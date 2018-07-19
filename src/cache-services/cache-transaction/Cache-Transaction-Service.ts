@@ -61,7 +61,7 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
  * @param {TransferTransaction} transaction
  * @returns {boolean}
  */
-export const verifyCacheAmount = (transaction: TransferTransaction): number => {
+export const getCacheAmount = (transaction: TransferTransaction): number => {
   if (transaction.containsMosaics()) {
     transaction.mosaics().map(mosaic => {
       if (mosaic.mosaicId.namespaceId === 'cache' && mosaic.mosaicId.name === 'cache') {
@@ -77,7 +77,7 @@ export const verifyCacheAmount = (transaction: TransferTransaction): number => {
  * @param {TransferTransaction} transaction
  * @returns {boolean}
  */
-export const verifyXemMosaic = (transaction: TransferTransaction): number => {
+export const getXemAmount = (transaction: TransferTransaction): number => {
   if (!transaction.containsMosaics()) {
       return transaction.xem().amount;
   }
