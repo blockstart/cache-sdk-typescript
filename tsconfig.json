@@ -30,6 +30,7 @@
     "dist"
   ],
   "include": [
+    "test-cache/**/*.spec.ts",
     "test/**/*.spec.ts",
     "integration_test/**/*.spec.ts",
     "src/**/*.ts",
