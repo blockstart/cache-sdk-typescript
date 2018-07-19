@@ -44,9 +44,7 @@ export class Account extends PublicAccount {
    * @param publicKey
    * @param privateKey
    */
-  constructor(address: Address,
-              publicKey: string,
-              public readonly privateKey: string) {
+  constructor(address: Address, publicKey: string, public readonly privateKey: string) {
     super(address, publicKey);
   }
 

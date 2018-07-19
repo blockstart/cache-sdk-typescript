@@ -24,10 +24,12 @@
 
 import { Account } from '../../models/account/Account';
 import { Address } from '../../models/account/Address';
+import { NetworkTypes } from '../../models/node/NetworkTypes';
 import { CacheAddress } from './Cache-Address';
 
 export class CacheAccount extends Account {
   private readonly _cacheAddress: CacheAddress;
+
   /**
    * Constructor
    * @internal
@@ -55,6 +57,18 @@ export class CacheAccount extends Account {
    */
   public static createWithPrivateKey = (privateKey: string): CacheAccount => {
     const account: Account = Account.createWithPrivateKey(privateKey);
-      return new CacheAccount(new CacheAddress(account.address.plain()), account.publicKey, account.privateKey);
+    return new CacheAccount(new CacheAddress(account.address.plain()), account.publicKey, account.privateKey);
+  };
+
+  /**
+   * generate new cache account
+   * @param walletName
+   * @param passphrase
+   * @param networkType
+   * @returns {CacheAccount}
+   */
+  public static generateAccount = (walletName: string, passphrase: string, networkType: NetworkTypes): CacheAccount => {
+    const account: Account = Account.generateAccount(walletName, passphrase, networkType);
+    return new CacheAccount(new CacheAddress(account.address.plain()), account.publicKey, account.privateKey);
   };
 }
