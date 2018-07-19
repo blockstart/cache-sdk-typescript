@@ -33,6 +33,7 @@
     "test/**/*.spec.ts",
     "integration_test/**/*.spec.ts",
     "src/**/*.ts",
+    "e2e-cache/**/*.spec.ts",
     "e2e/**/*.spec.ts",
     "nem-sdk.d.ts",
     "crypto-js.d.ts",

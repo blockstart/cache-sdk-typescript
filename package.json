@@ -5,6 +5,7 @@
   "scripts": {
     "pretest": "npm run build",
     "test": "mocha --ui bdd --recursive ./dist/test ./dist/integration_test --timeout 60000",
+    "test:e2e-cache": "mocha --ui bdd --recursive ./dist/e2e-cache --timeout 240000",
     "test:e2e": "mocha --ui bdd --recursive ./dist/e2e --timeout 60000",
     "test:int": "mocha --ui bdd --recursive ./dist/integration_test --timeout 10000",
     "test:unit": "mocha --ui bdd --recursive ./dist/test",
