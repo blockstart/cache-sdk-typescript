@@ -28,8 +28,6 @@ import { NetworkTypes } from '../../models/node/NetworkTypes';
 import { CacheAddress } from './Cache-Address';
 
 export class CacheAccount extends Account {
-  private readonly _cacheAddress: CacheAddress;
-
   /**
    * Constructor
    * @internal
@@ -39,7 +37,6 @@ export class CacheAccount extends Account {
    */
   constructor(address: CacheAddress, publicKey: string, public readonly privateKey: string) {
     super(new Address(address.plain()), publicKey, privateKey);
-    this._cacheAddress = address;
   }
 
   /**
@@ -47,7 +44,7 @@ export class CacheAccount extends Account {
    * @returns {CacheAddress}
    */
   public getCacheAddress = (): CacheAddress => {
-    return this._cacheAddress;
+    return new CacheAddress(this.address.plain());
   };
 
   /**
