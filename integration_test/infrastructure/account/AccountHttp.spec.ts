@@ -30,6 +30,7 @@ import {Address} from "../../../src/models/account/Address";
 import {NetworkTypes} from "../../../src/models/node/NetworkTypes";
 import {NEMLibrary} from "../../../src/NEMLibrary";
 import {TestVariables} from "../../../test/config/TestVariables.spec";
+import { TestAccount } from "../../config/Accounts.spec";
 
 describe("AccountHttp", () => {
   before(() => {
@@ -260,7 +261,7 @@ describe("AccountHttp", () => {
 
   it("receives account namespace", (done) => {
     const accountHttp = new AccountHttp();
-    accountHttp.getNamespaceOwnedByAddress(new Address("TANLDM5VDKSZJQX4GFLOEC4V5OVHIJZFACRHUWI5"))
+    accountHttp.getNamespaceOwnedByAddress(new Address(TestAccount.address))
       .subscribe((namespaces) => {
         expect(namespaces[0].name).to.not.be.undefined;
         expect(namespaces[0].height).to.not.be.undefined;
@@ -271,7 +272,7 @@ describe("AccountHttp", () => {
 
   it("receives account namespace with params parent, id and pageSize", (done) => {
     const accountHttp = new AccountHttp();
-    accountHttp.getNamespaceOwnedByAddress(new Address("TANLDM5VDKSZJQX4GFLOEC4V5OVHIJZFACRHUWI5"), "server", 1)
+    accountHttp.getNamespaceOwnedByAddress(new Address(TestAccount.address), "server", 1)
       .subscribe((namespaces) => {
         expect(namespaces[0].name).to.not.be.undefined;
         expect(namespaces[0].height).to.not.be.undefined;
@@ -283,7 +284,7 @@ describe("AccountHttp", () => {
 
   it("receives account created mosaics", (done) => {
     const accountHttp = new AccountHttp();
-    accountHttp.getMosaicCreatedByAddress(new Address("TANLDM5VDKSZJQX4GFLOEC4V5OVHIJZFACRHUWI5"))
+    accountHttp.getMosaicCreatedByAddress(new Address(TestAccount.address))
       .subscribe((mosaics) => {
         expect(mosaics[0].creator).to.not.be.null;
         expect(mosaics[0].id).to.not.be.null;
@@ -295,7 +296,7 @@ describe("AccountHttp", () => {
 
   it("receives account created mosaics from a namespace", (done) => {
     const accountHttp = new AccountHttp();
-    accountHttp.getMosaicCreatedByAddress(new Address("TANLDM5VDKSZJQX4GFLOEC4V5OVHIJZFACRHUWI5"), "server")
+    accountHttp.getMosaicCreatedByAddress(new Address(TestAccount.address), "server")
       .subscribe((mosaics) => {
         expect(mosaics[0].creator).to.not.be.null;
         expect(mosaics[0].id).to.not.be.null;

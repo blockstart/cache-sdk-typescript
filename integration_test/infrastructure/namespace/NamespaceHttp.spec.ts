@@ -74,7 +74,7 @@ describe("NamespaceHttp", () => {
 
   it("should get namespace information", (done) => {
     const namespaceHttp = new NamespaceHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
-    const namespace = "trading";
+    const namespace = "server";
     namespaceHttp.getNamespace(namespace)
       .subscribe((namespace) => {
         expect(namespace).to.be.instanceOf(Namespace);
