@@ -117,7 +117,8 @@ export class MultisigAggregateModificationTransaction extends Transaction {
                        modifications: CosignatoryModification[],
                        relativeChange?: number): MultisigAggregateModificationTransaction {
     const fee = Math.floor(10 * 0.05 * 1000000);
-    return new MultisigAggregateModificationTransaction(timeWindow, 1, modifications, fee, undefined, relativeChange);
+    const version = relativeChange ? 2 : 1;
+    return new MultisigAggregateModificationTransaction(timeWindow, version, modifications, fee, undefined, relativeChange);
   }
 }
 

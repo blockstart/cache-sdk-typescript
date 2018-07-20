@@ -41,25 +41,25 @@ describe("TransactionWithMosaics", () => {
     NEMLibrary.reset();
   });
 
-  it("Create runtime MosaicTransferable with an xem", (done) => {
-    mosaicHttp.getMosaicTransferableWithAmount(new MosaicId("server", "alcapone"), 1)
+  it("Create runtime MosaicTransferable with a server:mosaic", (done) => {
+    mosaicHttp.getMosaicTransferableWithAmount(new MosaicId("server", "mosaic"), 1)
       .subscribe((mosaicTransferable) => {
         expect(mosaicTransferable.quantity()).to.be.equal(1);
         done();
       });
   });
 
-  it("Create runtime MosaicTransferable with an xem", (done) => {
-    mosaicHttp.getMosaicTransferableWithAmount(new MosaicId("server", "alexis"), 1)
+  it("Create runtime MosaicTransferable with a server:other", (done) => {
+    mosaicHttp.getMosaicTransferableWithAmount(new MosaicId("server", "other"), 1)
       .subscribe((mosaicTransferable) => {
-        expect(mosaicTransferable.quantity()).to.be.equal(100000);
+        expect(mosaicTransferable.quantity()).to.be.equal(1000000);
         done();
       });
   });
 
   it("Fetch different mosaics and add the xem", (done) => {
     Observable.from([
-      {namespace: "server", mosaic: "alcapone", amount: 1},
+      {namespace: "server", mosaic: "mosaic", amount: 1},
       {namespace: "server", mosaic: "alexis", amount: 1},
     ]).flatMap((_) => mosaicHttp.getMosaicTransferableWithAmount(new MosaicId(_.namespace, _.mosaic), _.amount))
       .toArray()

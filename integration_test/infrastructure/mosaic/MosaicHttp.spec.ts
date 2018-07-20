@@ -95,9 +95,9 @@ describe("MosaicHttp", () => {
   });
 
   it("should look for an expecific mosaic", (done) => {
-    new MosaicHttp().getMosaicDefinition(new MosaicId("server", "alcapone"))
+    new MosaicHttp().getMosaicDefinition(new MosaicId("server", "mosaic"))
       .subscribe((mosaic) =>  {
-        expect(mosaic.id.name).to.be.equal("alcapone");
+        expect(mosaic.id.name).to.be.equal("mosaic");
         done();
       });
   });

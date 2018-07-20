@@ -113,7 +113,10 @@ export class TransferTransaction extends Transaction {
    * @returns {Mosaic[]}
    */
   public mosaics(): Mosaic[] {
-    if (this.containsMosaics()) { return this._mosaics!; }
+    if (this.containsMosaics()) { return this._mosaics!
+      .map(x =>
+        new Mosaic(x.mosaicId, (x.quantity * (this._xem.quantity() / 1e6)))
+      )}
     throw new Error("Does not contain mosaics");
   }
 
