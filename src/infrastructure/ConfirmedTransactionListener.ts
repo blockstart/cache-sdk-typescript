@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+import { Client } from '@stomp/stompjs';
 import * as _ from "lodash";
 import {Observable} from "rxjs";
 import {Observer} from "rxjs/Observer";

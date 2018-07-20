@@ -22,16 +22,24 @@
  * SOFTWARE.
  */
 
-// Cache Models
-export  * from "./src/cacheModels"
-// Cache Services
-export * from "./src/cacheServices";
+import { Observable } from 'rxjs/Observable';
+import { mapTransfer, transferFilter } from '../../cacheServices/cacheTransaction/CacheTransactionService';
+import { WebSocketConfig } from '../../infrastructure/Listener';
+import { TransferTransaction } from '../../models/transaction/TransferTransaction';
+import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';
+import { Address } from '../../models/account/Address';
 
-// Infrastructure
-export * from "./src/infrastrcture";
-// Models
-export * from "./src/models";
-// Services
-export * from "./src/services";
+export class CacheAddress extends Address {
 
-export {NEMLibrary, Environment} from "./src/NEMLibrary";
+  constructor(address: string) {
+    super(address);
+  }
+
+  /**
+   * Start listening new confirmed cache transactions
+   * @returns {Observable<Array<TransferTransaction>>}
+   */
+  public addObserver = (nodes?: Array<WebSocketConfig>): Observable<TransferTransaction> => {
+    return new ConfirmedTransactionListener(nodes).given(this).filter(transferFilter).map(mapTransfer);
+  }
+}
