@@ -22,5 +22,24 @@
  * SOFTWARE.
  */
 
-export * from "./cache-model/cache-account/Cache-Account";
-export * from "./cache-model/cache-account/Cache-Address";
+import { Observable } from 'rxjs/Observable';
+import { mapTransfer, transferFilter } from '../../cacheServices/cacheTransaction/CacheTransactionService';
+import { WebSocketConfig } from '../../infrastructure/Listener';
+import { TransferTransaction } from '../../models/transaction/TransferTransaction';
+import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';
+import { Address } from '../../models/account/Address';
+
+export class CacheAddress extends Address {
+
+  constructor(address: string) {
+    super(address);
+  }
+
+  /**
+   * Start listening new confirmed cache transactions
+   * @returns {Observable<Array<TransferTransaction>>}
+   */
+  public addObserver = (nodes?: Array<WebSocketConfig>): Observable<TransferTransaction> => {
+    return new ConfirmedTransactionListener(nodes).given(this).filter(transferFilter).map(mapTransfer);
+  }
+}

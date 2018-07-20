@@ -61,7 +61,7 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
  * @param {TransferTransaction} transaction
  * @returns {boolean}
  */
-export const getCacheAmount = (transaction: TransferTransaction): number => {
+export const cacheAmount = (transaction: TransferTransaction): number => {
   if (transaction.containsMosaics()) {
     transaction.mosaics().map(mosaic => {
       if (mosaic.mosaicId.namespaceId === 'cache' && mosaic.mosaicId.name === 'cache') {
@@ -69,7 +69,7 @@ export const getCacheAmount = (transaction: TransferTransaction): number => {
       }
     });
   }
-  throw new Error('Transaction does not contain Cache mosaic');
+  return 0;
 };
 
 /**
@@ -77,9 +77,9 @@ export const getCacheAmount = (transaction: TransferTransaction): number => {
  * @param {TransferTransaction} transaction
  * @returns {boolean}
  */
-export const getXemAmount = (transaction: TransferTransaction): number => {
+export const xemAmount = (transaction: TransferTransaction): number => {
   if (!transaction.containsMosaics()) {
       return transaction.xem().amount;
   }
-  throw new Error('Transaction does not contain Cache mosaic');
+  return 0;
 };

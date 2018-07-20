@@ -25,7 +25,7 @@
 import { Account } from '../../models/account/Account';
 import { Address } from '../../models/account/Address';
 import { NetworkTypes } from '../../models/node/NetworkTypes';
-import { CacheAddress } from './Cache-Address';
+import { CacheAddress } from './CacheAddress';
 
 export class CacheAccount extends Account {
   /**
@@ -43,12 +43,12 @@ export class CacheAccount extends Account {
    * Finds cache address from cache account
    * @returns {CacheAddress}
    */
-  public getCacheAddress = (): CacheAddress => {
+  public cacheAddress = (): CacheAddress => {
     return new CacheAddress(this.address.plain());
   };
 
   /**
-   * Creates Cache account with private key
+   * Creates cache account with private key
    * @param {string} privateKey
    * @returns {CacheAccount}
    */
@@ -58,7 +58,7 @@ export class CacheAccount extends Account {
   };
 
   /**
-   * generate new cache account
+   * Generate new cache account
    * @param walletName
    * @param passphrase
    * @param networkType

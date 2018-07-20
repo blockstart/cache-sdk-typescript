@@ -30,11 +30,11 @@
     "dist"
   ],
   "include": [
-    "test-cache/**/*.spec.ts",
+    "testCache/**/*.spec.ts",
     "test/**/*.spec.ts",
     "integration_test/**/*.spec.ts",
     "src/**/*.ts",
-    "e2e-cache/**/*.spec.ts",
+    "e2eCache/**/*.spec.ts",
     "e2e/**/*.spec.ts",
     "nem-sdk.d.ts",
     "crypto-js.d.ts",

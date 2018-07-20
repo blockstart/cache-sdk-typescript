@@ -23,9 +23,9 @@
  */
 
 // Cache Models
-export  * from "./src/cache-models"
+export  * from "./src/cacheModels"
 // Cache Services
-export * from "./src/cache-services";
+export * from "./src/cacheServices";
 
 // Infrastructure
 export * from "./src/infrastrcture";

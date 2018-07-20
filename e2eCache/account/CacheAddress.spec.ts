@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-import { CacheAccount } from '../../src/cache-model/cache-account/Cache-Account';
-import { CacheAddress } from '../../src/cache-model/cache-account/Cache-Address';
+import { CacheAccount } from '../../src/cacheModel/cacheAccount/CacheAccount';
+import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
 import {ConfirmedTransactionListener} from "../../src/infrastructure/ConfirmedTransactionListener";
 import { WebSocketConfig } from '../../src/infrastructure/Listener';
 import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
@@ -61,10 +61,10 @@ describe("ConfirmedTransactionListener", () => {
       TimeWindow.createWithDeadline(),
       address,
       new XEM(0),
-      EmptyMessage,
+      EmptyMessage
     );
 
-    const subscriber = account.getCacheAddress().addObserver(NODE_Endpoint).subscribe((x) => {
+    const subscriber = account.cacheAddress().addObserver(NODE_Endpoint).subscribe((x) => {
       console.log(x);
       subscriber.unsubscribe();
       done();

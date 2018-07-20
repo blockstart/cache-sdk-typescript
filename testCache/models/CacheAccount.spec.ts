@@ -23,7 +23,7 @@
  */
 
 import {expect} from "chai";
-import { CacheAddress } from '../../src/cache-model/cache-account/Cache-Address';
+import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
 import {NetworkTypes} from "../../src/models/node/NetworkTypes";
 
 describe("CacheAddress", () => {
