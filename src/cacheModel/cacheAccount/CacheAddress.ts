@@ -23,7 +23,7 @@
  */
 
 import { Observable } from 'rxjs/Observable';
-import { mapTransfer, transferFilter } from '../../cacheServices/cacheTransaction/CacheTransactionService';
+import { mapTransfer, transferFilter } from '../../cacheServices/CacheTransactionService';
 import { WebSocketConfig } from '../../infrastructure/Listener';
 import { TransferTransaction } from '../../models/transaction/TransferTransaction';
 import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';

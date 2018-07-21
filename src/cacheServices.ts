@@ -22,4 +22,4 @@
  * SOFTWARE.
  */
 
-export * from "./cacheServices/cacheTransaction/CacheTransactionService";
+export * from "./cacheServices/CacheTransactionService";

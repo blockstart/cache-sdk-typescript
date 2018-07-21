@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-import { MultisigTransaction } from '../../models/transaction/MultisigTransaction';
-import { Transaction } from '../../models/transaction/Transaction';
-import { TransactionTypes } from '../../models/transaction/TransactionTypes';
-import { TransferTransaction } from '../../models/transaction/TransferTransaction';
+import { MultisigTransaction } from '../models/transaction/MultisigTransaction';
+import { Transaction } from '../models/transaction/Transaction';
+import { TransactionTypes } from '../models/transaction/TransactionTypes';
+import { TransferTransaction } from '../models/transaction/TransferTransaction';
 
 /**
  * Filters a list of Transactions and only returns transactions of type Transfer
