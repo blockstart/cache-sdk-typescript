@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+import { CACHE } from '../cacheMosaic/CACHE';
+import { XEM } from '../models/mosaic/XEM';
 import { MultisigTransaction } from '../models/transaction/MultisigTransaction';
 import { Transaction } from '../models/transaction/Transaction';
 import { TransactionTypes } from '../models/transaction/TransactionTypes';
@@ -61,15 +63,15 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
  * @param {TransferTransaction} transaction
  * @returns {boolean}
  */
-export const cacheAmount = (transaction: TransferTransaction): number => {
+export const cacheDetails = (transaction: TransferTransaction): CACHE => {
   if (transaction.containsMosaics()) {
     transaction.mosaics().map(mosaic => {
       if (mosaic.mosaicId.namespaceId === 'cache' && mosaic.mosaicId.name === 'cache') {
-        return mosaic.quantity * transaction.xem().amount;
+        return new CACHE(mosaic.quantity / 1e6);
       }
     });
   }
-  return 0;
+  return new CACHE(0);
 };
 
 /**
@@ -77,9 +79,9 @@ export const cacheAmount = (transaction: TransferTransaction): number => {
  * @param {TransferTransaction} transaction
  * @returns {boolean}
  */
-export const xemAmount = (transaction: TransferTransaction): number => {
+export const xemDetails = (transaction: TransferTransaction): XEM => {
   if (!transaction.containsMosaics()) {
-      return transaction.xem().amount;
+      return new XEM(transaction.xem().amount);
   }
-  return 0;
+  return new XEM(0);
 };

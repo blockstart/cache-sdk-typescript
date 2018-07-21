@@ -22,6 +22,51 @@
  * SOFTWARE.
  */
 
-export * from "./cacheModel/cacheAccount/CacheAccount";
-export * from "./cacheModel/cacheAccount/CacheAddress";
-export * from "./cacheModel/cacheTransaction/CacheTransferTransaction";
+
+import { MosaicProperties } from '../models/mosaic/MosaicDefinition';
+import { MosaicId } from '../models/mosaic/MosaicId';
+import { MosaicTransferable } from '../models/mosaic/MosaicTransferable';
+
+/**
+ * XEM mosaic transferable
+ */
+export class CACHE extends MosaicTransferable {
+  /**
+   * Divisiblity
+   * @type {number}
+   */
+  public static DIVISIBILITY = 6;
+
+  /**
+   * Initial supply
+   * @type {number}
+   */
+  public static INITIALSUPPLY= 1000000000;
+
+  /**
+   * Is tranferable
+   * @type {boolean}
+   */
+  public static TRANSFERABLE = true;
+
+  /**
+   * Is mutable
+   * @type {boolean}
+   */
+  public static SUPPLYMUTABLE = false;
+
+  /**
+   * mosaicId
+   * @type {MosaicId}
+   */
+  public static MOSAICID = new MosaicId("cache", "cache");
+
+  /**
+   * constructor
+   * @param amount
+   */
+  constructor(amount: number) {
+    super(CACHE.MOSAICID, new MosaicProperties(CACHE.DIVISIBILITY, CACHE.INITIALSUPPLY, CACHE.TRANSFERABLE, CACHE.SUPPLYMUTABLE), amount);
+  }
+
+}

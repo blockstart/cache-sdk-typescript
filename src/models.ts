@@ -60,7 +60,6 @@ export * from "./models/transaction/SignedTransaction";
 export * from "./models/transaction/Transaction";
 export * from "./models/transaction/TransactionInfo";
 export * from "./models/transaction/TransactionTypes";
-export * from "./models/transaction/TransferTransaction";
 export * from "./models/transaction/TimeWindow";
 export * from "./models/wallet/SimpleWallet";
 export * from "./models/wallet/EncryptedPrivateKey";
