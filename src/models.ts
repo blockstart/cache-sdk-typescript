@@ -61,7 +61,6 @@ export * from "./models/transaction/Transaction";
 export * from "./models/transaction/TransactionInfo";
 export * from "./models/transaction/TransactionTypes";
 export * from "./models/transaction/TimeWindow";
-export * from "./models/wallet/SimpleWallet";
 export * from "./models/wallet/EncryptedPrivateKey";
 export * from "./models/wallet/Password";
 export * from "./models/wallet/BrainWallet";
