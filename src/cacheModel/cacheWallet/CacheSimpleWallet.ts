@@ -25,14 +25,14 @@
 import {Base64} from "js-base64";
 import {LocalDateTime} from "js-joda";
 import * as nemSdk from "nem-sdk";
-import { Address } from '../../models/account/Address';
-import { NetworkTypes } from '../../models/node/NetworkTypes';
-import { EncryptedPrivateKey } from '../../models/wallet/EncryptedPrivateKey';
-import { Password } from '../../models/wallet/Password';
-import { SimpleWallet } from '../../models/wallet/SimpleWallet';
+import { Address } from "../../models/account/Address";
+import { NetworkTypes } from "../../models/node/NetworkTypes";
+import { EncryptedPrivateKey } from "../../models/wallet/EncryptedPrivateKey";
+import { Password } from "../../models/wallet/Password";
+import { SimpleWallet } from "../../models/wallet/SimpleWallet";
 import {NEMLibrary} from "../../NEMLibrary";
-import { CacheAccount } from '../cacheAccount/CacheAccount';
-import { CacheAddress } from '../cacheAccount/CacheAddress';
+import { CacheAccount } from "../cacheAccount/CacheAccount";
+import { CacheAddress } from "../cacheAccount/CacheAddress";
 
 /**
  * Cache Simple wallet model generates a private key from a PRNG
@@ -98,7 +98,7 @@ export class CacheSimpleWallet extends SimpleWallet {
     if (account.address.equals(this.address)) {
       return account;
     }
-    throw new Error('wrong password');
+    throw new Error("wrong password");
   }
 
   /**
@@ -122,7 +122,7 @@ export class CacheSimpleWallet extends SimpleWallet {
 
   public static readFromNanoWalletWLF(wlt: string): CacheSimpleWallet {
     const wallet = JSON.parse(Base64.decode(wlt));
-    // TODO: Check the encrypted and iv fields, if they aren't null, it's a simple wallet
+    // TODO: Check the encrypted and iv fields, if they aren"t null, it"s a simple wallet
     const account = wallet.accounts[0];
     const network = account.network;
     return new CacheSimpleWallet(

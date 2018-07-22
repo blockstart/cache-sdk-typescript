@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-import { CACHE } from '../../cacheMosaic/CACHE';
-import { cacheDetails, xemDetails } from '../../cacheServices/CacheTransactionService';
-import { Address } from '../../models/account/Address';
-import { PublicAccount } from '../../models/account/PublicAccount';
-import { Mosaic } from '../../models/mosaic/Mosaic';
-import { XEM } from '../../models/mosaic/XEM';
-import { EncryptedMessage } from '../../models/transaction/EncryptedMessage';
-import { PlainMessage } from '../../models/transaction/PlainMessage';
-import { TimeWindow } from '../../models/transaction/TimeWindow';
-import { TransactionInfo } from '../../models/transaction/TransactionInfo';
-import { TransferTransaction } from '../../models/transaction/TransferTransaction';
+import { CACHE } from "../../cacheMosaic/CACHE";
+import { cacheDetails, xemDetails } from "../../cacheServices/CacheTransactionService";
+import { Address } from "../../models/account/Address";
+import { PublicAccount } from "../../models/account/PublicAccount";
+import { Mosaic } from "../../models/mosaic/Mosaic";
+import { XEM } from "../../models/mosaic/XEM";
+import { EncryptedMessage } from "../../models/transaction/EncryptedMessage";
+import { PlainMessage } from "../../models/transaction/PlainMessage";
+import { TimeWindow } from "../../models/transaction/TimeWindow";
+import { TransactionInfo } from "../../models/transaction/TransactionInfo";
+import { TransferTransaction } from "../../models/transaction/TransferTransaction";
 
 export class CacheTransferTransaction extends TransferTransaction {
   /**

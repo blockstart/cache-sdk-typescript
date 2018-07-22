@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import { CACHE } from '../cacheMosaic/CACHE';
-import { XEM } from '../models/mosaic/XEM';
-import { MultisigTransaction } from '../models/transaction/MultisigTransaction';
-import { Transaction } from '../models/transaction/Transaction';
-import { TransactionTypes } from '../models/transaction/TransactionTypes';
-import { TransferTransaction } from '../models/transaction/TransferTransaction';
+import { CACHE } from "../cacheMosaic/CACHE";
+import { XEM } from "../models/mosaic/XEM";
+import { MultisigTransaction } from "../models/transaction/MultisigTransaction";
+import { Transaction } from "../models/transaction/Transaction";
+import { TransactionTypes } from "../models/transaction/TransactionTypes";
+import { TransferTransaction } from "../models/transaction/TransferTransaction";
 
 /**
  * Filters a list of Transactions and only returns transactions of type Transfer
@@ -55,7 +55,7 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
   } else if (transaction.type == TransactionTypes.MULTISIG && (transaction as MultisigTransaction).otherTransaction.type == TransactionTypes.TRANSFER) {
     return (transaction as MultisigTransaction).otherTransaction as TransferTransaction;
   }
-  throw new Error('Transaction does not contain TransferTransaction');
+  throw new Error("Transaction does not contain TransferTransaction");
 };
 
 /**
@@ -66,7 +66,7 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
 export const cacheDetails = (transaction: TransferTransaction): CACHE => {
   if (transaction.containsMosaics()) {
     transaction.mosaics().map(mosaic => {
-      if (mosaic.mosaicId.namespaceId === 'cache' && mosaic.mosaicId.name === 'cache') {
+      if (mosaic.mosaicId.namespaceId === "cache" && mosaic.mosaicId.name === "cache") {
         return new CACHE(mosaic.quantity / 1e6);
       }
     });

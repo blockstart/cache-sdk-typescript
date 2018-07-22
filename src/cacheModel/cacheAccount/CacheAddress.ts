@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import { Observable } from 'rxjs/Observable';
-import { mapTransfer, transferFilter } from '../../cacheServices/CacheTransactionService';
-import { WebSocketConfig } from '../../infrastructure/Listener';
-import { TransferTransaction } from '../../models/transaction/TransferTransaction';
-import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';
-import { Address } from '../../models/account/Address';
+import { Observable } from "rxjs/Observable";
+import { mapTransfer, transferFilter } from "../../cacheServices/CacheTransactionService";
+import { WebSocketConfig } from "../../infrastructure/Listener";
+import { TransferTransaction } from "../../models/transaction/TransferTransaction";
+import { ConfirmedTransactionListener } from "../../infrastructure/ConfirmedTransactionListener";
+import { Address } from "../../models/account/Address";
 
 export class CacheAddress extends Address {
 

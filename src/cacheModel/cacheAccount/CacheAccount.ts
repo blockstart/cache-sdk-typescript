@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-import { Account } from '../../models/account/Account';
-import { Address } from '../../models/account/Address';
-import { NetworkTypes } from '../../models/node/NetworkTypes';
-import { CacheAddress } from './CacheAddress';
+import { Account } from "../../models/account/Account";
+import { Address } from "../../models/account/Address";
+import { NetworkTypes } from "../../models/node/NetworkTypes";
+import { CacheAddress } from "./CacheAddress";
 
 export class CacheAccount extends Account {
   /**
