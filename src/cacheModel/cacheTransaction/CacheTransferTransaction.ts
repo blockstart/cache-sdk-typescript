@@ -108,9 +108,8 @@ export class CacheTransferTransaction extends TransferTransaction {
                                    message: PlainMessage | EncryptedMessage): CacheTransferTransaction => {
 
     const transferTransaction: TransferTransaction = TransferTransaction.createWithMosaics(timeWindow, recipient, [cache], message);
-
     return new CacheTransferTransaction(transferTransaction.recipient,
-      transferTransaction.xem(),
+      new XEM(1),
       transferTransaction.timeWindow,
       2,
       transferTransaction.fee,

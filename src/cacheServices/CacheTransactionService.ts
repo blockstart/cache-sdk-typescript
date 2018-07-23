@@ -23,6 +23,7 @@
  */
 
 import { CACHE } from "../cacheMosaic/CACHE";
+import { Mosaic } from '../models/mosaic/Mosaic';
 import { XEM } from "../models/mosaic/XEM";
 import { MultisigTransaction } from "../models/transaction/MultisigTransaction";
 import { Transaction } from "../models/transaction/Transaction";
@@ -65,11 +66,8 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
  */
 export const cacheDetails = (transaction: TransferTransaction): CACHE => {
   if (transaction.containsMosaics()) {
-    transaction.mosaics().map(mosaic => {
-      if (mosaic.mosaicId.namespaceId === "cache" && mosaic.mosaicId.name === "cache") {
-        return new CACHE(mosaic.quantity / 1e6);
-      }
-    });
+    const cache = transaction.mosaics().find(mosaic => mosaic.mosaicId === CACHE.MOSAICID);
+    if (cache) { return new CACHE(cache.quantity / Math.pow(10, CACHE.DIVISIBILITY)); }
   }
   return new CACHE(0);
 };
