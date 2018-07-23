@@ -46,10 +46,10 @@ export const transferFilter = (transaction: Transaction): boolean => {
 };
 
 /**
- * Parses through list of transactions and casts them to TransferTransactions so we
+ * Parses through list of transactions and casts them to CacheTransferTransaction so we
  * can have access to important transfer details
  * @param {Transaction} transaction
- * @returns {TransferTransaction}
+ * @returns {CacheTransferTransaction}
  */
 export const mapTransfer = (transaction: Transaction): CacheTransferTransaction => {
   if (transaction.type == TransactionTypes.TRANSFER) {
