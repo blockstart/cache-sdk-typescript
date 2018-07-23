@@ -26,6 +26,7 @@ import { CacheTransferTransaction } from '../cacheModel/cacheTransaction/CacheTr
 import { CACHE } from "../cacheMosaic/CACHE";
 import { XEM } from "../models/mosaic/XEM";
 import { MultisigTransaction } from "../models/transaction/MultisigTransaction";
+import { Mosaic } from "../models/mosaic/Mosaic";
 import { Transaction } from "../models/transaction/Transaction";
 import { TransactionTypes } from "../models/transaction/TransactionTypes";
 import { TransferTransaction } from "../models/transaction/TransferTransaction";
@@ -52,15 +53,23 @@ export const transferFilter = (transaction: Transaction): boolean => {
  */
 export const mapTransfer = (transaction: Transaction): CacheTransferTransaction => {
   if (transaction.type == TransactionTypes.TRANSFER) {
-    const transferTX = transaction as TransferTransaction
-    return new CacheTransferTransaction(transferTX.recipient, transferTX.xem(), transferTX.timeWindow,
-      transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, transferTX.mosaics(),
+    const transferTX = transaction as TransferTransaction;
+    let mosaics: Array<Mosaic> = [];
+    if (transferTX.containsMosaics()) {
+      mosaics = transferTX.mosaics();
+    }
+    return new CacheTransferTransaction(transferTX.recipient, xemDetails(transferTX), transferTX.timeWindow,
+      transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, mosaics,
       transferTX.signer, transferTX.getTransactionInfo()
     );
   } else if (transaction.type == TransactionTypes.MULTISIG && (transaction as MultisigTransaction).otherTransaction.type == TransactionTypes.TRANSFER) {
     const transferTX = (transaction as MultisigTransaction).otherTransaction as TransferTransaction;
-    return new CacheTransferTransaction(transferTX.recipient, transferTX.xem(), transferTX.timeWindow,
-      transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, transferTX.mosaics(),
+    let mosaics: Array<Mosaic> = [];
+    if (transferTX.containsMosaics()) {
+      mosaics = transferTX.mosaics();
+    }
+    return new CacheTransferTransaction(transferTX.recipient, xemDetails(transferTX), transferTX.timeWindow,
+      transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, mosaics,
       transferTX.signer, transferTX.getTransactionInfo()
     );
   }
