@@ -61,7 +61,7 @@ export class CacheTransferTransaction extends TransferTransaction {
     super(recipient, amount, timeWindow, version, fee, message, signature, mosaic, sender, transactionInfo);
   }
 
-  public mosaicDetails = (): XEM | CACHE => {
+  public mosaicDetails = (): any => {
     if (this.containsMosaics()) {
       return cacheDetails(this);
     } else {
