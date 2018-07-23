@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
+import { CacheTransferTransaction } from '../cacheModel/cacheTransaction/CacheTransferTransaction';
 import { CACHE } from "../cacheMosaic/CACHE";
-import { Mosaic } from '../models/mosaic/Mosaic';
 import { XEM } from "../models/mosaic/XEM";
 import { MultisigTransaction } from "../models/transaction/MultisigTransaction";
 import { Transaction } from "../models/transaction/Transaction";
@@ -50,11 +50,19 @@ export const transferFilter = (transaction: Transaction): boolean => {
  * @param {Transaction} transaction
  * @returns {TransferTransaction}
  */
-export const mapTransfer = (transaction: Transaction): TransferTransaction => {
+export const mapTransfer = (transaction: Transaction): CacheTransferTransaction => {
   if (transaction.type == TransactionTypes.TRANSFER) {
-    return transaction as TransferTransaction;
+    const transferTX = transaction as TransferTransaction
+    return new CacheTransferTransaction(transferTX.recipient, transferTX.xem(), transferTX.timeWindow,
+      transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, transferTX.mosaics(),
+      transferTX.signer, transferTX.getTransactionInfo()
+    );
   } else if (transaction.type == TransactionTypes.MULTISIG && (transaction as MultisigTransaction).otherTransaction.type == TransactionTypes.TRANSFER) {
-    return (transaction as MultisigTransaction).otherTransaction as TransferTransaction;
+    const transferTX = (transaction as MultisigTransaction).otherTransaction as TransferTransaction;
+    return new CacheTransferTransaction(transferTX.recipient, transferTX.xem(), transferTX.timeWindow,
+      transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, transferTX.mosaics(),
+      transferTX.signer, transferTX.getTransactionInfo()
+    );
   }
   throw new Error("Transaction does not contain TransferTransaction");
 };

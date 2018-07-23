@@ -25,9 +25,9 @@
 import { Observable } from "rxjs/Observable";
 import { mapTransfer, transferFilter } from "../../cacheServices/CacheTransactionService";
 import { WebSocketConfig } from "../../infrastructure/Listener";
-import { TransferTransaction } from "../../models/transaction/TransferTransaction";
 import { ConfirmedTransactionListener } from "../../infrastructure/ConfirmedTransactionListener";
 import { Address } from "../../models/account/Address";
+import { CacheTransferTransaction } from '../cacheTransaction/CacheTransferTransaction';
 
 export class CacheAddress extends Address {
 
@@ -37,9 +37,9 @@ export class CacheAddress extends Address {
 
   /**
    * Start listening new confirmed cache transactions
-   * @returns {Observable<Array<TransferTransaction>>}
+   * @returns {Observable<Array<CacheTransferTransaction>>}
    */
-  public addObserver = (nodes?: Array<WebSocketConfig>): Observable<TransferTransaction> => {
+  public addObserver = (nodes?: Array<WebSocketConfig>): Observable<CacheTransferTransaction> => {
     return new ConfirmedTransactionListener(nodes).given(this).filter(transferFilter).map(mapTransfer);
   }
 }
