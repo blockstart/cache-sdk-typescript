@@ -26,6 +26,7 @@ import {expect} from "chai";
 import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
 import { CacheTransferTransaction } from '../../src/cacheModel/cacheTransaction/CacheTransferTransaction';
 import { CACHE } from '../../src/cacheMosaic/CACHE';
+import { XEM } from '../../src/models/mosaic/XEM'
 import { PlainMessage } from '../../src/models/transaction/PlainMessage';
 import { TimeWindow } from '../../src/models/transaction/TimeWindow';
 
@@ -41,5 +42,17 @@ describe("CacheTransferTransaction", () => {
     expect(cacheTransferTransaction.mosaicDetails().quantity()).to.be.equal(100 * 1e6);
     expect(cacheTransferTransaction.mosaicDetails().amount).to.be.equal(100 );
     expect(cacheTransferTransaction.mosaicDetails().mosaicId).to.be.equal(CACHE.MOSAICID);
+  });
+
+  it("should return xem transaction", () => {
+    const cacheTransferTransaction = CacheTransferTransaction.createWithXem(
+      TimeWindow.createWithDeadline(),
+      new CacheAddress("TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA"),
+      new XEM(200),
+      PlainMessage.create("test message")
+    );
+    expect(cacheTransferTransaction.mosaicDetails().quantity()).to.be.equal(200 * 1e6);
+    expect(cacheTransferTransaction.mosaicDetails().amount).to.be.equal(200);
+    expect(cacheTransferTransaction.mosaicDetails().mosaicId).to.be.equal(XEM.MOSAICID);
   });
 });
