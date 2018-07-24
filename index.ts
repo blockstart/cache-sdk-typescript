@@ -28,5 +28,7 @@ export * from "./src/infrastrcture";
 export * from "./src/models";
 // Services
 export * from "./src/services";
+// Utilities
+export * from "./src/utilities";
 
 export {NEMLibrary, Environment} from "./src/NEMLibrary";

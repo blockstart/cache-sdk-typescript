@@ -21,9 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import nem from "nem-sdk";
 
-export * from "./services/AccountOwnedMosaicsService";
-export * from "./services/MosaicService";
-export * from "./services/QRService";
-
-export * from "./cacheServices/CacheTransactionService";
+/**
+ * Get USD Value for 1 XEM
+ * @returns {Promise<number>}
+ */
+export const xemUSDValue = (): Promise<string> => {
+  return new Promise<string>(async (resolve, reject) => {
+    try {
+      const data = await nem.com.requests.market.xem();
+      const xem = data["BTC_XEM"];
+      const btc = await nem.com.requests.market.btc();
+      resolve((xem.highestBid * btc["USD"].last).toFixed(4));
+    } catch (err) {
+      reject(err);
+    }
+  });
+};

@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-import {Mosaic} from "./Mosaic";
 import {MosaicDefinition, MosaicProperties} from "./MosaicDefinition";
 import {MosaicId} from "./MosaicId";
 import {MosaicLevy} from "./MosaicLevy";
