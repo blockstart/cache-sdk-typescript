@@ -26,3 +26,4 @@ export * from "./cacheModel/cacheAccount/CacheAccount";
 export * from "./cacheModel/cacheAccount/CacheAddress";
 export * from "./cacheModel/cacheTransaction/CacheTransferTransaction";
 export * from "./cacheModel/cacheWallet/CacheSimpleWallet";
+export * from "./cacheModel/cacheMosaic/CACHE";

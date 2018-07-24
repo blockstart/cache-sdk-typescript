@@ -23,7 +23,7 @@
  */
 
 import { CacheTransferTransaction } from '../cacheModel/cacheTransaction/CacheTransferTransaction';
-import { CACHE } from "../cacheMosaic/CACHE";
+import { CACHE } from "../cacheModel/cacheMosaic/CACHE";
 import { XEM } from "../models/mosaic/XEM";
 import { MultisigTransaction } from "../models/transaction/MultisigTransaction";
 import { Mosaic } from "../models/mosaic/Mosaic";

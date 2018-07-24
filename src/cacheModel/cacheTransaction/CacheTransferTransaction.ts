@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { CACHE } from "../../cacheMosaic/CACHE";
+import { CACHE } from "../cacheMosaic/CACHE";
 import { cacheDetails, xemDetails } from "../../cacheServices/CacheTransactionService";
 import { Address } from "../../models/account/Address";
 import { PublicAccount } from "../../models/account/PublicAccount";
