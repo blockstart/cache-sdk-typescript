@@ -29,10 +29,12 @@ import { CacheTransferTransaction } from '../../src/cacheModel/cacheTransaction/
 import {ConfirmedTransactionListener} from "../../src/infrastructure/ConfirmedTransactionListener";
 import { WebSocketConfig } from '../../src/infrastructure/Listener';
 import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
+import { Mosaic } from '../../src/models/mosaic/Mosaic';
 import {XEM} from "../../src/models/mosaic/XEM";
 import {NetworkTypes} from "../../src/models/node/NetworkTypes";
 import {EmptyMessage} from "../../src/models/transaction/PlainMessage";
 import {TimeWindow} from "../../src/models/transaction/TimeWindow";
+import { TransferTransaction } from '../../src/models/transaction/TransferTransaction';
 import {NEMLibrary} from "../../src/NEMLibrary";
 import {Observable} from "rxjs/Observable";
 
@@ -66,8 +68,7 @@ describe("ConfirmedTransactionListener", () => {
     );
 
     const subscriber = account.cacheAddress().addObserver(NODE_Endpoint).subscribe((x) => {
-      const transTX = x as CacheTransferTransaction;
-      console.log(transTX);
+      console.log(x);
       subscriber.unsubscribe();
       done();
     }, (err) => {
@@ -94,8 +95,7 @@ describe("ConfirmedTransactionListener", () => {
     );
 
     const subscriber = account.cacheAddress().addObserver(NODE_Endpoint).subscribe((x) => {
-      const transTX = x as CacheTransferTransaction;
-      console.log(transTX);
+      console.log(x);
       subscriber.unsubscribe();
       done();
     }, (err) => {

@@ -87,7 +87,7 @@ export const mapTransfer = (transaction: Transaction): CacheTransferTransaction 
  */
 export const cacheDetails = (transaction: TransferTransaction): CACHE => {
   if (transaction.containsMosaics()) {
-    const cache = transaction.mosaics().find(mosaic => mosaic.mosaicId === CACHE.MOSAICID);
+    const cache = transaction.mosaics().find(mosaic => mosaic.mosaicId.namespaceId === CACHE.MOSAICID.namespaceId && mosaic.mosaicId.name === CACHE.MOSAICID.name);
     if (cache) { return new CACHE(cache.quantity / Math.pow(10, CACHE.DIVISIBILITY)); }
   }
   return new CACHE(0);
