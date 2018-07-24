@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import {expect} from "chai";
+import { expect } from "chai";
 import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
 import { CacheTransferTransaction } from '../../src/cacheModel/cacheTransaction/CacheTransferTransaction';
 import { CACHE } from '../../src/cacheModel/cacheMosaic/CACHE';

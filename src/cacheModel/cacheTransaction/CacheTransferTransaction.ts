@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-import { MosaicTransferable } from '../../models/mosaic/MosaicTransferable';
 import { CACHE } from "../cacheMosaic/CACHE";
 import { cacheDetails, xemDetails } from "../../cacheServices/CacheTransactionService";
 import { Address } from "../../models/account/Address";

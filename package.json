@@ -1,7 +1,7 @@
 {
-  "name": "nem-library",
+  "name": "cache-sdk-typescript",
   "version": "1.0.9",
-  "description": "Reactive Library for NEM",
+  "description": "Reactive sdk for NEM",
   "scripts": {
     "pretest": "npm run build",
     "test": "mocha --ui bdd --recursive ./dist/test ./dist/integration_test --timeout 60000",
@@ -19,6 +19,7 @@
   },
   "keywords": [
     "NEM",
+    "CACHE",
     "Library",
     "API",
     "RX"
@@ -86,7 +87,8 @@
     "dist/src/",
     "dist/index.d.ts",
     "dist/index.js",
-    "dist/index.js.map"
+    "dist/index.js.map",
+    "node-endpoint-config.json"
   ],
   "nyc": {
     "exclude": [

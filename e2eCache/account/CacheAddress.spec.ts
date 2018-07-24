@@ -27,14 +27,11 @@ import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
 import { CACHE } from '../../src/cacheModel/cacheMosaic/CACHE';
 import { CacheTransferTransaction } from '../../src/cacheModel/cacheTransaction/CacheTransferTransaction';
 import {ConfirmedTransactionListener} from "../../src/infrastructure/ConfirmedTransactionListener";
-import { WebSocketConfig } from '../../src/infrastructure/Listener';
 import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
-import { Mosaic } from '../../src/models/mosaic/Mosaic';
 import {XEM} from "../../src/models/mosaic/XEM";
 import {NetworkTypes} from "../../src/models/node/NetworkTypes";
 import {EmptyMessage} from "../../src/models/transaction/PlainMessage";
 import {TimeWindow} from "../../src/models/transaction/TimeWindow";
-import { TransferTransaction } from '../../src/models/transaction/TransferTransaction';
 import {NEMLibrary} from "../../src/NEMLibrary";
 import {Observable} from "rxjs/Observable";
 
@@ -44,7 +41,6 @@ describe("ConfirmedTransactionListener", () => {
   const privateKey: string = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
   let account: CacheAccount;
-  const NODE_Endpoint: Array<WebSocketConfig> = [{domain: "50.3.87.123"}];
 
   before(() => {
     // Initialize NEMLibrary for TEST_NET Network
@@ -67,7 +63,7 @@ describe("ConfirmedTransactionListener", () => {
       EmptyMessage
     );
 
-    const subscriber = account.cacheAddress().addObserver(NODE_Endpoint).subscribe((x) => {
+    const subscriber = account.cacheAddress().addObserver().subscribe((x) => {
       console.log(x);
       subscriber.unsubscribe();
       done();
@@ -94,7 +90,7 @@ describe("ConfirmedTransactionListener", () => {
       EmptyMessage
     );
 
-    const subscriber = account.cacheAddress().addObserver(NODE_Endpoint).subscribe((x) => {
+    const subscriber = account.cacheAddress().addObserver().subscribe((x) => {
       console.log(x);
       subscriber.unsubscribe();
       done();

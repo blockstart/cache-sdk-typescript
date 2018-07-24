@@ -22,18 +22,13 @@
  * SOFTWARE.
  */
 
-// Cache Models
-export  * from "./src/cacheModels"
-// Cache Services
-export * from "./src/cacheServices";
-// Cache Utilities
-export * from "./src/cacheUtilities";
-
 // Infrastructure
 export * from "./src/infrastrcture";
 // Models
 export * from "./src/models";
 // Services
 export * from "./src/services";
+// Utilities
+export * from "./src/utilities";
 
 export {NEMLibrary, Environment} from "./src/NEMLibrary";

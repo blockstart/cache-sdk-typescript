@@ -27,6 +27,8 @@ import { mapTransfer, transferFilter } from "../../cacheServices/CacheTransactio
 import { WebSocketConfig } from "../../infrastructure/Listener";
 import { ConfirmedTransactionListener } from "../../infrastructure/ConfirmedTransactionListener";
 import { Address } from "../../models/account/Address";
+import { NetworkTypes } from '../../models/node/NetworkTypes';
+import { NEMLibrary } from '../../NEMLibrary';
 import { CacheTransferTransaction } from '../cacheTransaction/CacheTransferTransaction';
 
 export class CacheAddress extends Address {
@@ -39,7 +41,14 @@ export class CacheAddress extends Address {
    * Start listening new confirmed cache transactions
    * @returns {Observable<Array<CacheTransferTransaction>>}
    */
-  public addObserver = (nodes?: Array<WebSocketConfig>): Observable<CacheTransferTransaction> => {
-    return new ConfirmedTransactionListener(nodes).given(this).filter(transferFilter).map(mapTransfer);
+  public addObserver = (): Observable<CacheTransferTransaction> => {
+    let NODE_Endpoint: Array<WebSocketConfig>;
+    if (NEMLibrary.getNetworkType() === NetworkTypes.MAIN_NET) {
+      NODE_Endpoint = [{ domain:'alice7.nem.ninja' }]
+    } else {
+      NODE_Endpoint = [{ domain: '50.3.87.123' }]
+    }
+
+    return new ConfirmedTransactionListener(NODE_Endpoint).given(this).filter(transferFilter).map(mapTransfer);
   }
 }
