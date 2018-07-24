@@ -27,15 +27,16 @@
   "license": "MIT",
   "contributors": [
     "Aleix <aleix602@gmail.com>",
-    "Guillem <guillemchain@gmail.com>"
+    "Guillem <guillemchain@gmail.com>",
+    "Jacob <jacob@devslopes.com>"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/aleixmorgadas/nem-library-ts"
+    "url": "https://github.com/blockstart/cache-sdk-typescript"
   },
   "bugs": {
-    "url": "https://github.com/aleixmorgadas/nem-library-ts/issues",
-    "email": "aleix602@gmail.com"
+    "url": "https://github.com/blockstart/cache-sdk-typescript/issues",
+    "email": "jacob@devslopes.com"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
