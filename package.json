@@ -1,7 +1,7 @@
 {
-  "name": "cache-sdk-typescript",
+  "name": "blockstart-nis1-sdk",
   "version": "0.0.1",
-  "description": "Reactive sdk for NEM",
+  "description": "Blockstart NIS1 SDK",
   "scripts": {
     "pretest": "npm run build",
     "test": "mocha --ui bdd --recursive ./dist/test ./dist/integration_test --timeout 60000",
@@ -32,10 +32,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/blockstart/cache-sdk-typescript"
+    "url": "https://github.com/blockstart/blockstart-nis1-sdk"
   },
   "bugs": {
-    "url": "https://github.com/blockstart/cache-sdk-typescript/issues",
+    "url": "https://github.com/blockstart/blockstart-nis1-sdk",
     "email": "jacob@devslopes.com"
   },
   "devDependencies": {
