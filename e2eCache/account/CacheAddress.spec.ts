@@ -61,12 +61,13 @@ describe("ConfirmedTransactionListener", () => {
     const transferTransaction = CacheTransferTransaction.createWithXem(
       TimeWindow.createWithDeadline(),
       address,
-      new XEM(0),
+      new XEM(2),
       EmptyMessage
     );
 
     const subscriber = account.cacheAddress().addObserver(NODE_Endpoint).subscribe((x) => {
-      console.log(x);
+      const transTX = x as CacheTransferTransaction;
+      console.log(transTX);
       subscriber.unsubscribe();
       done();
     }, (err) => {
@@ -88,12 +89,13 @@ describe("ConfirmedTransactionListener", () => {
     const transferTransaction = CacheTransferTransaction.createWithCache(
       TimeWindow.createWithDeadline(),
       address,
-      new CACHE(0),
+      new CACHE(3),
       EmptyMessage
     );
 
     const subscriber = account.cacheAddress().addObserver(NODE_Endpoint).subscribe((x) => {
-      console.log(x);
+      const transTX = x as CacheTransferTransaction;
+      console.log(transTX);
       subscriber.unsubscribe();
       done();
     }, (err) => {

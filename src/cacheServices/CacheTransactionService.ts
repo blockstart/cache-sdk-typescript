@@ -52,23 +52,27 @@ export const transferFilter = (transaction: Transaction): boolean => {
  * @returns {CacheTransferTransaction}
  */
 export const mapTransfer = (transaction: Transaction): CacheTransferTransaction => {
+  let mosaics: Array<Mosaic> = [];
+  let xem: XEM = new XEM(1);
   if (transaction.type == TransactionTypes.TRANSFER) {
     const transferTX = transaction as TransferTransaction;
-    let mosaics: Array<Mosaic> = [];
     if (transferTX.containsMosaics()) {
       mosaics = transferTX.mosaics();
+    } else {
+      xem = xemDetails(transferTX);
     }
-    return new CacheTransferTransaction(transferTX.recipient, xemDetails(transferTX), transferTX.timeWindow,
+    return new CacheTransferTransaction(transferTX.recipient, xem, transferTX.timeWindow,
       transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, mosaics,
       transferTX.signer, transferTX.getTransactionInfo()
     );
   } else if (transaction.type == TransactionTypes.MULTISIG && (transaction as MultisigTransaction).otherTransaction.type == TransactionTypes.TRANSFER) {
     const transferTX = (transaction as MultisigTransaction).otherTransaction as TransferTransaction;
-    let mosaics: Array<Mosaic> = [];
     if (transferTX.containsMosaics()) {
       mosaics = transferTX.mosaics();
+    } else {
+      xem = xemDetails(transferTX);
     }
-    return new CacheTransferTransaction(transferTX.recipient, xemDetails(transferTX), transferTX.timeWindow,
+    return new CacheTransferTransaction(transferTX.recipient, xem, transferTX.timeWindow,
       transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, mosaics,
       transferTX.signer, transferTX.getTransactionInfo()
     );
