@@ -24,20 +24,22 @@
 
 import { expect } from "chai";
 import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
-import { CacheTransferTransaction } from '../../src/cacheModel/cacheTransaction/CacheTransferTransaction';
 import { CACHE } from '../../src/cacheModel/cacheMosaic/CACHE';
+import {
+  CacheTransferTransaction,
+  ExpirationType
+} from '../../src/cacheModel/cacheTransaction/CacheTransferTransaction';
 import { XEM } from '../../src/models/mosaic/XEM'
 import { PlainMessage } from '../../src/models/transaction/PlainMessage';
-import { TimeWindow } from '../../src/models/transaction/TimeWindow';
 
 describe("CacheTransferTransaction", () => {
 
   it("should return cache transaction", () => {
     const cacheTransferTransaction = CacheTransferTransaction.createWithCache(
-      TimeWindow.createWithDeadline(),
       new CacheAddress("TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA"),
       new CACHE(100),
-      PlainMessage.create("test message")
+      PlainMessage.create("test message"),
+      ExpirationType.twoHour
     );
     expect(cacheTransferTransaction.mosaicDetails().quantity()).to.be.equal(100 * 1e6);
     expect(cacheTransferTransaction.mosaicDetails().amount).to.be.equal(100 );
@@ -46,10 +48,10 @@ describe("CacheTransferTransaction", () => {
 
   it("should return xem transaction", () => {
     const cacheTransferTransaction = CacheTransferTransaction.createWithXem(
-      TimeWindow.createWithDeadline(),
       new CacheAddress("TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA"),
       new XEM(200),
-      PlainMessage.create("test message")
+      PlainMessage.create("test message"),
+      ExpirationType.twoHour
     );
     expect(cacheTransferTransaction.mosaicDetails().quantity()).to.be.equal(200 * 1e6);
     expect(cacheTransferTransaction.mosaicDetails().amount).to.be.equal(200);

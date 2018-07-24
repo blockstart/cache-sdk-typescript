@@ -34,6 +34,13 @@ import { TimeWindow } from "../../models/transaction/TimeWindow";
 import { TransactionInfo } from "../../models/transaction/TransactionInfo";
 import { TransferTransaction } from "../../models/transaction/TransferTransaction";
 
+export enum ExpirationType {
+  oneHour = 1,
+  twoHour = 2,
+  sixHour = 6,
+  twelveHour = 12
+}
+
 export class CacheTransferTransaction extends TransferTransaction {
   /**
    * @internal
@@ -71,18 +78,18 @@ export class CacheTransferTransaction extends TransferTransaction {
 
   /**
    * Create a Xem TransferTransaction object
-   * @param timeWindow
+   * @param expiration
    * @param recipient
    * @param xem
    * @param message
    * @returns {TransferTransaction}
    */
-  public static createWithXem = (timeWindow: TimeWindow,
-                                 recipient: Address,
+  public static createWithXem = (recipient: Address,
                                  xem: XEM,
-                                 message: PlainMessage | EncryptedMessage): CacheTransferTransaction => {
+                                 message: PlainMessage | EncryptedMessage,
+                                 expiration?: ExpirationType): CacheTransferTransaction => {
 
-    const transferTransaction: TransferTransaction = TransferTransaction.create(timeWindow, recipient, xem, message);
+    const transferTransaction: TransferTransaction = TransferTransaction.create(TimeWindow.createWithDeadline(expiration), recipient, xem, message);
 
     return new CacheTransferTransaction(transferTransaction.recipient,
       transferTransaction.xem(),
@@ -96,18 +103,18 @@ export class CacheTransferTransaction extends TransferTransaction {
 
   /**
    * Create a Cache TransferTransaction object
-   * @param timeWindow
+   * @param expiration
    * @param recipient
    * @param cache
    * @param message
    * @returns {TransferTransaction}
    */
-  public static createWithCache = (timeWindow: TimeWindow,
-                                   recipient: Address,
+  public static createWithCache = (recipient: Address,
                                    cache: CACHE,
-                                   message: PlainMessage | EncryptedMessage): CacheTransferTransaction => {
+                                   message: PlainMessage | EncryptedMessage,
+                                   expiration?: ExpirationType): CacheTransferTransaction => {
 
-    const transferTransaction: TransferTransaction = TransferTransaction.createWithMosaics(timeWindow, recipient, [cache], message);
+    const transferTransaction: TransferTransaction = TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(expiration), recipient, [cache], message);
     return new CacheTransferTransaction(
       transferTransaction.recipient,
       new XEM(1),

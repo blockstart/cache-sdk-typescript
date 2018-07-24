@@ -22,18 +22,20 @@
  * SOFTWARE.
  */
 
+import { Observable } from "rxjs/Observable";
 import { CacheAccount } from '../../src/cacheModel/cacheAccount/CacheAccount';
 import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
 import { CACHE } from '../../src/cacheModel/cacheMosaic/CACHE';
-import { CacheTransferTransaction } from '../../src/cacheModel/cacheTransaction/CacheTransferTransaction';
-import {ConfirmedTransactionListener} from "../../src/infrastructure/ConfirmedTransactionListener";
-import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
-import {XEM} from "../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../src/models/node/NetworkTypes";
-import {EmptyMessage} from "../../src/models/transaction/PlainMessage";
-import {TimeWindow} from "../../src/models/transaction/TimeWindow";
-import {NEMLibrary} from "../../src/NEMLibrary";
-import {Observable} from "rxjs/Observable";
+import {
+  CacheTransferTransaction,
+  ExpirationType
+} from '../../src/cacheModel/cacheTransaction/CacheTransferTransaction';
+import { ConfirmedTransactionListener } from "../../src/infrastructure/ConfirmedTransactionListener";
+import { TransactionHttp } from "../../src/infrastructure/TransactionHttp";
+import { XEM } from "../../src/models/mosaic/XEM";
+import { NetworkTypes } from "../../src/models/node/NetworkTypes";
+import { EmptyMessage } from "../../src/models/transaction/PlainMessage";
+import { NEMLibrary } from "../../src/NEMLibrary";
 
 declare let process: any;
 
@@ -57,10 +59,10 @@ describe("ConfirmedTransactionListener", () => {
     const address = new CacheAddress("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
 
     const transferTransaction = CacheTransferTransaction.createWithXem(
-      TimeWindow.createWithDeadline(),
       address,
       new XEM(2),
-      EmptyMessage
+      EmptyMessage,
+      ExpirationType.twoHour
     );
 
     const subscriber = account.cacheAddress().addObserver().subscribe((x) => {
@@ -84,10 +86,10 @@ describe("ConfirmedTransactionListener", () => {
   it("should listen to cache transaction", (done) => {
     const address = new CacheAddress("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
     const transferTransaction = CacheTransferTransaction.createWithCache(
-      TimeWindow.createWithDeadline(),
       address,
       new CACHE(3),
-      EmptyMessage
+      EmptyMessage,
+      ExpirationType.twoHour
     );
 
     const subscriber = account.cacheAddress().addObserver().subscribe((x) => {
