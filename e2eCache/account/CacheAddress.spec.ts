@@ -22,18 +22,20 @@
  * SOFTWARE.
  */
 
+import { Observable } from "rxjs/Observable";
 import { CacheAccount } from '../../src/cacheModel/cacheAccount/CacheAccount';
 import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
-import {ConfirmedTransactionListener} from "../../src/infrastructure/ConfirmedTransactionListener";
-import { WebSocketConfig } from '../../src/infrastructure/Listener';
-import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
-import {XEM} from "../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../src/models/node/NetworkTypes";
-import {EmptyMessage} from "../../src/models/transaction/PlainMessage";
-import {TimeWindow} from "../../src/models/transaction/TimeWindow";
-import {TransferTransaction} from "../../src/models/transaction/TransferTransaction";
-import {NEMLibrary} from "../../src/NEMLibrary";
-import {Observable} from "rxjs/Observable";
+import { CACHE } from '../../src/cacheModel/cacheMosaic/CACHE';
+import {
+  CacheTransferTransaction,
+  ExpirationType
+} from '../../src/cacheModel/cacheTransaction/CacheTransferTransaction';
+import { ConfirmedTransactionListener } from "../../src/infrastructure/ConfirmedTransactionListener";
+import { TransactionHttp } from "../../src/infrastructure/TransactionHttp";
+import { XEM } from "../../src/models/mosaic/XEM";
+import { NetworkTypes } from "../../src/models/node/NetworkTypes";
+import { EmptyMessage } from "../../src/models/transaction/PlainMessage";
+import { NEMLibrary } from "../../src/NEMLibrary";
 
 declare let process: any;
 
@@ -41,7 +43,6 @@ describe("ConfirmedTransactionListener", () => {
   const privateKey: string = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
   let account: CacheAccount;
-  const NODE_Endpoint: Array<WebSocketConfig> = [{domain: "50.3.87.123"}];
 
   before(() => {
     // Initialize NEMLibrary for TEST_NET Network
@@ -54,17 +55,44 @@ describe("ConfirmedTransactionListener", () => {
     NEMLibrary.reset();
   });
 
-  it("should listen the next data", (done) => {
+  it("should listen to xem transaction", (done) => {
     const address = new CacheAddress("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
 
-    const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
+    const transferTransaction = CacheTransferTransaction.createWithXem(
       address,
-      new XEM(0),
-      EmptyMessage
+      new XEM(2),
+      EmptyMessage,
+      ExpirationType.twoHour
     );
 
-    const subscriber = account.cacheAddress().addObserver(NODE_Endpoint).subscribe((x) => {
+    const subscriber = account.cacheAddress().addObserver().subscribe((x) => {
+      console.log(x);
+      subscriber.unsubscribe();
+      done();
+    }, (err) => {
+      console.log(err);
+    });
+
+    const transaction = account.signTransaction(transferTransaction);
+
+    Observable.of(1)
+      .delay(3000)
+      .flatMap((ignored) => transactionHttp.announceTransaction(transaction))
+      .subscribe((x) => {
+        console.log(x);
+      });
+  });
+
+  it("should listen to cache transaction", (done) => {
+    const address = new CacheAddress("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+    const transferTransaction = CacheTransferTransaction.createWithCache(
+      address,
+      new CACHE(3),
+      EmptyMessage,
+      ExpirationType.twoHour
+    );
+
+    const subscriber = account.cacheAddress().addObserver().subscribe((x) => {
       console.log(x);
       subscriber.unsubscribe();
       done();

@@ -60,11 +60,15 @@ export * from "./models/transaction/SignedTransaction";
 export * from "./models/transaction/Transaction";
 export * from "./models/transaction/TransactionInfo";
 export * from "./models/transaction/TransactionTypes";
-export * from "./models/transaction/TransferTransaction";
 export * from "./models/transaction/TimeWindow";
-export * from "./models/wallet/SimpleWallet";
 export * from "./models/wallet/EncryptedPrivateKey";
 export * from "./models/wallet/Password";
 export * from "./models/wallet/BrainWallet";
 export * from "./models/wallet/BrainPassword";
 export * from "./models/wallet/Wallet";
+
+export * from "./cacheModel/cacheAccount/CacheAccount";
+export * from "./cacheModel/cacheAccount/CacheAddress";
+export * from "./cacheModel/cacheTransaction/CacheTransferTransaction";
+export * from "./cacheModel/cacheWallet/CacheSimpleWallet";
+export * from "./cacheModel/cacheMosaic/CACHE";

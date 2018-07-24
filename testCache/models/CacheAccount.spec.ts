@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-import {expect} from "chai";
+import { expect } from "chai";
 import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
-import {NetworkTypes} from "../../src/models/node/NetworkTypes";
+import { NetworkTypes } from "../../src/models/node/NetworkTypes";
 
 describe("CacheAddress", () => {
 
