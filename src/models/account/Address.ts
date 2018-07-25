@@ -22,7 +22,12 @@
  * SOFTWARE.
  */
 
+import { Observable } from 'rxjs/Observable';
+import { mapTransfer, transferFilter } from '../../utilities/TransactionUtilities';
+import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';
+import { nodeEndpoints } from '../../utilities/NodeEndpointUtilities';
 import {NetworkTypes} from "../node/NetworkTypes";
+import { TransferTransaction } from '../transaction/TransferTransaction';
 
 /**
  * Address model
@@ -68,5 +73,13 @@ export class Address {
 
   public equals(otherAddress: Address) {
     return this.plain() == otherAddress.plain();
+  }
+
+  /**
+   * Start listening new confirmed cache transactions
+   * @returns {Observable<Array<CacheTransferTransaction>>}
+   */
+  public confirmedTxObserver = (): Observable<TransferTransaction> => {
+    return new ConfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
   }
 }

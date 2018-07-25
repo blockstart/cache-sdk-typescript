@@ -25,5 +25,3 @@
 export * from "./services/AccountOwnedMosaicsService";
 export * from "./services/MosaicService";
 export * from "./services/QRService";
-
-export * from "./cacheServices/CacheTransactionService";
