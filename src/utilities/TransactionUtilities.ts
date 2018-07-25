@@ -50,7 +50,7 @@ export const transferFilter = (transaction: Transaction): boolean => {
  * Parses through list of transactions and casts them to CacheTransferTransaction so we
  * can have access to important transfer details
  * @param {Transaction} transaction
- * @returns {CacheTransferTransaction}
+ * @returns {TransferTransaction}
  */
 export const mapTransfer = (transaction: Transaction): TransferTransaction => {
   let mosaics: Array<Mosaic> = [];
@@ -86,18 +86,15 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
  * @param {TransferTransaction} transaction
  * @returns {boolean}
  */
-export const mosaicDetails = (transaction: TransferTransaction): MosaicTransferable => {
-  if (transaction.containsMosaics()) {
-    transaction.mosaics().map(mosaic => {
-      if (mosaic.mosaicId.namespaceId === CACHE.MOSAICID.namespaceId && mosaic.mosaicId.name === CACHE.MOSAICID.name) {
-        return new CACHE(mosaic.quantity / Math.pow(10, CACHE.DIVISIBILITY));
-      } else {
-        return new MosaicTransferable(mosaic.mosaicId, new MosaicProperties(), mosaic.quantity)
-      }
-    });
-  }
-  return new CACHE(0);
-};
+export const mosaicDetails = (transaction: TransferTransaction): MosaicTransferable | CACHE => {
+  const mosaics = transaction.mosaics();
+    if (mosaics[0].mosaicId.namespaceId === CACHE.MOSAICID.namespaceId && mosaics[0].mosaicId.name === CACHE.MOSAICID.name) {
+      return new CACHE(mosaics[0].quantity / Math.pow(10, CACHE.DIVISIBILITY));
+    }
+    else {
+      return new MosaicTransferable(mosaics[0].mosaicId, new MosaicProperties(), mosaics[0].quantity)
+    }
+  };
 
 /**
  * Verifies that mosaic received is xem and returns amount

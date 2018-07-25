@@ -77,7 +77,7 @@ export class Address {
 
   /**
    * Start listening new confirmed cache transactions
-   * @returns {Observable<Array<CacheTransferTransaction>>}
+   * @returns {Observable<Array<TransferTransaction>>}
    */
   public confirmedTxObserver = (): Observable<TransferTransaction> => {
     return new ConfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
