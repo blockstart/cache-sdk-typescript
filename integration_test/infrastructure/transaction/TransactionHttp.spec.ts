@@ -21,20 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {expect} from "chai";
-import {Observable} from "rxjs/Observable";
-import {MosaicHttp} from "../../../src/infrastructure/MosaicHttp";
-import {TransactionHttp} from "../../../src/infrastructure/TransactionHttp";
-import {Account} from "../../../src/models/account/Account";
-import {Address} from "../../../src/models/account/Address";
-import {MosaicId} from "../../../src/models/mosaic/MosaicId";
-import {XEM} from "../../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../../src/models/node/NetworkTypes";
-import {EmptyMessage, PlainMessage} from "../../../src/models/transaction/PlainMessage";
-import {TimeWindow} from "../../../src/models/transaction/TimeWindow";
-import {TransferTransaction} from "../../../src/models/transaction/TransferTransaction";
-import {NEMLibrary} from "../../../src/NEMLibrary";
-import {TestVariables} from "../../../test/config/TestVariables.spec";
+import { expect } from "chai";
+import { TransactionHttp } from "../../../src/infrastructure/TransactionHttp";
+import { Account } from "../../../src/models/account/Account";
+import { Address } from "../../../src/models/account/Address";
+import { XEM } from "../../../src/models/mosaic/XEM";
+import { NetworkTypes } from "../../../src/models/node/NetworkTypes";
+import { PlainMessage } from "../../../src/models/transaction/PlainMessage";
+import { TimeWindow } from "../../../src/models/transaction/TimeWindow";
+import { TransferTransaction, TxType } from "../../../src/models/transaction/TransferTransaction";
+import { NEMLibrary } from "../../../src/NEMLibrary";
+import { TestVariables } from "../../../test/config/TestVariables.spec";
 
 declare let process: any;
 
@@ -57,7 +54,7 @@ describe("TransactionHttp", () => {
     const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
     const account = Account.createWithPrivateKey(privateKey);
     const amount = new XEM(2000000);
-    const transferTransaction = TransferTransaction.create(TimeWindow.createWithDeadline(), new Address(recipientAccount), amount,
+    const transferTransaction = TransferTransaction.create(new Address(recipientAccount), TxType.xem, amount,
       PlainMessage.createFromDTO(
         "74657374207472616e73616374696f6e",
       ));

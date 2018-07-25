@@ -23,31 +23,27 @@
  */
 
 import { Observable } from "rxjs/Observable";
-import { CacheAccount } from '../../src/cacheModel/cacheAccount/CacheAccount';
-import { CacheAddress } from '../../src/cacheModel/cacheAccount/CacheAddress';
-import { CACHE } from '../../src/cacheModel/cacheMosaic/CACHE';
-import {
-  CacheTransferTransaction,
-  ExpirationType
-} from '../../src/cacheModel/cacheTransaction/CacheTransferTransaction';
-import { ConfirmedTransactionListener } from "../../src/infrastructure/ConfirmedTransactionListener";
-import { TransactionHttp } from "../../src/infrastructure/TransactionHttp";
-import { XEM } from "../../src/models/mosaic/XEM";
-import { NetworkTypes } from "../../src/models/node/NetworkTypes";
-import { EmptyMessage } from "../../src/models/transaction/PlainMessage";
-import { NEMLibrary } from "../../src/NEMLibrary";
+import { BlockchainListener } from "../src/infrastructure/BlockchainListener";
+import { TransactionHttp } from "../src/infrastructure/TransactionHttp";
+import { Account } from "../src/models/account/Account";
+import { Address } from "../src/models/account/Address";
+import { XEM } from "../src/models/mosaic/XEM";
+import { NetworkTypes } from "../src/models/node/NetworkTypes";
+import { EmptyMessage } from "../src/models/transaction/PlainMessage";
+import { TransferTransaction, TxType } from "../src/models/transaction/TransferTransaction";
+import { NEMLibrary } from "../src/NEMLibrary";
 
 declare let process: any;
 
-describe("ConfirmedTransactionListener", () => {
+describe("BlockchainListener", () => {
   const privateKey: string = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
-  let account: CacheAccount;
+  let account: Account;
 
   before(() => {
     // Initialize NEMLibrary for TEST_NET Network
     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
-    account = CacheAccount.createWithPrivateKey(privateKey);
+    account = Account.createWithPrivateKey(privateKey);
     transactionHttp = new TransactionHttp();
   });
 
@@ -55,17 +51,17 @@ describe("ConfirmedTransactionListener", () => {
     NEMLibrary.reset();
   });
 
-  it("should listen to xem transaction", (done) => {
-    const address = new CacheAddress("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+  it("should listen the new block", (done) => {
+    const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
 
-    const transferTransaction = CacheTransferTransaction.createWithXem(
+    const transferTransaction = TransferTransaction.create(
       address,
-      new XEM(2),
+      TxType.xem,
+      new XEM(0),
       EmptyMessage,
-      ExpirationType.twoHour
     );
 
-    const subscriber = account.cacheAddress().addObserver().subscribe((x) => {
+    const subscriber = new BlockchainListener().newBlock().subscribe((x) => {
       console.log(x);
       subscriber.unsubscribe();
       done();
@@ -76,26 +72,27 @@ describe("ConfirmedTransactionListener", () => {
     const transaction = account.signTransaction(transferTransaction);
 
     Observable.of(1)
-      .delay(3000)
+      .delay(1000)
       .flatMap((ignored) => transactionHttp.announceTransaction(transaction))
       .subscribe((x) => {
         console.log(x);
       });
   });
 
-  it("should listen to cache transaction", (done) => {
-    const address = new CacheAddress("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
-    const transferTransaction = CacheTransferTransaction.createWithCache(
+  it("should listen the new block", (done) => {
+    const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+
+    const transferTransaction = TransferTransaction.create(
       address,
-      new CACHE(3),
+      TxType.xem,
+      new XEM(0),
       EmptyMessage,
-      ExpirationType.twoHour
     );
 
-    const subscriber = account.cacheAddress().addObserver().subscribe((x) => {
+    const subscriber = new BlockchainListener().newHeight().subscribe((x) => {
       console.log(x);
-      subscriber.unsubscribe();
       done();
+      subscriber.unsubscribe();
     }, (err) => {
       console.log(err);
     });

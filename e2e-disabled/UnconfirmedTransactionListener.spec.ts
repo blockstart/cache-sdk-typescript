@@ -22,21 +22,20 @@
  * SOFTWARE.
  */
 
-import {BlockchainListener} from "../../src/infrastructure/BlockchainListener";
-import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
-import {Account} from "../../src/models/account/Account";
-import {Address} from "../../src/models/account/Address";
-import {XEM} from "../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../src/models/node/NetworkTypes";
-import {EmptyMessage} from "../../src/models/transaction/PlainMessage";
-import {TimeWindow} from "../../src/models/transaction/TimeWindow";
-import {TransferTransaction} from "../../src/models/transaction/TransferTransaction";
-import {NEMLibrary} from "../../src/NEMLibrary";
-import {Observable} from "rxjs/Observable";
+import { Observable } from "rxjs/Observable";
+import { TransactionHttp } from "../src/infrastructure/TransactionHttp";
+import { UnconfirmedTransactionListener } from "../src/infrastructure/UnconfirmedTransactionListener";
+import { Account } from "../src/models/account/Account";
+import { Address } from "../src/models/account/Address";
+import { XEM } from "../src/models/mosaic/XEM";
+import { NetworkTypes } from "../src/models/node/NetworkTypes";
+import { EmptyMessage } from "../src/models/transaction/PlainMessage";
+import { TransferTransaction, TxType } from "../src/models/transaction/TransferTransaction";
+import { NEMLibrary } from "../src/NEMLibrary";
 
 declare let process: any;
 
-describe("BlockchainListener", () => {
+describe("UnconfirmedTransactionListener", () => {
   const privateKey: string = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
   let account: Account;
@@ -52,51 +51,24 @@ describe("BlockchainListener", () => {
     NEMLibrary.reset();
   });
 
-  it("should listen the new block", (done) => {
-    const address = new Address("TDM3DO-ZM5WJ3-ZRBPSM-YRU6JS-WKUCAH-5VIPOF-4W7K");
+  it("should listen the next data", (done) => {
+    const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
 
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       address,
+      TxType.xem,
       new XEM(0),
       EmptyMessage,
     );
 
-    const subscriber = new BlockchainListener().newBlock().subscribe((x) => {
-      console.log(x);
-      subscriber.unsubscribe();
-      done();
-    }, (err) => {
-      console.log(err);
-    });
-
-    const transaction = account.signTransaction(transferTransaction);
-
-    Observable.of(1)
-      .delay(1000)
-      .flatMap((ignored) => transactionHttp.announceTransaction(transaction))
+    const subscribe = new UnconfirmedTransactionListener().given(account.address)
       .subscribe((x) => {
         console.log(x);
+        subscribe.unsubscribe();
+        done();
+      }, (err) => {
+        console.log(err);
       });
-  });
-
-  it("should listen the new block", (done) => {
-    const address = new Address("TBUAUC-3VYKPP-3PJPOH-7A7BCB-2C4I64-XZAAOZ-BO6N");
-
-    const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
-      address,
-      new XEM(0),
-      EmptyMessage,
-    );
-
-    const subscriber = new BlockchainListener().newHeight().subscribe((x) => {
-      console.log(x);
-      done();
-      subscriber.unsubscribe();
-    }, (err) => {
-      console.log(err);
-    });
 
     const transaction = account.signTransaction(transferTransaction);
 

@@ -22,10 +22,12 @@
  * SOFTWARE.
  */
 
+import { mosaicDetails, xemDetails } from '../../utilities/TransactionUtilities';
 import {TransactionDTO} from "../../infrastructure/transaction/TransactionDTO";
 import {TransferTransactionDTO} from "../../infrastructure/transaction/TransferTransactionDTO";
 import {Address} from "../account/Address";
 import {PublicAccount} from "../account/PublicAccount";
+import { CACHE } from '../mosaic/CACHE';
 import {Mosaic} from "../mosaic/Mosaic";
 import {MosaicDefinition} from "../mosaic/MosaicDefinition";
 import {MosaicId} from "../mosaic/MosaicId";
@@ -38,6 +40,19 @@ import {TimeWindow} from "./TimeWindow";
 import {Transaction} from "./Transaction";
 import {TransactionInfo} from "./TransactionInfo";
 import {TransactionTypes} from "./TransactionTypes";
+
+export enum ExpirationType {
+  oneHour = 1,
+  twoHour = 2,
+  sixHour = 6,
+  twelveHour = 12
+}
+
+export enum TxType {
+  xem = "XEM",
+  cache = "CACHE",
+  other = "OTHER",
+}
 
 /**
  * Transfer transactions contain data about transfers of XEM or mosaics to another account.
@@ -138,6 +153,40 @@ export class TransferTransaction extends Transaction {
   }
 
   /**
+   * returns mosaic details without sorting through array
+   * @returns MosaicTransferable
+   */
+  public mosaicDetails = (): XEM | CACHE | MosaicTransferable => {
+    if (this.containsMosaics()) {
+      return mosaicDetails(this);
+    } else {
+      return xemDetails(this);
+    }
+  };
+
+  /**
+   * Create a CacheTransferTransaction object
+   * @param txType - TxType.xem, .cache, .other
+   * @param recipient
+   * @param mosaic
+   * @param message
+   * @param expiration? - 2 hours default, can't exceed 23 hours
+   * @returns {TransferTransaction}
+   */
+  public static create = (recipient: Address,
+                            txType: TxType,
+                            mosaic: MosaicTransferable,
+                            message: PlainMessage | EncryptedMessage,
+                            expiration?: ExpirationType): TransferTransaction => {
+    if (txType === TxType.xem) {
+      const xem = mosaic as XEM;
+      return TransferTransaction.createWithXem(recipient, xem, message, expiration);
+    } else {
+      return  TransferTransaction.createWithMosaics(recipient, [mosaic], message, expiration);
+    }
+  };
+
+  /**
    * Create DTO of TransferTransaction
    * @returns {TransferTransactionDTO}
    */
@@ -160,22 +209,22 @@ export class TransferTransaction extends Transaction {
 
   /**
    * Create a TransferTransaction object
-   * @param timeWindow
    * @param recipient
    * @param xem
    * @param message
+   * @param expiration?
    * @returns {TransferTransaction}
    */
-  public static create(timeWindow: TimeWindow,
-                       recipient: Address,
-                       xem: XEM,
-                       message: PlainMessage | EncryptedMessage): TransferTransaction {
+  private static createWithXem(recipient: Address,
+                               xem: XEM,
+                               message: PlainMessage | EncryptedMessage,
+                               expiration?: ExpirationType): TransferTransaction {
     if (message instanceof EncryptedMessage && recipient.plain() !== message.recipientPublicAccount!.address.plain()) { throw new Error("Recipient address and recipientPublicAccount don't match"); }
     let fee = Math.floor(0.05 * this.calculateMinimum(xem.quantity() / 1000000) * 1000000);
     if (message.payload.length !== 0) {
       fee += 0.05 * (Math.floor((message.payload.length / 2) / 32) + 1) * 1000000;
     }
-    return new TransferTransaction(recipient, xem, timeWindow, 1, fee, message, undefined, undefined);
+    return new TransferTransaction(recipient, xem, TimeWindow.createWithDeadline(expiration), 1, fee, message, undefined, undefined);
   }
 
   /**
@@ -190,16 +239,16 @@ export class TransferTransaction extends Transaction {
 
   /**
    * Create a TransferTransaction object
-   * @param timeWindow
    * @param recipient
    * @param mosaics
    * @param message
+   * @param expiration?
    * @returns {TransferTransaction}
    */
-  public static createWithMosaics(timeWindow: TimeWindow,
-                                  recipient: Address,
+  public static createWithMosaics(recipient: Address,
                                   mosaics: MosaicTransferable[],
-                                  message: PlainMessage | EncryptedMessage): TransferTransaction {
+                                  message: PlainMessage | EncryptedMessage,
+                                   expiration?: ExpirationType): TransferTransaction {
     if (message instanceof EncryptedMessage && recipient.plain() !== message.recipientPublicAccount!.address.plain()) { throw new Error("Recipient address and recipientPublicAccount don't match"); }
     const multiplier = new XEM(1);
     let fee = 0;
@@ -220,12 +269,11 @@ export class TransferTransaction extends Transaction {
     }
     return new TransferTransaction(recipient,
       multiplier,
-      timeWindow,
+      TimeWindow.createWithDeadline(expiration),
       2,
       fee,
       message,
       undefined,
       mosaics.map((_) => new Mosaic(_.mosaicId, _.quantity())));
   }
-
 }

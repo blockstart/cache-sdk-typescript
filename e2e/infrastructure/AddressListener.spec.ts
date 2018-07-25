@@ -22,21 +22,21 @@
  * SOFTWARE.
  */
 
-import {AccountListener} from "../../src/infrastructure/AccountListener";
-import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
-import {Account} from "../../src/models/account/Account";
-import {Address} from "../../src/models/account/Address";
-import {XEM} from "../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../src/models/node/NetworkTypes";
-import {EmptyMessage} from "../../src/models/transaction/PlainMessage";
-import {TimeWindow} from "../../src/models/transaction/TimeWindow";
-import {TransferTransaction} from "../../src/models/transaction/TransferTransaction";
-import {NEMLibrary} from "../../src/NEMLibrary";
-import {Observable} from "rxjs";
+import { Observable } from "rxjs/Observable";
+import { CACHE } from '../../src/models/mosaic/CACHE';
+import { ConfirmedTransactionListener } from "../../src/infrastructure/ConfirmedTransactionListener";
+import { TransactionHttp } from "../../src/infrastructure/TransactionHttp";
+import { Account } from '../../src/models/account/Account';
+import { Address } from '../../src/models/account/Address';
+import { XEM } from "../../src/models/mosaic/XEM";
+import { NetworkTypes } from "../../src/models/node/NetworkTypes";
+import { EmptyMessage } from "../../src/models/transaction/PlainMessage";
+import { ExpirationType, TransferTransaction, TxType } from '../../src/models/transaction/TransferTransaction';
+import { NEMLibrary } from "../../src/NEMLibrary";
 
 declare let process: any;
 
-describe("AccountListener", () => {
+describe("ConfirmedTransactionListener", () => {
   const privateKey: string = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
   let account: Account;
@@ -45,24 +45,53 @@ describe("AccountListener", () => {
     // Initialize NEMLibrary for TEST_NET Network
     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
     account = Account.createWithPrivateKey(privateKey);
-    transactionHttp  = new TransactionHttp();
+    transactionHttp = new TransactionHttp();
   });
 
   after(() => {
     NEMLibrary.reset();
   });
 
-  it("should listen the next data", (done) => {
-    const address = new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA");
+  it("should listen to xem transaction", (done) => {
+    const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
 
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       address,
-      new XEM(0),
+      TxType.xem,
+      new XEM(2),
       EmptyMessage,
+      ExpirationType.twoHour
     );
 
-    const subscriber = new AccountListener().given(account.address).subscribe((x) => {
+    const subscriber = account.address.confirmedTxObserver().subscribe((x) => {
+      console.log(x);
+      subscriber.unsubscribe();
+      done();
+    }, (err) => {
+      console.log(err);
+    });
+
+    const transaction = account.signTransaction(transferTransaction);
+
+    Observable.of(1)
+      .delay(3000)
+      .flatMap((ignored) => transactionHttp.announceTransaction(transaction))
+      .subscribe((x) => {
+        console.log(x);
+      });
+  });
+
+  it("should listen to cache transaction", (done) => {
+    const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+    const transferTransaction = TransferTransaction.create(
+      address,
+      TxType.cache,
+      new CACHE(3),
+      EmptyMessage,
+      ExpirationType.twoHour
+    );
+
+    const subscriber = account.address.confirmedTxObserver().subscribe((x) => {
       console.log(x);
       subscriber.unsubscribe();
       done();
