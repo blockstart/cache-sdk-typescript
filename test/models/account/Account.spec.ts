@@ -30,7 +30,7 @@ import { NetworkTypes } from "../../../src/models/node/NetworkTypes";
 import { MultisigSignatureTransaction } from "../../../src/models/transaction/MultisigSignatureTransaction";
 import { EmptyMessage, PlainMessage } from "../../../src/models/transaction/PlainMessage";
 import { TimeWindow } from "../../../src/models/transaction/TimeWindow";
-import { TransferTransaction, TxType } from "../../../src/models/transaction/TransferTransaction";
+import { TransferTransaction } from "../../../src/models/transaction/TransferTransaction";
 import { NEMLibrary } from "../../../src/NEMLibrary";
 import { TestVariables } from "../../config/TestVariables.spec";
 
@@ -38,9 +38,9 @@ declare let process: any;
 
 describe("Account", () => {
   const recipientAccount = new Address(TestVariables.TEST_ADDRESS);
-  const publicKey: string = TestVariables.TEST_PUBLIC_KEY;
-  const privateKey: string = TestVariables.TEST_PRIVATE_KEY;
-  const undefinedPrivateKey: string = process.env.NOT_DEFINED_PRIVATE_KEY;
+  const publicKey = TestVariables.TEST_PUBLIC_KEY;
+  const privateKey = TestVariables.TEST_PRIVATE_KEY;
+  const undefinedPrivateKey = process.env.NOT_DEFINED_PRIVATE_KEY;
 
   before(() => {
     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
@@ -67,7 +67,7 @@ describe("Account", () => {
   it("should sign a transaction with message", () => {
     const account = new Account(recipientAccount, publicKey, privateKey);
 
-    const transaction = TransferTransaction.create(recipientAccount, TxType.xem, new XEM(1),
+    const transaction = TransferTransaction.create(recipientAccount, new XEM(1),
       PlainMessage.create("test transaction"));
     const signedTransaction = account.signTransaction(transaction);
     expect(signedTransaction.data).to.be.equal("010100000100009870431504200000002a9b9786d94b1ce89723c0b4ce1673aaed2185a2d8cee367499d80ac0259f0c6a086010000000000805115042800000054444c5a514c323650503552564f34514354414a5241544741355234554544484851474346334c5240420f000000000018000000010000001000000074657374207472616e73616374696f6e");
@@ -77,7 +77,7 @@ describe("Account", () => {
   it("should sign a transaction without message", () => {
     const account = new Account(recipientAccount, publicKey, privateKey);
 
-    const transaction = TransferTransaction.create(recipientAccount, TxType.xem, new XEM(1), EmptyMessage);
+    const transaction = TransferTransaction.create(recipientAccount, new XEM(1), EmptyMessage);
     const signedTransaction = account.signTransaction(transaction);
     expect(signedTransaction.data).to.be.equal("010100000100009870431504200000002a9b9786d94b1ce89723c0b4ce1673aaed2185a2d8cee367499d80ac0259f0c650c3000000000000805115042800000054444c5a514c323650503552564f34514354414a5241544741355234554544484851474346334c5240420f000000000000000000");
     expect(signedTransaction.signature).to.be.equal("73d0e12d9ecc009d9ad580d1864a68117a79f096b8dae3101e154407cba070a74727d6cf694932495f949c61b392d1b540d5bbfa7bd2f1ad381cd082baf71702");

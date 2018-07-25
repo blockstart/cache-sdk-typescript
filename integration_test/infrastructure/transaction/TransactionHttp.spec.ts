@@ -29,15 +29,15 @@ import { XEM } from "../../../src/models/mosaic/XEM";
 import { NetworkTypes } from "../../../src/models/node/NetworkTypes";
 import { PlainMessage } from "../../../src/models/transaction/PlainMessage";
 import { TimeWindow } from "../../../src/models/transaction/TimeWindow";
-import { TransferTransaction, TxType } from "../../../src/models/transaction/TransferTransaction";
+import { TransferTransaction } from "../../../src/models/transaction/TransferTransaction";
 import { NEMLibrary } from "../../../src/NEMLibrary";
 import { TestVariables } from "../../../test/config/TestVariables.spec";
 
 declare let process: any;
 
 describe("TransactionHttp", () => {
-  const recipientAccount: string = "TBV7LE4TFDEMGVOON5MYOK2P7TU2KEKLMHOLHQT6";
-  const privateKey: string = process.env.PRIVATE_KEY || TestVariables.TEST_PRIVATE_KEY;
+  const recipientAccount = "TBV7LE4TFDEMGVOON5MYOK2P7TU2KEKLMHOLHQT6";
+  const privateKey = process.env.PRIVATE_KEY || TestVariables.TEST_PRIVATE_KEY;
 
   before(() => {
     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
@@ -54,7 +54,7 @@ describe("TransactionHttp", () => {
     const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
     const account = Account.createWithPrivateKey(privateKey);
     const amount = new XEM(2000000);
-    const transferTransaction = TransferTransaction.create(new Address(recipientAccount), TxType.xem, amount,
+    const transferTransaction = TransferTransaction.create(new Address(recipientAccount), amount,
       PlainMessage.createFromDTO(
         "74657374207472616e73616374696f6e",
       ));

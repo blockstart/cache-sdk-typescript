@@ -27,14 +27,11 @@ import {TransactionDTO} from "../../infrastructure/transaction/TransactionDTO";
 import {TransferTransactionDTO} from "../../infrastructure/transaction/TransferTransactionDTO";
 import {Address} from "../account/Address";
 import {PublicAccount} from "../account/PublicAccount";
-import { CACHE } from '../mosaic/CACHE';
 import {Mosaic} from "../mosaic/Mosaic";
-import {MosaicDefinition} from "../mosaic/MosaicDefinition";
 import {MosaicId} from "../mosaic/MosaicId";
 import {MosaicTransferable} from "../mosaic/MosaicTransferable";
 import {XEM} from "../mosaic/XEM";
 import {EncryptedMessage} from "./EncryptedMessage";
-import {Message} from "./Message";
 import {PlainMessage} from "./PlainMessage";
 import {TimeWindow} from "./TimeWindow";
 import {Transaction} from "./Transaction";
@@ -46,12 +43,6 @@ export enum ExpirationType {
   twoHour = 2,
   sixHour = 6,
   twelveHour = 12
-}
-
-export enum TxType {
-  xem = "XEM",
-  cache = "CACHE",
-  other = "OTHER",
 }
 
 /**
@@ -156,7 +147,7 @@ export class TransferTransaction extends Transaction {
    * returns mosaic details without sorting through array
    * @returns MosaicTransferable
    */
-  public mosaicDetails = (): XEM | CACHE | MosaicTransferable => {
+  public mosaicDetails = (): MosaicTransferable => {
     if (this.containsMosaics()) {
       return mosaicDetails(this);
     } else {
@@ -166,7 +157,6 @@ export class TransferTransaction extends Transaction {
 
   /**
    * Create a CacheTransferTransaction object
-   * @param txType - TxType.xem, .cache, .other
    * @param recipient
    * @param mosaic
    * @param message
@@ -174,13 +164,11 @@ export class TransferTransaction extends Transaction {
    * @returns {TransferTransaction}
    */
   public static create = (recipient: Address,
-                            txType: TxType,
                             mosaic: MosaicTransferable,
                             message: PlainMessage | EncryptedMessage,
                             expiration?: ExpirationType): TransferTransaction => {
-    if (txType === TxType.xem) {
-      const xem = mosaic as XEM;
-      return TransferTransaction.createWithXem(recipient, xem, message, expiration);
+    if (mosaic.mosaicId.namespaceId === 'nem' && mosaic.mosaicId.name === 'xem') {
+      return TransferTransaction.createWithXem(recipient, mosaic, message, expiration);
     } else {
       return  TransferTransaction.createWithMosaics(recipient, [mosaic], message, expiration);
     }

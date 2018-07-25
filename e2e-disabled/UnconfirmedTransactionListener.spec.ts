@@ -30,13 +30,13 @@ import { Address } from "../src/models/account/Address";
 import { XEM } from "../src/models/mosaic/XEM";
 import { NetworkTypes } from "../src/models/node/NetworkTypes";
 import { EmptyMessage } from "../src/models/transaction/PlainMessage";
-import { TransferTransaction, TxType } from "../src/models/transaction/TransferTransaction";
+import { TransferTransaction } from "../src/models/transaction/TransferTransaction";
 import { NEMLibrary } from "../src/NEMLibrary";
 
 declare let process: any;
 
 describe("UnconfirmedTransactionListener", () => {
-  const privateKey: string = process.env.PRIVATE_KEY;
+  const privateKey = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
   let account: Account;
 
@@ -56,7 +56,7 @@ describe("UnconfirmedTransactionListener", () => {
 
     const transferTransaction = TransferTransaction.create(
       address,
-      TxType.xem,
+
       new XEM(0),
       EmptyMessage,
     );

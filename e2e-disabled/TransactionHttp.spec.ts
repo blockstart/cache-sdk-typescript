@@ -51,18 +51,18 @@ import { MultisigTransaction } from "../src/models/transaction/MultisigTransacti
 import { EmptyMessage, PlainMessage } from "../src/models/transaction/PlainMessage";
 import { ProvisionNamespaceTransaction } from "../src/models/transaction/ProvisionNamespaceTransaction";
 import { TimeWindow } from "../src/models/transaction/TimeWindow";
-import { TransferTransaction, TxType } from "../src/models/transaction/TransferTransaction";
+import { TransferTransaction } from "../src/models/transaction/TransferTransaction";
 import { NEMLibrary } from "../src/NEMLibrary";
 import { TestVariables } from "../test/config/TestVariables.spec";
 
 declare let process: any;
 
 describe("TransactionHttp", () => {
-  const recipientAccount: string = "TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD";
+  const recipientAccount = "TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD";
 
-  const privateKey: string = process.env.PRIVATE_KEY;
-  const newMultiSigPrivateKey: string = process.env.MULTISIG_PRIVATE_KEY;
-  const delegateAccountHarvestingPrivateKey: string = process.env.DELEGATE_HARVESTING_PRIVATE_KEY;
+  const privateKey = process.env.PRIVATE_KEY;
+  const newMultiSigPrivateKey = process.env.MULTISIG_PRIVATE_KEY;
+  const delegateAccountHarvestingPrivateKey = process.env.DELEGATE_HARVESTING_PRIVATE_KEY;
 
   let multisigAccount: PublicAccount;
 
@@ -84,7 +84,7 @@ describe("TransactionHttp", () => {
     const amount = new XEM(100);
     const transferTransaction = TransferTransaction.create(
     new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD"),
-      TxType.xem,
+
       amount,
       EmptyMessage);
     const signedTransaction = account.signTransaction(transferTransaction);
@@ -103,7 +103,7 @@ describe("TransactionHttp", () => {
 
     const transferTransaction = TransferTransaction.create(
       recipientPublicAccount.address,
-      TxType.xem,
+
       amount,
       encryptedMessage);
     const signedTransaction = account.signTransaction(transferTransaction);

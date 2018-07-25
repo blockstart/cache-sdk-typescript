@@ -28,7 +28,7 @@ import { Address } from "../models/account/Address";
 import { XEM } from "../models/mosaic/XEM";
 import { NetworkTypes } from "../models/node/NetworkTypes";
 import { PlainMessage } from "../models/transaction/PlainMessage";
-import { TransferTransaction, TxType } from "../models/transaction/TransferTransaction";
+import { TransferTransaction } from "../models/transaction/TransferTransaction";
 import { Password } from "../models/wallet/Password";
 import { Wallet } from "../models/wallet/Wallet";
 import get_random_values = require("get-random-values");
@@ -171,7 +171,7 @@ export class QRService {
   public decryptTrasactionQRText(qrTransactionText: QRTransactionText): TransferTransaction {
     return TransferTransaction.create(
       new Address(qrTransactionText.data.addr),
-      TxType.xem,
+
       new XEM(qrTransactionText.data.amount),
       PlainMessage.create(qrTransactionText.data.msg),
     );

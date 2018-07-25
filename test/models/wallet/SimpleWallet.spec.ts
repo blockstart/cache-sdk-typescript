@@ -37,7 +37,7 @@ import {TestVariables} from "../../config/TestVariables.spec";
 declare let process: any;
 
 describe("SimpleWallet", () => {
-  const privateKey: string = process.env.PRIVATE_KEY || TestVariables.TEST_PRIVATE_KEY;
+  const privateKey = process.env.PRIVATE_KEY || TestVariables.TEST_PRIVATE_KEY;
   let environmentAccount: Account;
 
   before(() => {

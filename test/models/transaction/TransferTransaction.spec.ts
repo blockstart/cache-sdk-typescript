@@ -36,7 +36,7 @@ import { EmptyMessage, PlainMessage } from "../../../src/models/transaction/Plai
 import { TimeWindow } from "../../../src/models/transaction/TimeWindow";
 import { HashData, TransactionInfo } from "../../../src/models/transaction/TransactionInfo";
 import { TransactionTypes } from "../../../src/models/transaction/TransactionTypes";
-import { TransferTransaction, TxType } from "../../../src/models/transaction/TransferTransaction";
+import { TransferTransaction } from "../../../src/models/transaction/TransferTransaction";
 import { NEMLibrary } from "../../../src/NEMLibrary";
 import { TestVariables } from "../../config/TestVariables.spec";
 
@@ -134,7 +134,6 @@ describe("TransferTransaction", () => {
   it("should be created by the named constructor", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(3),
       EmptyMessage);
     expect(transferTransaction.xem().quantity()).to.be.equal(3000000);
@@ -145,7 +144,6 @@ describe("TransferTransaction", () => {
   it("should create a transfer transaction with a mosaic and have the version 2", () => {
     const transaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.other,
       new MosaicTransferable(new MosaicId("multisigns", "mosaic"), new MosaicProperties(), 4000),
       EmptyMessage
     );
@@ -156,7 +154,6 @@ describe("TransferTransaction", () => {
   it("should have the minimum fee calculated 0 xem transaction for TEST_NET", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(0),
       EmptyMessage);
     expect(transferTransaction.fee).to.be.equal(Math.floor(0.05 * 1000000));
@@ -165,7 +162,6 @@ describe("TransferTransaction", () => {
   it("should have minimum fee with a message for TEST_NET", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(0),
       PlainMessage.create("test transaction"));
     expect(transferTransaction.fee).to.be.equal(Math.floor(0.05 * 1000000) + 0.05 * 1000000);
@@ -174,7 +170,6 @@ describe("TransferTransaction", () => {
   it("should take into account the maximum of fee for given an xem of less 19000", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(19999.9999),
       EmptyMessage);
     expect(transferTransaction.fee).to.be.equal(Math.floor(new XEM(0.05).quantity()));
@@ -183,7 +178,6 @@ describe("TransferTransaction", () => {
   it("should take into account the maximum of fee for given an xem of less 19000", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(20000),
       EmptyMessage);
     expect(transferTransaction.fee).to.be.equal(Math.floor(new XEM(0.10).quantity()));
@@ -192,7 +186,6 @@ describe("TransferTransaction", () => {
   it("should take into account the maximum of fee for given a huge xem", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(250000),
       EmptyMessage);
     expect(transferTransaction.fee).to.be.equal(Math.floor(new XEM(1.25).quantity()));
@@ -201,7 +194,6 @@ describe("TransferTransaction", () => {
   it("should take into account the maximum of fee for given a huge xem -1", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(249999),
       EmptyMessage);
     expect(transferTransaction.fee).to.be.equal(Math.floor(new XEM(1.20).quantity()));
@@ -210,7 +202,6 @@ describe("TransferTransaction", () => {
   it("should take into account the maximum of fee for given a huge xem", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(500000),
       EmptyMessage);
     expect(transferTransaction.fee).to.be.equal(Math.floor(new XEM(1.25).quantity()));
@@ -219,13 +210,11 @@ describe("TransferTransaction", () => {
   it("should get the same fee sending regular xem transaction and mosaic transaction xem 50", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(50),
       EmptyMessage);
 
     const mosaicTransferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.other,
       new XEM(50),
       EmptyMessage,
     );
@@ -236,13 +225,11 @@ describe("TransferTransaction", () => {
   it("should get the same fee sending regular xem transaction and mosaic transaction xem 500000", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
       new XEM(500000),
       EmptyMessage);
 
     const mosaicTransferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.other,
       new XEM(500000),
       EmptyMessage,
     );
@@ -276,7 +263,7 @@ describe("TransferTransaction", () => {
     const account = Account.createWithPrivateKey(privateKey);
     const encryptedMessage = account.encryptMessage("test transaction", PublicAccount.createWithPublicKey(account.publicKey));
     expect(() => {
-      TransferTransaction.create(recipientPublicAccount.address, TxType.xem, new XEM(2), encryptedMessage);
+      TransferTransaction.create(recipientPublicAccount.address, new XEM(2), encryptedMessage);
     }).to.throw(Error, "Recipient address and recipientPublicAccount don't match");
   });
 
@@ -317,7 +304,7 @@ describe("TransferTransaction", () => {
   it("should return false when the transaction does not contain mosaics", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
+
       new XEM(500000),
       EmptyMessage);
 
@@ -370,7 +357,7 @@ describe("TransferTransaction", () => {
   it("should throw error when the transaction does not contain mosaics and mosaic function is called", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
+
       new XEM(500000),
       EmptyMessage);
 
@@ -408,7 +395,7 @@ describe("TransferTransaction", () => {
   it("should throw error when mosaicsIds() is called and it doesn't contain mosaics", () => {
     const transferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      TxType.xem,
+
       new XEM(500000),
       EmptyMessage);
 

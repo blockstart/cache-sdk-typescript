@@ -31,13 +31,13 @@ import { Address } from '../../src/models/account/Address';
 import { XEM } from "../../src/models/mosaic/XEM";
 import { NetworkTypes } from "../../src/models/node/NetworkTypes";
 import { EmptyMessage } from "../../src/models/transaction/PlainMessage";
-import { ExpirationType, TransferTransaction, TxType } from '../../src/models/transaction/TransferTransaction';
+import { ExpirationType, TransferTransaction } from '../../src/models/transaction/TransferTransaction';
 import { NEMLibrary } from "../../src/NEMLibrary";
 
 declare let process: any;
 
 describe("ConfirmedTransactionListener", () => {
-  const privateKey: string = process.env.PRIVATE_KEY;
+  const privateKey = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
   let account: Account;
 
@@ -57,7 +57,6 @@ describe("ConfirmedTransactionListener", () => {
 
     const transferTransaction = TransferTransaction.create(
       address,
-      TxType.xem,
       new XEM(2),
       EmptyMessage,
       ExpirationType.twoHour
@@ -85,7 +84,6 @@ describe("ConfirmedTransactionListener", () => {
     const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
     const transferTransaction = TransferTransaction.create(
       address,
-      TxType.cache,
       new CACHE(3),
       EmptyMessage,
       ExpirationType.twoHour

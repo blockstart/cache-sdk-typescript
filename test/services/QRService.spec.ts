@@ -43,7 +43,7 @@ describe("QRService", () => {
     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
     qrService = new QRService();
     password = new Password("12345678");
-    const privateKey: string = process.env.PRIVATE_KEY || TestVariables.TEST_PRIVATE_KEY;
+    const privateKey = process.env.PRIVATE_KEY || TestVariables.TEST_PRIVATE_KEY;
     simpleWallet = SimpleWallet.createWithPrivateKey("testWallet", password, privateKey);
   });
 

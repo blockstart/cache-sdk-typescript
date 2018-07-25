@@ -29,15 +29,15 @@ import { Address } from "../src/models/account/Address";
 import { XEM } from "../src/models/mosaic/XEM";
 import { NetworkTypes } from "../src/models/node/NetworkTypes";
 import { EmptyMessage, PlainMessage } from "../src/models/transaction/PlainMessage";
-import { TransferTransaction, TxType } from "../src/models/transaction/TransferTransaction";
+import { TransferTransaction } from "../src/models/transaction/TransferTransaction";
 import { NEMLibrary } from "../src/NEMLibrary";
 import { TestVariables } from "../test/config/TestVariables.spec";
 
 declare let process: any;
 
 describe("TransferTransactionTestnetFees", () => {
-  const recipientAccount: string = "TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD";
-  const privateKey: string = process.env.PRIVATE_KEY;
+  const recipientAccount = "TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD";
+  const privateKey = process.env.PRIVATE_KEY;
   let account: Account;
   let transactionHttp: TransactionHttp;
 
@@ -54,7 +54,7 @@ describe("TransferTransactionTestnetFees", () => {
   it("should be SUCCESS if the transaction sends 0 XEM and NoMessage", async () => {
     const transaction = TransferTransaction.create(
       new Address(recipientAccount),
-      TxType.xem,
+
       new XEM(0),
       EmptyMessage);
     const signedTransaction = account.signTransaction(transaction);
@@ -67,7 +67,7 @@ describe("TransferTransactionTestnetFees", () => {
   it("should be SUCCESS if the transaction sends 0 XEM and a little message", async () => {
     const transaction = TransferTransaction.create(
       new Address(recipientAccount),
-      TxType.xem,
+
       new XEM(0),
       PlainMessage.create("simple"));
     const signedTransaction = account.signTransaction(transaction);

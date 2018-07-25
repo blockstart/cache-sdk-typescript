@@ -30,14 +30,14 @@ import {XEM} from "../src/models/mosaic/XEM";
 import {NetworkTypes} from "../src/models/node/NetworkTypes";
 import {EmptyMessage} from "../src/models/transaction/PlainMessage";
 import {TimeWindow} from "../src/models/transaction/TimeWindow";
-import { TransferTransaction, TxType } from "../src/models/transaction/TransferTransaction";
+import { TransferTransaction } from "../src/models/transaction/TransferTransaction";
 import {NEMLibrary} from "../src/NEMLibrary";
 import {Observable} from "rxjs";
 
 declare let process: any;
 
 describe("AccountListener", () => {
-  const privateKey: string = process.env.PRIVATE_KEY;
+  const privateKey = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
   let account: Account;
 
@@ -57,7 +57,7 @@ describe("AccountListener", () => {
 
     const transferTransaction = TransferTransaction.create(
       address,
-      TxType.xem,
+
       new XEM(0),
       EmptyMessage,
     );

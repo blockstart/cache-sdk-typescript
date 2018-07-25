@@ -28,8 +28,8 @@ import {NetworkTypes} from "../../../src/models/node/NetworkTypes";
 import {NEMLibrary} from "../../../src/NEMLibrary";
 
 describe("PublicAccount", () => {
-  const recipientAccount: string = "TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA";
-  const publicKey: string = "a4f9d42cf8e1f7c6c3216ede81896c4fa9f49071ee4aee2a4843e2711899b23a";
+  const recipientAccount = "TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA";
+  const publicKey = "a4f9d42cf8e1f7c6c3216ede81896c4fa9f49071ee4aee2a4843e2711899b23a";
 
   before(() => {
     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
