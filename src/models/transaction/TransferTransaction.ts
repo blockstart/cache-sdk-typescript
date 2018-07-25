@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { cacheDetails, xemDetails } from '../../utilities/TransactionUtilities';
+import { mosaicDetails, xemDetails } from '../../utilities/TransactionUtilities';
 import {TransactionDTO} from "../../infrastructure/transaction/TransactionDTO";
 import {TransferTransactionDTO} from "../../infrastructure/transaction/TransferTransactionDTO";
 import {Address} from "../account/Address";
@@ -158,7 +158,7 @@ export class TransferTransaction extends Transaction {
    */
   public mosaicDetails = (): XEM | CACHE | MosaicTransferable => {
     if (this.containsMosaics()) {
-      return cacheDetails(this);
+      return mosaicDetails(this);
     } else {
       return xemDetails(this);
     }

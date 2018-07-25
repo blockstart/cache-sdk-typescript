@@ -23,12 +23,14 @@
  */
 
 import { CACHE } from "../models/mosaic/CACHE";
+import { MosaicTransferable } from '../models/mosaic/MosaicTransferable';
 import { XEM } from "../models/mosaic/XEM";
 import { MultisigTransaction } from "../models/transaction/MultisigTransaction";
 import { Mosaic } from "../models/mosaic/Mosaic";
 import { Transaction } from "../models/transaction/Transaction";
 import { TransactionTypes } from "../models/transaction/TransactionTypes";
 import { TransferTransaction } from "../models/transaction/TransferTransaction";
+import { MosaicProperties } from "../models/mosaic/MosaicDefinition";
 
 /**
  * Filters a list of Transactions and only returns transactions of type Transfer
@@ -84,10 +86,15 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
  * @param {TransferTransaction} transaction
  * @returns {boolean}
  */
-export const cacheDetails = (transaction: TransferTransaction): CACHE => {
+export const mosaicDetails = (transaction: TransferTransaction): MosaicTransferable => {
   if (transaction.containsMosaics()) {
-    const cache = transaction.mosaics().find(mosaic => mosaic.mosaicId.namespaceId === CACHE.MOSAICID.namespaceId && mosaic.mosaicId.name === CACHE.MOSAICID.name);
-    if (cache) { return new CACHE(cache.quantity / Math.pow(10, CACHE.DIVISIBILITY)); }
+    transaction.mosaics().map(mosaic => {
+      if (mosaic.mosaicId.namespaceId === CACHE.MOSAICID.namespaceId && mosaic.mosaicId.name === CACHE.MOSAICID.name) {
+        return new CACHE(mosaic.quantity / Math.pow(10, CACHE.DIVISIBILITY));
+      } else {
+        return new MosaicTransferable(mosaic.mosaicId, new MosaicProperties(), mosaic.quantity)
+      }
+    });
   }
   return new CACHE(0);
 };
