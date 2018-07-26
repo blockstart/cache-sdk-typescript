@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
-import { mosaicDetails, xemDetails } from '../../utilities/TransactionUtilities';
 import {TransactionDTO} from "../../infrastructure/transaction/TransactionDTO";
 import {TransferTransactionDTO} from "../../infrastructure/transaction/TransferTransactionDTO";
 import {Address} from "../account/Address";
 import {PublicAccount} from "../account/PublicAccount";
+import { CACHE } from '../mosaic/CACHE';
 import {Mosaic} from "../mosaic/Mosaic";
+import { MosaicProperties } from "../mosaic/MosaicDefinition";
 import {MosaicId} from "../mosaic/MosaicId";
 import {MosaicTransferable} from "../mosaic/MosaicTransferable";
 import {XEM} from "../mosaic/XEM";
@@ -144,14 +145,21 @@ export class TransferTransaction extends Transaction {
   }
 
   /**
-   * returns mosaic details without sorting through array
-   * @returns MosaicTransferable
+   * returns mosaic array of received mosaics
+   * @returns {MosaicTransferable[]}
    */
-  public mosaicDetails = (): MosaicTransferable => {
+  public mosaicDetails = (): MosaicTransferable[] => {
     if (this.containsMosaics()) {
-      return mosaicDetails(this);
+      return this.mosaics().map(mosaic => {
+        if (mosaic.mosaicId.namespaceId === CACHE.MOSAICID.namespaceId && mosaic.mosaicId.name === CACHE.MOSAICID.name) {
+          return new CACHE(mosaic.quantity / Math.pow(10, CACHE.DIVISIBILITY));
+        }
+        else {
+          return new MosaicTransferable(mosaic.mosaicId, new MosaicProperties(), mosaic.quantity)
+        }
+      })
     } else {
-      return xemDetails(this);
+      return [this.xem()];
     }
   };
 
