@@ -30,6 +30,6 @@ export const nodeEndpoints = (): Array<WebSocketConfig> => {
   if (NEMLibrary.getNetworkType() === NetworkTypes.MAIN_NET) {
     return [{ domain:'alice7.nem.ninja' }];
   } else {
-    return [{ domain: '50.3.87.123' }];
+    return [{ domain: '23.228.67.85' }];
   }
 };

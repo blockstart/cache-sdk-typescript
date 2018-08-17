@@ -63,7 +63,7 @@ describe("ConfirmedTransactionListener", () => {
     );
 
     const subscriber = account.address.confirmedTxObserver().subscribe((x) => {
-      console.log(x);
+      console.log(x.mosaicDetails()[0].quantity());
       subscriber.unsubscribe();
       done();
     }, (err) => {
@@ -90,7 +90,7 @@ describe("ConfirmedTransactionListener", () => {
     );
 
     const subscriber = account.address.confirmedTxObserver().subscribe((x) => {
-      console.log(x);
+      console.log(x.mosaicDetails()[0].quantity());
       subscriber.unsubscribe();
       done();
     }, (err) => {
