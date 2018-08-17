@@ -23,6 +23,7 @@
  */
 
 import { Observable } from 'rxjs/Observable';
+import { UnconfirmedTransactionListener } from '../../infrastructure/UnconfirmedTransactionListener';
 import { mapTransfer, transferFilter } from '../../utilities/TransactionUtilities';
 import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';
 import { nodeEndpoints } from '../../utilities/NodeEndpointUtilities';
@@ -76,10 +77,18 @@ export class Address {
   }
 
   /**
-   * Start listening new confirmed cache transactions
+   * Start listening new confirmed transactions
    * @returns {Observable<Array<TransferTransaction>>}
    */
   public confirmedTxObserver = (): Observable<TransferTransaction> => {
     return new ConfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
+  }
+
+  /**
+   * Start listening new unconfirmed transactions
+   * @returns {Observable<Array<TransferTransaction>>}
+   */
+  public unconfirmedTxObserver = (): Observable<TransferTransaction> => {
+    return new UnconfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
   }
 }

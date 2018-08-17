@@ -36,7 +36,7 @@ import { NEMLibrary } from "../../src/NEMLibrary";
 
 declare let process: any;
 
-describe("ConfirmedTransactionListener", () => {
+describe("AddressTransactionListener", () => {
   const privateKey = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
   let account: Account;
@@ -52,7 +52,7 @@ describe("ConfirmedTransactionListener", () => {
     NEMLibrary.reset();
   });
 
-  it("should listen to xem transaction", (done) => {
+  it("should listen to confirmed xem transaction", (done) => {
     const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
 
     const transferTransaction = TransferTransaction.create(
@@ -80,7 +80,7 @@ describe("ConfirmedTransactionListener", () => {
       });
   });
 
-  it("should listen to cache transaction", (done) => {
+  it("should listen to confirmed cache transaction", (done) => {
     const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
     const transferTransaction = TransferTransaction.create(
       address,
@@ -90,6 +90,61 @@ describe("ConfirmedTransactionListener", () => {
     );
 
     const subscriber = account.address.confirmedTxObserver().subscribe((x) => {
+      console.log(x.mosaicDetails()[0].quantity());
+      subscriber.unsubscribe();
+      done();
+    }, (err) => {
+      console.log(err);
+    });
+
+    const transaction = account.signTransaction(transferTransaction);
+
+    Observable.of(1)
+      .delay(3000)
+      .flatMap((ignored) => transactionHttp.announceTransaction(transaction))
+      .subscribe((x) => {
+        console.log(x);
+      });
+  });
+
+  it("should listen to unconfirmed xem transaction", (done) => {
+    const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+
+    const transferTransaction = TransferTransaction.create(
+      address,
+      new XEM(2),
+      EmptyMessage,
+      ExpirationType.twoHour
+    );
+
+    const subscriber = account.address.unconfirmedTxObserver().subscribe((x) => {
+      console.log(x.mosaicDetails()[0].quantity());
+      subscriber.unsubscribe();
+      done();
+    }, (err) => {
+      console.log(err);
+    });
+
+    const transaction = account.signTransaction(transferTransaction);
+
+    Observable.of(1)
+      .delay(3000)
+      .flatMap((ignored) => transactionHttp.announceTransaction(transaction))
+      .subscribe((x) => {
+        console.log(x);
+      });
+  });
+
+  it("should listen to unconfirmed cache transaction", (done) => {
+    const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+    const transferTransaction = TransferTransaction.create(
+      address,
+      new CACHE(3),
+      EmptyMessage,
+      ExpirationType.twoHour
+    );
+
+    const subscriber = account.address.unconfirmedTxObserver().subscribe((x) => {
       console.log(x.mosaicDetails()[0].quantity());
       subscriber.unsubscribe();
       done();

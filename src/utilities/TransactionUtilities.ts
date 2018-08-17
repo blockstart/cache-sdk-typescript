@@ -59,9 +59,13 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
     } else {
       xem = transferTX.xem();
     }
+    let transactionInfo;
+    if (transferTX.isConfirmed()) {
+      transactionInfo = transferTX.getTransactionInfo();
+    }
     return new TransferTransaction(transferTX.recipient, xem, transferTX.timeWindow,
       transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, mosaics,
-      transferTX.signer, transferTX.getTransactionInfo()
+      transferTX.signer, transactionInfo
     );
   } else if (transaction.type == TransactionTypes.MULTISIG && (transaction as MultisigTransaction).otherTransaction.type == TransactionTypes.TRANSFER) {
     const transferTX = (transaction as MultisigTransaction).otherTransaction as TransferTransaction;
@@ -70,9 +74,13 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
     } else {
       xem = transferTX.xem();
     }
+    let transactionInfo;
+    if (transferTX.isConfirmed()) {
+      transactionInfo = transferTX.getTransactionInfo();
+    }
     return new TransferTransaction(transferTX.recipient, xem, transferTX.timeWindow,
       transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, mosaics,
-      transferTX.signer, transferTX.getTransactionInfo()
+      transferTX.signer, transactionInfo
     );
   }
   throw new Error("Transaction does not contain TransferTransaction");
