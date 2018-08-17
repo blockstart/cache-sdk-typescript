@@ -22,7 +22,13 @@
  * SOFTWARE.
  */
 
+import { Observable } from 'rxjs/Observable';
+import { UnconfirmedTransactionListener } from '../../infrastructure/UnconfirmedTransactionListener';
+import { mapTransfer, transferFilter } from '../../utilities/TransactionUtilities';
+import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';
+import { nodeEndpoints } from '../../utilities/NodeEndpointUtilities';
 import {NetworkTypes} from "../node/NetworkTypes";
+import { TransferTransaction } from '../transaction/TransferTransaction';
 
 /**
  * Address model
@@ -68,5 +74,21 @@ export class Address {
 
   public equals(otherAddress: Address) {
     return this.plain() == otherAddress.plain();
+  }
+
+  /**
+   * Start listening new confirmed transactions
+   * @returns {Observable<Array<TransferTransaction>>}
+   */
+  public confirmedTxObserver = (): Observable<TransferTransaction> => {
+    return new ConfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
+  }
+
+  /**
+   * Start listening new unconfirmed transactions
+   * @returns {Observable<Array<TransferTransaction>>}
+   */
+  public unconfirmedTxObserver = (): Observable<TransferTransaction> => {
+    return new UnconfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
   }
 }

@@ -36,7 +36,7 @@ declare let process: any;
 
 describe("Transaction", () => {
   const recipientAccount = new Address("TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA");
-  const privateKey: string = process.env.PRIVATE_KEY || TestVariables.TEST_PRIVATE_KEY;
+  const privateKey = process.env.PRIVATE_KEY || TestVariables.TEST_PRIVATE_KEY;
 
   before(() => {
     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);

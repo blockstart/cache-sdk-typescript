@@ -40,8 +40,8 @@ describe("AccountInfo", () => {
     NEMLibrary.reset();
   });
 
-  const address: string = "TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA";
-  const publicKey: string = "a4f9d42cf8e1f7c6c3216ede81896c4fa9f49071ee4aee2a4843e2711899b23a";
+  const address = "TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA";
+  const publicKey = "a4f9d42cf8e1f7c6c3216ede81896c4fa9f49071ee4aee2a4843e2711899b23a";
 
   it("should create an AccountInfo object", (done) => {
     const accountInfoDTO = {

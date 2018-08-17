@@ -30,7 +30,7 @@ import {
 import {AccountImportanceInfo} from "../../../src/models/account/AccountImportanceInfo";
 
 describe("AccountImportanceInfo", () => {
-  const address: string = "TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA";
+  const address ="TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA";
 
   it("should create an AccountImportanceInfo object", (done) => {
     const accountImportanceViewModelDTO = {

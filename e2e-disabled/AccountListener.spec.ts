@@ -22,22 +22,22 @@
  * SOFTWARE.
  */
 
-import {ConfirmedTransactionListener} from "../../src/infrastructure/ConfirmedTransactionListener";
-import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
-import {Account} from "../../src/models/account/Account";
-import {Address} from "../../src/models/account/Address";
-import {XEM} from "../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../src/models/node/NetworkTypes";
-import {EmptyMessage} from "../../src/models/transaction/PlainMessage";
-import {TimeWindow} from "../../src/models/transaction/TimeWindow";
-import {TransferTransaction} from "../../src/models/transaction/TransferTransaction";
-import {NEMLibrary} from "../../src/NEMLibrary";
-import {Observable} from "rxjs/Observable";
+import {AccountListener} from "../src/infrastructure/AccountListener";
+import {TransactionHttp} from "../src/infrastructure/TransactionHttp";
+import {Account} from "../src/models/account/Account";
+import {Address} from "../src/models/account/Address";
+import {XEM} from "../src/models/mosaic/XEM";
+import {NetworkTypes} from "../src/models/node/NetworkTypes";
+import {EmptyMessage} from "../src/models/transaction/PlainMessage";
+import {TimeWindow} from "../src/models/transaction/TimeWindow";
+import { TransferTransaction } from "../src/models/transaction/TransferTransaction";
+import {NEMLibrary} from "../src/NEMLibrary";
+import {Observable} from "rxjs";
 
 declare let process: any;
 
-describe("ConfirmedTransactionListener", () => {
-  const privateKey: string = process.env.PRIVATE_KEY;
+describe("AccountListener", () => {
+  const privateKey = process.env.PRIVATE_KEY;
   let transactionHttp: TransactionHttp;
   let account: Account;
 
@@ -45,7 +45,7 @@ describe("ConfirmedTransactionListener", () => {
     // Initialize NEMLibrary for TEST_NET Network
     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
     account = Account.createWithPrivateKey(privateKey);
-    transactionHttp = new TransactionHttp();
+    transactionHttp  = new TransactionHttp();
   });
 
   after(() => {
@@ -53,23 +53,22 @@ describe("ConfirmedTransactionListener", () => {
   });
 
   it("should listen the next data", (done) => {
-    const address = new Address("TDM3DO-ZM5WJ3-ZRBPSM-YRU6JS-WKUCAH-5VIPOF-4W7K");
+    const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
 
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       address,
+
       new XEM(0),
       EmptyMessage,
     );
 
-    const subscriber = new ConfirmedTransactionListener().given(account.address)
-      .subscribe((x) => {
-        console.log(x);
-        subscriber.unsubscribe();
-        done();
-      }, (err) => {
-        console.log(err);
-      });
+    const subscriber = new AccountListener().given(account.address).subscribe((x) => {
+      console.log(x);
+      subscriber.unsubscribe();
+      done();
+    }, (err) => {
+      console.log(err);
+    });
 
     const transaction = account.signTransaction(transferTransaction);
 

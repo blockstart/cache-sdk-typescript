@@ -26,7 +26,7 @@ import nock = require("nock");
 import {TestVariables} from "../../../test/config/TestVariables.spec";
 
 describe("AccountHttp Response Mapping", () => {
-  const address: string = "TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA";
+  const address = "TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA";
 
   after(() => {
     nock.cleanAll();

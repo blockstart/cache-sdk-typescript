@@ -23,9 +23,9 @@
  */
 
 
-import { MosaicProperties } from "../../models/mosaic/MosaicDefinition";
-import { MosaicId } from "../../models/mosaic/MosaicId";
-import { MosaicTransferable } from "../../models/mosaic/MosaicTransferable";
+import { MosaicProperties } from "./MosaicDefinition";
+import { MosaicId } from "./MosaicId";
+import { MosaicTransferable } from "./MosaicTransferable";
 
 /**
  * XEM mosaic transferable

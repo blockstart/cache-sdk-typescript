@@ -40,7 +40,7 @@ describe("ImportanceTransferTransaction", () => {
   after(() => {
     NEMLibrary.reset();
   });
-  const publicKey: string = "a4f9d42cf8e1f7c6c3216ede81896c4fa9f49071ee4aee2a4843e2711899b23a";
+  const publicKey = "a4f9d42cf8e1f7c6c3216ede81896c4fa9f49071ee4aee2a4843e2711899b23a";
 
   it("should be created with Activation Mode", () => {
     const transaction = new ImportanceTransferTransaction(

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-import { CacheTransferTransaction } from '../cacheModel/cacheTransaction/CacheTransferTransaction';
-import { CACHE } from "../cacheModel/cacheMosaic/CACHE";
 import { XEM } from "../models/mosaic/XEM";
 import { MultisigTransaction } from "../models/transaction/MultisigTransaction";
 import { Mosaic } from "../models/mosaic/Mosaic";
@@ -49,9 +47,9 @@ export const transferFilter = (transaction: Transaction): boolean => {
  * Parses through list of transactions and casts them to CacheTransferTransaction so we
  * can have access to important transfer details
  * @param {Transaction} transaction
- * @returns {CacheTransferTransaction}
+ * @returns {TransferTransaction}
  */
-export const mapTransfer = (transaction: Transaction): CacheTransferTransaction => {
+export const mapTransfer = (transaction: Transaction): TransferTransaction => {
   let mosaics: Array<Mosaic> = [];
   let xem: XEM = new XEM(1);
   if (transaction.type == TransactionTypes.TRANSFER) {
@@ -59,48 +57,31 @@ export const mapTransfer = (transaction: Transaction): CacheTransferTransaction 
     if (transferTX.containsMosaics()) {
       mosaics = transferTX.mosaics();
     } else {
-      xem = xemDetails(transferTX);
+      xem = transferTX.xem();
     }
-    return new CacheTransferTransaction(transferTX.recipient, xem, transferTX.timeWindow,
+    let transactionInfo;
+    if (transferTX.isConfirmed()) {
+      transactionInfo = transferTX.getTransactionInfo();
+    }
+    return new TransferTransaction(transferTX.recipient, xem, transferTX.timeWindow,
       transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, mosaics,
-      transferTX.signer, transferTX.getTransactionInfo()
+      transferTX.signer, transactionInfo
     );
   } else if (transaction.type == TransactionTypes.MULTISIG && (transaction as MultisigTransaction).otherTransaction.type == TransactionTypes.TRANSFER) {
     const transferTX = (transaction as MultisigTransaction).otherTransaction as TransferTransaction;
     if (transferTX.containsMosaics()) {
       mosaics = transferTX.mosaics();
     } else {
-      xem = xemDetails(transferTX);
+      xem = transferTX.xem();
     }
-    return new CacheTransferTransaction(transferTX.recipient, xem, transferTX.timeWindow,
+    let transactionInfo;
+    if (transferTX.isConfirmed()) {
+      transactionInfo = transferTX.getTransactionInfo();
+    }
+    return new TransferTransaction(transferTX.recipient, xem, transferTX.timeWindow,
       transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, mosaics,
-      transferTX.signer, transferTX.getTransactionInfo()
+      transferTX.signer, transactionInfo
     );
   }
   throw new Error("Transaction does not contain TransferTransaction");
-};
-
-/**
- * Verifies that mosaic received is cache and returns amount
- * @param {TransferTransaction} transaction
- * @returns {boolean}
- */
-export const cacheDetails = (transaction: TransferTransaction): CACHE => {
-  if (transaction.containsMosaics()) {
-    const cache = transaction.mosaics().find(mosaic => mosaic.mosaicId.namespaceId === CACHE.MOSAICID.namespaceId && mosaic.mosaicId.name === CACHE.MOSAICID.name);
-    if (cache) { return new CACHE(cache.quantity / Math.pow(10, CACHE.DIVISIBILITY)); }
-  }
-  return new CACHE(0);
-};
-
-/**
- * Verifies that mosaic received is xem and returns amount
- * @param {TransferTransaction} transaction
- * @returns {boolean}
- */
-export const xemDetails = (transaction: TransferTransaction): XEM => {
-  if (!transaction.containsMosaics()) {
-      return new XEM(transaction.xem().amount);
-  }
-  return new XEM(0);
 };

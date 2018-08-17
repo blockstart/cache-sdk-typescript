@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-import {deepEqual} from "assert";
-import {expect} from "chai";
-import {Account} from "../../../src/models/account/Account";
-import {Address} from "../../../src/models/account/Address";
-import {PublicAccount} from "../../../src/models/account/PublicAccount";
-import {MosaicProperties} from "../../../src/models/mosaic/MosaicDefinition";
-import {MosaicId} from "../../../src/models/mosaic/MosaicId";
-import {MosaicTransferable} from "../../../src/models/mosaic/MosaicTransferable";
-import {XEM} from "../../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../../src/models/node/NetworkTypes";
-import {EmptyMessage, PlainMessage} from "../../../src/models/transaction/PlainMessage";
-import {TimeWindow} from "../../../src/models/transaction/TimeWindow";
-import {HashData, TransactionInfo} from "../../../src/models/transaction/TransactionInfo";
-import {TransactionTypes} from "../../../src/models/transaction/TransactionTypes";
-import {TransferTransaction} from "../../../src/models/transaction/TransferTransaction";
-import {NEMLibrary} from "../../../src/NEMLibrary";
-import {TestVariables} from "../../config/TestVariables.spec";
+import { deepEqual } from "assert";
+import { expect } from "chai";
+import { Account } from "../../../src/models/account/Account";
+import { Address } from "../../../src/models/account/Address";
+import { PublicAccount } from "../../../src/models/account/PublicAccount";
+import { MosaicProperties } from "../../../src/models/mosaic/MosaicDefinition";
+import { MosaicId } from "../../../src/models/mosaic/MosaicId";
+import { MosaicTransferable } from "../../../src/models/mosaic/MosaicTransferable";
+import { XEM } from "../../../src/models/mosaic/XEM";
+import { NetworkTypes } from "../../../src/models/node/NetworkTypes";
+import { EmptyMessage, PlainMessage } from "../../../src/models/transaction/PlainMessage";
+import { TimeWindow } from "../../../src/models/transaction/TimeWindow";
+import { HashData, TransactionInfo } from "../../../src/models/transaction/TransactionInfo";
+import { TransactionTypes } from "../../../src/models/transaction/TransactionTypes";
+import { TransferTransaction } from "../../../src/models/transaction/TransferTransaction";
+import { NEMLibrary } from "../../../src/NEMLibrary";
+import { TestVariables } from "../../config/TestVariables.spec";
 
 declare let process: any;
 
@@ -133,7 +133,6 @@ describe("TransferTransaction", () => {
 
   it("should be created by the named constructor", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(3),
       EmptyMessage);
@@ -143,11 +142,10 @@ describe("TransferTransaction", () => {
   });
 
   it("should create a transfer transaction with a mosaic and have the version 2", () => {
-    const transaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
+    const transaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      [new MosaicTransferable(new MosaicId("multisigns", "mosaic"), new MosaicProperties(), 4000)],
-      EmptyMessage,
+      new MosaicTransferable(new MosaicId("multisigns", "mosaic"), new MosaicProperties(), 4000),
+      EmptyMessage
     );
     expect(transaction.version).to.be.equal(2);
     deepEqual(transaction.mosaics()[0].mosaicId, new MosaicId("multisigns", "mosaic"));
@@ -155,7 +153,6 @@ describe("TransferTransaction", () => {
 
   it("should have the minimum fee calculated 0 xem transaction for TEST_NET", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(0),
       EmptyMessage);
@@ -164,7 +161,6 @@ describe("TransferTransaction", () => {
 
   it("should have minimum fee with a message for TEST_NET", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(0),
       PlainMessage.create("test transaction"));
@@ -173,7 +169,6 @@ describe("TransferTransaction", () => {
 
   it("should take into account the maximum of fee for given an xem of less 19000", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(19999.9999),
       EmptyMessage);
@@ -182,7 +177,6 @@ describe("TransferTransaction", () => {
 
   it("should take into account the maximum of fee for given an xem of less 19000", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(20000),
       EmptyMessage);
@@ -191,7 +185,6 @@ describe("TransferTransaction", () => {
 
   it("should take into account the maximum of fee for given a huge xem", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(250000),
       EmptyMessage);
@@ -200,7 +193,6 @@ describe("TransferTransaction", () => {
 
   it("should take into account the maximum of fee for given a huge xem -1", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(249999),
       EmptyMessage);
@@ -209,7 +201,6 @@ describe("TransferTransaction", () => {
 
   it("should take into account the maximum of fee for given a huge xem", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(500000),
       EmptyMessage);
@@ -218,15 +209,13 @@ describe("TransferTransaction", () => {
 
   it("should get the same fee sending regular xem transaction and mosaic transaction xem 50", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(50),
       EmptyMessage);
 
-    const mosaicTransferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
+    const mosaicTransferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      [new XEM(50)],
+      new XEM(50),
       EmptyMessage,
     );
 
@@ -235,15 +224,13 @@ describe("TransferTransaction", () => {
 
   it("should get the same fee sending regular xem transaction and mosaic transaction xem 500000", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       new XEM(500000),
       EmptyMessage);
 
-    const mosaicTransferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
+    const mosaicTransferTransaction = TransferTransaction.create(
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
-      [new XEM(500000)],
+      new XEM(500000),
       EmptyMessage,
     );
 
@@ -253,7 +240,6 @@ describe("TransferTransaction", () => {
   it("should calculate mosaic fee correctly", () => {
 
     const mosaicTransferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       [new MosaicTransferable(new MosaicId("test", "test"), new MosaicProperties(3, 9000000), 150)],
       EmptyMessage,
@@ -265,7 +251,6 @@ describe("TransferTransaction", () => {
   it("should calculate mosaic and message fee correctly", () => {
 
     const mosaicTransferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       [new MosaicTransferable(new MosaicId("test", "test"), new MosaicProperties(3, 9000000), 150)],
       PlainMessage.create("message"),
@@ -278,7 +263,7 @@ describe("TransferTransaction", () => {
     const account = Account.createWithPrivateKey(privateKey);
     const encryptedMessage = account.encryptMessage("test transaction", PublicAccount.createWithPublicKey(account.publicKey));
     expect(() => {
-      TransferTransaction.create(TimeWindow.createWithDeadline(), recipientPublicAccount.address, new XEM(2), encryptedMessage);
+      TransferTransaction.create(recipientPublicAccount.address, new XEM(2), encryptedMessage);
     }).to.throw(Error, "Recipient address and recipientPublicAccount don't match");
   });
 
@@ -287,7 +272,6 @@ describe("TransferTransaction", () => {
     const encryptedMessage = account.encryptMessage("test transaction", PublicAccount.createWithPublicKey(account.publicKey));
     expect(() => {
       TransferTransaction.createWithMosaics(
-        TimeWindow.createWithDeadline(),
         recipientPublicAccount.address,
         [new MosaicTransferable(new MosaicId("multisigns", "mosaic"), new MosaicProperties(), 1),
           new MosaicTransferable(new MosaicId("multisigns", "mosaic2"), new MosaicProperties(), 1),
@@ -319,8 +303,8 @@ describe("TransferTransaction", () => {
 
   it("should return false when the transaction does not contain mosaics", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
+
       new XEM(500000),
       EmptyMessage);
 
@@ -329,7 +313,6 @@ describe("TransferTransaction", () => {
 
   it("should return true when the transaction contains mosaics", () => {
     const mosaicTransferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       [new MosaicTransferable(new MosaicId("test", "test"), new MosaicProperties(3, 9000000), 150)],
       PlainMessage.create("message"),
@@ -341,7 +324,6 @@ describe("TransferTransaction", () => {
 
   it("should return true when the transaction mosaics[0] amount equals expected value multiplier = 1", () => {
     const mosaicTransferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       [new MosaicTransferable(new MosaicId("test", "test"), new MosaicProperties(3, 9000000), 150)],
       PlainMessage.create("message"),
@@ -352,7 +334,6 @@ describe("TransferTransaction", () => {
 
   it("should return true when the transaction mosaics[0] amount equals expected value multiplier = 0.5", () => {
     const mosaicTransferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       [new MosaicTransferable(new MosaicId("test", "test"), new MosaicProperties(3, 9000000), 150)],
       PlainMessage.create("message"),
@@ -364,7 +345,6 @@ describe("TransferTransaction", () => {
 
   it("should return true when the transaction mosaics[0] amount equals expected value multiplier = 2", () => {
     const mosaicTransferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       [new MosaicTransferable(new MosaicId("test", "test"), new MosaicProperties(3, 9000000), 150)],
       PlainMessage.create("message"),
@@ -376,8 +356,8 @@ describe("TransferTransaction", () => {
 
   it("should throw error when the transaction does not contain mosaics and mosaic function is called", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
+
       new XEM(500000),
       EmptyMessage);
 
@@ -388,7 +368,6 @@ describe("TransferTransaction", () => {
 
   it("should throw error when the transaction has mosaics and xem method is called", () => {
     const mosaicTransferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
       [new MosaicTransferable(new MosaicId("test", "test"), new MosaicProperties(3, 9000000), 150)],
       PlainMessage.create("message"),
@@ -404,7 +383,6 @@ describe("TransferTransaction", () => {
     const mosaicId2 = new MosaicId("multisigns", "mosaic2");
     const mosaicId3 = new MosaicId("multisigns", "mosaic3");
     const transaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
       recipientPublicAccount.address,
       [new MosaicTransferable(mosaicId1, new MosaicProperties(), 1),
         new MosaicTransferable(mosaicId2, new MosaicProperties(), 1),
@@ -416,8 +394,8 @@ describe("TransferTransaction", () => {
 
   it("should throw error when mosaicsIds() is called and it doesn't contain mosaics", () => {
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       new Address("TCJZJH-AV63RE-2JSKN2-7DFIHZ-RXIHAI-736WXE-OJGA"),
+
       new XEM(500000),
       EmptyMessage);
 

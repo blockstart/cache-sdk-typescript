@@ -22,5 +22,14 @@
  * SOFTWARE.
  */
 
-export * from "./utilities/XemUtilities";
-export * from "./utilities/TransactionUtilities";
+import { WebSocketConfig } from '../infrastructure/Listener';
+import { NetworkTypes } from '../models/node/NetworkTypes';
+import { NEMLibrary } from '../NEMLibrary';
+
+export const nodeEndpoints = (): Array<WebSocketConfig> => {
+  if (NEMLibrary.getNetworkType() === NetworkTypes.MAIN_NET) {
+    return [{ domain:'alice7.nem.ninja' }];
+  } else {
+    return [{ domain: '23.228.67.85' }];
+  }
+};

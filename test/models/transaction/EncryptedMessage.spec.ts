@@ -22,24 +22,23 @@
  * SOFTWARE.
  */
 
-import {expect} from "chai";
-import {Account} from "../../../src/models/account/Account";
-import {PublicAccount} from "../../../src/models/account/PublicAccount";
-import {XEM} from "../../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../../src/models/node/NetworkTypes";
-import {EncryptedMessage} from "../../../src/models/transaction/EncryptedMessage";
-import {MultisigTransaction} from "../../../src/models/transaction/MultisigTransaction";
-import {PlainMessage} from "../../../src/models/transaction/PlainMessage";
-import {TimeWindow} from "../../../src/models/transaction/TimeWindow";
-import {TransferTransaction} from "../../../src/models/transaction/TransferTransaction";
-import {NEMLibrary} from "../../../src/NEMLibrary";
-import {TestVariables} from "../../config/TestVariables.spec";
+import { expect } from "chai";
+import { Account } from "../../../src/models/account/Account";
+import { PublicAccount } from "../../../src/models/account/PublicAccount";
+import { XEM } from "../../../src/models/mosaic/XEM";
+import { NetworkTypes } from "../../../src/models/node/NetworkTypes";
+import { EncryptedMessage } from "../../../src/models/transaction/EncryptedMessage";
+import { MultisigTransaction } from "../../../src/models/transaction/MultisigTransaction";
+import { TimeWindow } from "../../../src/models/transaction/TimeWindow";
+import { TransferTransaction } from "../../../src/models/transaction/TransferTransaction";
+import { NEMLibrary } from "../../../src/NEMLibrary";
+import { TestVariables } from "../../config/TestVariables.spec";
 
 declare let process: any;
 
 describe("EncryptedMessage", () => {
 
-  const privateKey: string = TestVariables.TEST_PRIVATE_KEY;
+  const privateKey = TestVariables.TEST_PRIVATE_KEY;
   let recipientPublicAccount: PublicAccount;
 
   before(() => {
@@ -75,14 +74,14 @@ describe("EncryptedMessage", () => {
   it("should create a transfer transaction with an encrypted message", () => {
     const account = Account.createWithPrivateKey(privateKey);
     const encryptedMessage = account.encryptMessage("test transaction", recipientPublicAccount);
-    const transaction = TransferTransaction.create(TimeWindow.createWithDeadline(), recipientPublicAccount.address, new XEM(2), encryptedMessage);
+    const transaction = TransferTransaction.create(recipientPublicAccount.address, new XEM(2), encryptedMessage);
     expect(transaction.message).to.be.instanceof(EncryptedMessage);
   });
 
   it("should create a multisig transfer transaction with an encrypted message", () => {
     const account = Account.createWithPrivateKey(privateKey);
     const encryptedMessage = account.encryptMessage("test transaction", recipientPublicAccount);
-    const transaction = TransferTransaction.create(TimeWindow.createWithDeadline(), recipientPublicAccount.address, new XEM(2), encryptedMessage);
+    const transaction = TransferTransaction.create( recipientPublicAccount.address, new XEM(2), encryptedMessage);
     const multisig = MultisigTransaction.create(TimeWindow.createWithDeadline(), transaction, PublicAccount.createWithPublicKey(account.publicKey));
     expect((multisig.otherTransaction as TransferTransaction).message).to.be.instanceof(EncryptedMessage);
   });

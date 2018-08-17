@@ -22,56 +22,53 @@
  * SOFTWARE.
  */
 
-import {expect} from "chai";
-import {Observable} from "rxjs/Observable";
-import {MosaicHttp} from "../../src/infrastructure/MosaicHttp";
-import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
-import {Account} from "../../src/models/account/Account";
-import {Address} from "../../src/models/account/Address";
-import {PublicAccount} from "../../src/models/account/PublicAccount";
-import {Mosaic} from "../../src/models/mosaic/Mosaic";
-import {MosaicDefinition, MosaicProperties} from "../../src/models/mosaic/MosaicDefinition";
-import {MosaicId} from "../../src/models/mosaic/MosaicId";
-import {MosaicLevy, MosaicLevyType} from "../../src/models/mosaic/MosaicLevy";
-import {MosaicTransferable} from "../../src/models/mosaic/MosaicTransferable";
-import {XEM} from "../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../src/models/node/NetworkTypes";
-import {EncryptedMessage} from "../../src/models/transaction/EncryptedMessage";
+import { expect } from "chai";
+import { TransactionHttp } from "../src/infrastructure/TransactionHttp";
+import { Account } from "../src/models/account/Account";
+import { Address } from "../src/models/account/Address";
+import { PublicAccount } from "../src/models/account/PublicAccount";
+import { MosaicDefinition, MosaicProperties } from "../src/models/mosaic/MosaicDefinition";
+import { MosaicId } from "../src/models/mosaic/MosaicId";
+import { MosaicLevy, MosaicLevyType } from "../src/models/mosaic/MosaicLevy";
+import { MosaicTransferable } from "../src/models/mosaic/MosaicTransferable";
+import { XEM } from "../src/models/mosaic/XEM";
+import { NetworkTypes } from "../src/models/node/NetworkTypes";
 import {
   ImportanceMode,
   ImportanceTransferTransaction,
-} from "../../src/models/transaction/ImportanceTransferTransaction";
-import {MosaicDefinitionCreationTransaction} from "../../src/models/transaction/MosaicDefinitionCreationTransaction";
+} from "../src/models/transaction/ImportanceTransferTransaction";
+import { MosaicDefinitionCreationTransaction } from "../src/models/transaction/MosaicDefinitionCreationTransaction";
 import {
   MosaicSupplyChangeTransaction,
   MosaicSupplyType,
-} from "../../src/models/transaction/MosaicSupplyChangeTransaction";
+} from "../src/models/transaction/MosaicSupplyChangeTransaction";
 import {
   CosignatoryModification,
   CosignatoryModificationAction,
   MultisigAggregateModificationTransaction,
-} from "../../src/models/transaction/MultisigAggregateModificationTransaction";
-import {MultisigTransaction} from "../../src/models/transaction/MultisigTransaction";
-import {EmptyMessage, PlainMessage} from "../../src/models/transaction/PlainMessage";
-import {ProvisionNamespaceTransaction} from "../../src/models/transaction/ProvisionNamespaceTransaction";
-import {TimeWindow} from "../../src/models/transaction/TimeWindow";
-import {TransferTransaction} from "../../src/models/transaction/TransferTransaction";
-import {NEMLibrary} from "../../src/NEMLibrary";
-import {TestVariables} from "../../test/config/TestVariables.spec";
+} from "../src/models/transaction/MultisigAggregateModificationTransaction";
+import { MultisigTransaction } from "../src/models/transaction/MultisigTransaction";
+import { EmptyMessage, PlainMessage } from "../src/models/transaction/PlainMessage";
+import { ProvisionNamespaceTransaction } from "../src/models/transaction/ProvisionNamespaceTransaction";
+import { TimeWindow } from "../src/models/transaction/TimeWindow";
+import { TransferTransaction } from "../src/models/transaction/TransferTransaction";
+import { NEMLibrary } from "../src/NEMLibrary";
+import { TestVariables } from "../test/config/TestVariables.spec";
 
 declare let process: any;
 
 describe("TransactionHttp", () => {
-  const recipientAccount: string = "TBV7LE4TFDEMGVOON5MYOK2P7TU2KEKLMHOLHQT6";
-  const privateKey: string = process.env.PRIVATE_KEY;
-  const newMultiSigPrivateKey: string = process.env.MULTISIG_PRIVATE_KEY;
-  const delegateAccountHarvestingPrivateKey: string = process.env.DELEGATE_HARVESTING_PRIVATE_KEY;
+  const recipientAccount = "TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD";
+
+  const privateKey = process.env.PRIVATE_KEY;
+  const newMultiSigPrivateKey = process.env.MULTISIG_PRIVATE_KEY;
+  const delegateAccountHarvestingPrivateKey = process.env.DELEGATE_HARVESTING_PRIVATE_KEY;
 
   let multisigAccount: PublicAccount;
 
   before(() => {
     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
-    multisigAccount = PublicAccount.createWithPublicKey("d7fb38212198228837841fc16b658db589642a3052f2b9bb119fe6b40c6795be");
+    multisigAccount = PublicAccount.createWithPublicKey("0d2c788e8a03803fd39b899395d78e7fb20f04814c82d57d7a2a3195b81d5db0");
   });
 
   after(() => {
@@ -86,8 +83,8 @@ describe("TransactionHttp", () => {
     const account = Account.createWithPrivateKey(privateKey);
     const amount = new XEM(100);
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
-      new Address("TCPQZT5P4XWXZBC36Z5YEBM6XKUW6O2N3OBLS2TH"),
+    new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD"),
+
       amount,
       EmptyMessage);
     const signedTransaction = account.signTransaction(transferTransaction);
@@ -100,13 +97,13 @@ describe("TransactionHttp", () => {
   it("creates a TRANSFER with encrypted message", (done) => {
     const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
     const account = Account.createWithPrivateKey(privateKey);
-    const recipientPublicAccount = PublicAccount.createWithPublicKey("b254d8b2b00e1b1266eb54a6931cd7c1b0f307e41d9ebb01f025f4933758f0be");
+    const recipientPublicAccount = PublicAccount.createWithPublicKey("0d2c788e8a03803fd39b899395d78e7fb20f04814c82d57d7a2a3195b81d5db0");
     const amount = new XEM(20);
     const encryptedMessage = account.encryptMessage("test transaction", recipientPublicAccount);
 
     const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
       recipientPublicAccount.address,
+
       amount,
       encryptedMessage);
     const signedTransaction = account.signTransaction(transferTransaction);
@@ -122,10 +119,10 @@ describe("TransactionHttp", () => {
     const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
     const account = Account.createWithPrivateKey(privateKey);
 
-    const transferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
+    const transferTransaction = TransferTransaction.create(
       new Address(recipientAccount),
-      [new XEM(10)],
+      TxType.other,
+      new XEM(10),
       EmptyMessage);
     const signedTransaction = account.signTransaction(transferTransaction);
     // transactionHttp.announceTransaction(signedTransaction).subscribe(announceSuccessResult => {
@@ -140,10 +137,10 @@ describe("TransactionHttp", () => {
     const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
     const account = Account.createWithPrivateKey(privateKey);
 
-    const transferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
-      new Address("TCJZJHAV63RE2JSKN27DFIHZRXIHAI736WXEOJGA"),
-      [new XEM(1)],
+    const transferTransaction = TransferTransaction.create(
+     new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD"),
+      TxType.other,
+      new XEM(1),
       PlainMessage.create("plain message"));
     const signedTransaction = account.signTransaction(transferTransaction);
     // transactionHttp.announceTransaction(signedTransaction).subscribe(announceSuccessResult => {
@@ -270,7 +267,7 @@ describe("TransactionHttp", () => {
 
     const multisigAggregateModificationTransaction = MultisigAggregateModificationTransaction.create(
       TimeWindow.createWithDeadline(),
-      [new CosignatoryModification(PublicAccount.createWithPublicKey("18025570b50177f4dfe93cdbb8859c3afa2a490084446e3212d3ad9434a80d0a"), CosignatoryModificationAction.ADD)],
+      [new CosignatoryModification(PublicAccount.createWithPublicKey("0d2c788e8a03803fd39b899395d78e7fb20f04814c82d57d7a2a3195b81d5db0"), CosignatoryModificationAction.ADD)],
     );
     const multisigTransferTransaction = MultisigTransaction.create(
       TimeWindow.createWithDeadline(),
@@ -293,7 +290,7 @@ describe("TransactionHttp", () => {
 
     const multisigAggregateModificationTransaction = MultisigAggregateModificationTransaction.create(
       TimeWindow.createWithDeadline(),
-      [new CosignatoryModification(PublicAccount.createWithPublicKey("18025570b50177f4dfe93cdbb8859c3afa2a490084446e3212d3ad9434a80d0a"), CosignatoryModificationAction.DELETE)],
+      [new CosignatoryModification(PublicAccount.createWithPublicKey("0d2c788e8a03803fd39b899395d78e7fb20f04814c82d57d7a2a3195b81d5db0"), CosignatoryModificationAction.DELETE)],
     );
     const multisigTransferTransaction = MultisigTransaction.create(
       TimeWindow.createWithDeadline(),
@@ -315,7 +312,6 @@ describe("TransactionHttp", () => {
     const amount = 2000000;
 
     const transferTransaction = TransferTransaction.createWithMosaics(
-      TimeWindow.createWithDeadline(),
       new Address(recipientAccount),
       [new MosaicTransferable(new MosaicId("multisigns", "mosaic"), new MosaicProperties(), 1),
         new MosaicTransferable(new MosaicId("multisigns", "mosaic"), new MosaicProperties(), 1),
@@ -339,7 +335,7 @@ describe("TransactionHttp", () => {
   it("MULTISIG - IMPORTANCE_TRANSFER", (done) => {
     const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
     const account = Account.createWithPrivateKey(privateKey);
-    const delegatedAccount = PublicAccount.createWithPublicKey("02785c70494f5b3351b5f5a3390b94fd0041474ccd8bcd1c486746114b679e18");
+    const delegatedAccount = PublicAccount.createWithPublicKey("0d2c788e8a03803fd39b899395d78e7fb20f04814c82d57d7a2a3195b81d5db0");
     const importanceTransferTransaction = ImportanceTransferTransaction.create(TimeWindow.createWithDeadline(), ImportanceMode.Activate, delegatedAccount);
     const multisigTransferTransaction = MultisigTransaction.create(
       TimeWindow.createWithDeadline(),
