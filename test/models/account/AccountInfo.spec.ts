@@ -56,8 +56,8 @@ describe("AccountInfo", () => {
     } as AccountInfoDTO;
 
     const accountInfo = AccountInfo.createFromAccountInfoDTO(accountInfoDTO);
-    expect(accountInfo.publicAccount.publicKey).to.be.equal(publicKey);
-    expect(accountInfo.publicAccount.address.plain()).to.be.equal(address);
+    expect(accountInfo.publicAccount!!.publicKey).to.be.equal(publicKey);
+    expect(accountInfo.publicAccount!!.address.plain()).to.be.equal(address);
     expect(accountInfo.balance.balance).to.be.equal(10000);
     expect(accountInfo.balance.vestedBalance).to.be.equal(5000);
     expect(accountInfo.harvestedBlocks).to.be.equal(1);
@@ -95,8 +95,8 @@ describe("AccountInfo", () => {
     const accountInfoWithMetaData = AccountInfoWithMetaData.createFromAccountMetaDataPairDTO(accountInfoWithMetaDataDTO);
     const accountInfo = AccountInfo.createFromAccountInfoDTO(accountInfoDTO);
 
-    expect(accountInfoWithMetaData.publicAccount.publicKey).to.be.equal(publicKey);
-    expect(accountInfoWithMetaData.publicAccount.address.plain()).to.be.equal(address);
+    expect(accountInfoWithMetaData.publicAccount!!.publicKey).to.be.equal(publicKey);
+    expect(accountInfoWithMetaData.publicAccount!!.address.plain()).to.be.equal(address);
     expect(accountInfoWithMetaData.balance.balance).to.be.equal(10000);
     expect(accountInfoWithMetaData.balance.vestedBalance).to.be.equal(5000);
     expect(accountInfoWithMetaData.harvestedBlocks).to.be.equal(1);

@@ -144,6 +144,9 @@ export abstract class Transaction {
     } else if (networkType === NetworkTypes.TEST_NET) {
       this.networkVersion = 0x98000000 | this.version;
       return;
+    } else if (networkType == NetworkTypes.MIJIN_NET) {
+      this.networkVersion = 0x60000000 | this.version;
+      return;
     }
     throw new Error("Unsupported Network Type " + networkType);
   }

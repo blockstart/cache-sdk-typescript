@@ -59,7 +59,7 @@ export class AccountInfo {
   /**
    * The public key of the account.
    */
-  public readonly publicAccount: PublicAccount;
+  public readonly publicAccount?: PublicAccount;
 
   /**
    * The number blocks that the account already harvested.
@@ -95,7 +95,9 @@ export class AccountInfo {
               minCosignatories?: number) {
     this.balance = new Balance(balance, vestedBalance);
     this.importance = importance;
-    this.publicAccount = PublicAccount.createWithPublicKey(publicKey);
+    if (publicKey != null) {
+      this.publicAccount = PublicAccount.createWithPublicKey(publicKey);
+    }
     this.harvestedBlocks = harvestedBlocks;
     this.cosignatoriesCount = cosignatoriesCount;
     this.minCosignatories = minCosignatories;

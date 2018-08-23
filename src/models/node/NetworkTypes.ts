@@ -36,4 +36,10 @@ export enum NetworkTypes {
    */
   TEST_NET = 0x98,
 
+  /**
+   * mijin net network
+   * @type {number}
+   */
+  MIJIN_NET = 0x60,
+
 }

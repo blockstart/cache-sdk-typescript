@@ -78,7 +78,7 @@ describe("AccountBarchInfo", () => {
       .subscribe(
         (x) => {
           expect(x).to.have.length(addresses.length);
-          expect(x[0].publicAccount.address.plain()).to.equal("NA2PDM4VPUGA37RYVPGTD6H7G7A2S6HTFRQUI55S");
+          expect(x[0].publicAccount!!.address.plain()).to.equal("NA2PDM4VPUGA37RYVPGTD6H7G7A2S6HTFRQUI55S");
           done();
         },
       );
