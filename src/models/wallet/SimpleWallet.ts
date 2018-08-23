@@ -145,9 +145,17 @@ export class SimpleWallet extends Wallet {
     if (wallet.type !== "simple") {
       throw new Error("ERROR WLT TYPE");
     }
+    let network;
+    if (wallet.network < 0) {
+      network = NetworkTypes.TEST_NET;
+    } else if (wallet.network == 104) {
+      network = NetworkTypes.MAIN_NET;
+    } else {
+      network = NetworkTypes.MIJIN_NET;
+    }
     return new SimpleWallet(
       wallet.name,
-      Number(wallet.network),
+      network,
       new Address(wallet.address),
       LocalDateTime.parse(wallet.creationDate),
       new EncryptedPrivateKey(wallet.encryptedPrivateKey, wallet.iv),
