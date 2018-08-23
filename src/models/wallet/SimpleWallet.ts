@@ -94,16 +94,6 @@ export class SimpleWallet extends Wallet {
   }
 
   /**
-   * Create a SimpleWallet from object
-   * @param wallet - wallet object from outside source
-   * @returns {SimpleWallet}
-   */
-  public static createFromObject(wallet: SimpleWallet): SimpleWallet {
-    const newEncryptedPrivateKey = new EncryptedPrivateKey(wallet.encryptedPrivateKey.encryptedKey, wallet.encryptedPrivateKey.iv);
-    return new SimpleWallet(wallet.name, wallet.network, wallet.address, wallet.creationDate, newEncryptedPrivateKey);
-  }
-
-  /**
    * Open a wallet and generate an Account
    * @param password
    * @returns {Account}
