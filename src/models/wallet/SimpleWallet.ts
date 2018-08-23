@@ -151,7 +151,7 @@ export class SimpleWallet extends Wallet {
     }
     return new SimpleWallet(
       wallet.name,
-      wallet.network,
+      Number(wallet.network),
       new Address(wallet.address),
       LocalDateTime.parse(wallet.creationDate),
       new EncryptedPrivateKey(wallet.encryptedPrivateKey, wallet.iv),
