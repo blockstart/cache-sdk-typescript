@@ -94,6 +94,16 @@ export class SimpleWallet extends Wallet {
   }
 
   /**
+   * Create a SimpleWallet from object
+   * @param wallet - wallet object from outside source
+   * @returns {SimpleWallet}
+   */
+  public static castToSimpleWallet(wallet: SimpleWallet): SimpleWallet {
+    const newEncryptedPrivateKey = new EncryptedPrivateKey(wallet.encryptedPrivateKey.encryptedKey, wallet.encryptedPrivateKey.iv);
+    return new SimpleWallet(wallet.name, wallet.network, wallet.address, wallet.creationDate, newEncryptedPrivateKey);
+  }
+
+  /**
    * Open a wallet and generate an Account
    * @param password
    * @returns {Account}
@@ -103,18 +113,12 @@ export class SimpleWallet extends Wallet {
     if (account.address.equals(this.address)) {
       return account;
     }
-    throw new Error("wrong password");
+    throw new Error('wrong password');
   }
 
   public unlockPrivateKey(password: Password): string {
     const privateKey = this.encryptedPrivateKey.decrypt(password);
-    if (privateKey === "" || (privateKey.length !== 64 && privateKey.length !== 66)) {
-      throw new Error("Invalid password");
-    }
-    const account = Account.createWithPrivateKey(privateKey);
-    if (!account.address.equals(this.address)) {
-      throw new Error("Invalid password");
-    }
+    if (privateKey == "" || (privateKey.length != 64 && privateKey.length != 66)) throw new Error("Invalid password");
     return privateKey;
   }
 
@@ -166,17 +170,10 @@ export class SimpleWallet extends Wallet {
     const wallet = JSON.parse(Base64.decode(wlt));
     // TODO: Check the encrypted and iv fields, if they aren't null, it's a simple wallet
     const account = wallet.accounts[0];
-    let network;
-    if (account.network < 0) {
-      network = NetworkTypes.TEST_NET;
-    } else if (account.network == 104) {
-      network = NetworkTypes.MAIN_NET;
-    } else {
-      network = NetworkTypes.MIJIN_NET;
-    }
+    const network = account.network;
     return new SimpleWallet(
       wallet.name,
-      network,
+      network < 0 ? NetworkTypes.TEST_NET : NetworkTypes.MAIN_NET,
       new Address(account.address),
       LocalDateTime.now(),
       new EncryptedPrivateKey(account.encrypted, account.iv)
