@@ -43,6 +43,8 @@ export class Address {
       this.networkType = NetworkTypes.TEST_NET;
     } else if (this.value.charAt(0) == "N") {
       this.networkType = NetworkTypes.MAIN_NET;
+    } else if (this.value.charAt(0) == "M") {
+      this.networkType = NetworkTypes.MIJIN_NET;
     } else {
       throw new Error("NetworkType invalid");
     }
@@ -69,7 +71,13 @@ export class Address {
    * @returns {number}
    */
   public network(): NetworkTypes {
-    return this.value.charAt(0) == "T" ? NetworkTypes.TEST_NET : NetworkTypes.MAIN_NET;
+    if (this.value.charAt(0) == "T") {
+      return NetworkTypes.TEST_NET;
+    } else if (this.value.charAt(0) == "N") {
+      return NetworkTypes.MAIN_NET;
+    } else {
+      return NetworkTypes.MIJIN_NET;
+    }
   }
 
   public equals(otherAddress: Address) {

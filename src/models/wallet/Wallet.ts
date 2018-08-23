@@ -96,7 +96,13 @@ export abstract class Wallet {
    * @internal
    */
   public static networkTypesSDKAdapter(network: NetworkTypes): number {
-    return network == NetworkTypes.TEST_NET ? -104 : network;
+    if (network == NetworkTypes.MAIN_NET) {
+      return 104;
+    } else if (network == NetworkTypes.TEST_NET) {
+      return -104;
+    } else {
+      return 96;
+    }
   }
 
   /**
