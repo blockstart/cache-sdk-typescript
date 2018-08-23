@@ -67,6 +67,8 @@ export class PublicAccount {
       network = nemSdk.default.model.network.data.mainnet.id;
     } else if (NEMLibrary.getNetworkType() === NetworkTypes.TEST_NET) {
       network = nemSdk.default.model.network.data.testnet.id;
+    } else if (NEMLibrary.getNetworkType() == NetworkTypes.MIJIN_NET){
+      network = nemSdk.default.model.network.data.mijin.id;
     }
     const address: string = nemSdk.default.model.address.toAddress(publicKey, network);
     return new PublicAccount(new Address(address), publicKey);

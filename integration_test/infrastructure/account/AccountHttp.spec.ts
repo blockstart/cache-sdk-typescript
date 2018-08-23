@@ -48,7 +48,7 @@ describe("AccountHttp", () => {
     const accountHttp = new AccountHttp();
     accountHttp.getFromAddress(address)
       .subscribe((accountInfoWithMetaData) => {
-          expect(accountInfoWithMetaData.publicAccount.address.plain())
+          expect(accountInfoWithMetaData.publicAccount!!.address.plain())
             .to.equal(address.plain());
           checkAccountInfoWithMetaData(accountInfoWithMetaData);
           done();
@@ -60,9 +60,9 @@ describe("AccountHttp", () => {
     const accountHttp = new AccountHttp();
     accountHttp.getFromPublicKey(publicKey)
       .subscribe((accountInfoWithMetaData) => {
-          expect(accountInfoWithMetaData.publicAccount.address.plain())
+          expect(accountInfoWithMetaData.publicAccount!!.address.plain())
             .to.equal(address.plain());
-          expect(accountInfoWithMetaData.publicAccount.publicKey)
+          expect(accountInfoWithMetaData.publicAccount!!.publicKey)
             .to.equal(publicKey);
           checkAccountInfoWithMetaData(accountInfoWithMetaData);
           done();
@@ -74,7 +74,7 @@ describe("AccountHttp", () => {
     const accountHttp = new AccountHttp();
     accountHttp.getOriginalAccountDataFromDelegatedAccountAddress(address)
       .subscribe((accountInfoWithMetaData) => {
-          expect(accountInfoWithMetaData.publicAccount.address.plain())
+          expect(accountInfoWithMetaData.publicAccount!!.address.plain())
             .to.equal(address.plain());
           checkAccountInfoWithMetaData(accountInfoWithMetaData);
           done();
@@ -86,9 +86,9 @@ describe("AccountHttp", () => {
     const accountHttp = new AccountHttp();
     accountHttp.getOriginalAccountDataFromDelegatedAccountPublicKey(publicKey)
       .subscribe((accountInfoWithMetaData) => {
-          expect(accountInfoWithMetaData.publicAccount.address.plain())
+          expect(accountInfoWithMetaData.publicAccount!!.address.plain())
             .to.equal(address.plain());
-          expect(accountInfoWithMetaData.publicAccount.publicKey)
+          expect(accountInfoWithMetaData.publicAccount!!.publicKey)
             .to.equal(publicKey);
           checkAccountInfoWithMetaData(accountInfoWithMetaData);
           done();
@@ -178,7 +178,7 @@ describe("AccountHttp", () => {
     accountHttp.incomingTransactions(address, {id: 114305})
       .subscribe((confirmedTransactions) => {
           expect(confirmedTransactions).to.not.be.undefined;
-          expect(confirmedTransactions[0].getTransactionInfo().id).to.be.equal(112685);
+          expect(confirmedTransactions[0].getTransactionInfo().id).to.be.equal(114304);
           done();
         },
       );
@@ -227,7 +227,7 @@ describe("AccountHttp", () => {
       .subscribe((confirmedTransactions) => {
           expect(confirmedTransactions).to.not.be.undefined;
           expect(confirmedTransactions).to.have.length(10);
-          expect(confirmedTransactions[0].getTransactionInfo().id).to.be.equal(114190);
+          expect(confirmedTransactions[0].getTransactionInfo().id).to.be.equal(114304);
           done();
         },
       );
@@ -343,7 +343,7 @@ describe("AccountHttp", () => {
     const accountHttp = new AccountHttp();
     accountHttp.getBatchAccountData([new Address("TALICESKTW5TAN5GEOK4TQKD43AUGSDTHK7UIIAK")])
       .subscribe((accountHistoryData) => {
-        expect(accountHistoryData[0].publicAccount.address.plain()).to.not.be.null;
+        expect(accountHistoryData[0].publicAccount!!.address.plain()).to.not.be.null;
         expect(accountHistoryData[0].balance.balance).to.not.be.null;
         expect(accountHistoryData[0].balance.vestedBalance).to.not.be.null;
         expect(accountHistoryData[0].importance).to.not.be.null;
@@ -377,8 +377,8 @@ describe("AccountHttp", () => {
 
   // region
   const checkAccountInfo = (accountInfo: AccountInfo) => {
-    expect(accountInfo.publicAccount.address).to.not.be.undefined;
-    expect(accountInfo.publicAccount.publicKey).to.not.be.undefined;
+    expect(accountInfo.publicAccount!!.address).to.not.be.undefined;
+    expect(accountInfo.publicAccount!!.publicKey).to.not.be.undefined;
     expect(accountInfo.harvestedBlocks).to.not.be.undefined;
     expect(accountInfo.importance).to.not.be.undefined;
     expect(accountInfo.balance.vestedBalance).to.not.be.undefined;

@@ -100,6 +100,8 @@ export class Account extends PublicAccount {
       network = nemSdk.default.model.network.data.mainnet.id;
     } else if (NEMLibrary.getNetworkType() == NetworkTypes.TEST_NET) {
       network = nemSdk.default.model.network.data.testnet.id;
+    } else if (NEMLibrary.getNetworkType() == NetworkTypes.MIJIN_NET){
+      network = nemSdk.default.model.network.data.mijin.id;
     }
     const keyPair: any = nemSdk.default.crypto.keyPair.create(nemSdk.default.utils.helpers.fixPrivateKey(privateKey));
     const publicKey: string = keyPair.publicKey.toString();
