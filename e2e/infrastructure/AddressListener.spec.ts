@@ -24,7 +24,6 @@
 
 import { Observable } from "rxjs/Observable";
 import { CACHE } from '../../src/models/mosaic/CACHE';
-import { ConfirmedTransactionListener } from "../../src/infrastructure/ConfirmedTransactionListener";
 import { TransactionHttp } from "../../src/infrastructure/TransactionHttp";
 import { Account } from '../../src/models/account/Account';
 import { Address } from '../../src/models/account/Address';

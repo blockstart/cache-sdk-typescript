@@ -23,11 +23,14 @@
  */
 
 import { Observable } from 'rxjs/Observable';
+import { AccountHttp } from '../../infrastructure/AccountHttp';
 import { UnconfirmedTransactionListener } from '../../infrastructure/UnconfirmedTransactionListener';
 import { mapTransfer, transferFilter } from '../../utilities/TransactionUtilities';
 import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';
 import { nodeEndpoints } from '../../utilities/NodeEndpointUtilities';
+import { Mosaic } from '../mosaic/Mosaic';
 import {NetworkTypes} from "../node/NetworkTypes";
+import { Transaction } from '../transaction/Transaction';
 import { TransferTransaction } from '../transaction/TransferTransaction';
 
 /**
@@ -82,7 +85,22 @@ export class Address {
 
   public equals(otherAddress: Address) {
     return this.plain() == otherAddress.plain();
-  }
+  };
+
+  /**
+   * Get mosaics for given address
+   * @returns {Promise<Array<Mosaic>>}
+   */
+  public mosaics = (): Promise<Array<Mosaic>> => {
+    return new Promise<Array<Mosaic>>((resolve, reject) => {
+      const accountHttp = new AccountHttp();
+      accountHttp.getMosaicOwnedByAddress(this).subscribe((mosaics: Array<Mosaic>) => {
+        resolve(mosaics);
+      }, err => {
+        reject(err);
+      });
+    });
+  };
 
   /**
    * Start listening new confirmed transactions
@@ -90,7 +108,7 @@ export class Address {
    */
   public confirmedTxObserver = (): Observable<TransferTransaction> => {
     return new ConfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
-  }
+  };
 
   /**
    * Start listening new unconfirmed transactions
@@ -98,5 +116,6 @@ export class Address {
    */
   public unconfirmedTxObserver = (): Observable<TransferTransaction> => {
     return new UnconfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
-  }
+  };
+
 }
