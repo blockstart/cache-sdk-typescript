@@ -50,7 +50,7 @@ export class PublicAccount {
    * @returns {boolean}
    */
   public hasPublicKey(): boolean {
-    return this.publicKey != null && (this.publicKey.length === 64 || this.publicKey.length === 66);
+    return this.publicKey !== null && (this.publicKey.length === 64 || this.publicKey.length === 66);
   }
 
   /**
@@ -59,7 +59,7 @@ export class PublicAccount {
    * @returns {PublicAccount}
    */
   public static createWithPublicKey(publicKey: string): PublicAccount {
-    if (publicKey == null || (publicKey.length !== 64 && publicKey.length !== 66)) {
+    if (publicKey === null || (publicKey.length !== 64 && publicKey.length !== 66)) {
       throw new Error("Not a valid public key");
     }
     let network;

@@ -160,4 +160,16 @@ describe("AddressTransactionListener", () => {
         console.log(x);
       });
   });
+
+  it("should return Mosaic Transferable Array for address", (done) => {
+    try {
+      const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+      address.mosaics().then((mosaics) => {
+        console.log(mosaics);
+        done();
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  });
 });

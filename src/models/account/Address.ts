@@ -28,9 +28,8 @@ import { UnconfirmedTransactionListener } from '../../infrastructure/Unconfirmed
 import { mapTransfer, transferFilter } from '../../utilities/TransactionUtilities';
 import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';
 import { nodeEndpoints } from '../../utilities/NodeEndpointUtilities';
-import { Mosaic } from '../mosaic/Mosaic';
+import { MosaicTransferable } from '../mosaic/MosaicTransferable';
 import {NetworkTypes} from "../node/NetworkTypes";
-import { Transaction } from '../transaction/Transaction';
 import { TransferTransaction } from '../transaction/TransferTransaction';
 
 /**
@@ -89,16 +88,19 @@ export class Address {
 
   /**
    * Get mosaics for given address
-   * @returns {Promise<Array<Mosaic>>}
+   * @returns {Promise<Array<MosaicTransferable>>}
    */
-  public mosaics = (): Promise<Array<Mosaic>> => {
-    return new Promise<Array<Mosaic>>((resolve, reject) => {
-      const accountHttp = new AccountHttp();
-      accountHttp.getMosaicOwnedByAddress(this).subscribe((mosaics: Array<Mosaic>) => {
-        resolve(mosaics);
-      }, err => {
+  public mosaics = (): Promise<MosaicTransferable[]> => {
+    return new Promise<MosaicTransferable[]>((resolve, reject) => {
+      try {
+        new AccountHttp().getMosaicOwnedByAddress(this).subscribe(async (mosaics) => {
+          resolve(await Promise.all(mosaics.map(async (mosaic) => {
+            return await mosaic.getMosaicDetails();
+          })));
+        });
+      } catch (err) {
         reject(err);
-      });
+      }
     });
   };
 

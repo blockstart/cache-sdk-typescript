@@ -94,7 +94,7 @@ describe("MosaicHttp", () => {
     expect(mosaicHttp.nextNode()).to.contain("bob.nem.ninja");
   });
 
-  it("should look for an expecific mosaic", (done) => {
+  it("should get mosaic definition", (done) => {
     new MosaicHttp().getMosaicDefinition(new MosaicId("server", "mosaic"))
       .subscribe((mosaic) =>  {
         expect(mosaic.id.name).to.be.equal("mosaic");

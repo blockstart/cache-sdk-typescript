@@ -23,7 +23,10 @@
  */
 
 import {MosaicDTO} from "../../infrastructure/mosaic/MosaicDTO";
+import { MosaicHttp } from '../../infrastructure/MosaicHttp';
 import {MosaicId} from "./MosaicId";
+import { MosaicTransferable } from './MosaicTransferable';
+import { XEM } from './XEM';
 
 /**
  * A mosaic describes an instance of a mosaic definition. Mosaics can be transferred by means of a transfer transaction.
@@ -52,6 +55,23 @@ export class Mosaic {
     this.mosaicId = mosaicId;
     this.quantity = quantity;
   }
+
+  public getMosaicDetails = (): Promise<MosaicTransferable> => {
+    return new Promise<MosaicTransferable>((resolve, reject) => {
+      try {
+        if (this.mosaicId.namespaceId === 'nem' && this.mosaicId.name === 'xem') {
+          resolve(new XEM(this.quantity / 1e6));
+        } else {
+          new MosaicHttp().getMosaicDefinition(this.mosaicId).subscribe((mosaicDefinition) => {
+            const amount = this.quantity / Math.pow(10, mosaicDefinition.properties.divisibility);
+            resolve(MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, amount));
+          });
+        }
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
 
   /**
    * @internal
