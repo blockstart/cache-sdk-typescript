@@ -155,6 +155,7 @@ export class TransferTransaction extends Transaction {
           return new CACHE(mosaic.quantity / Math.pow(10, CACHE.DIVISIBILITY));
         }
         else {
+          // TODO getMosaicDefinition
           return new MosaicTransferable(mosaic.mosaicId, new MosaicProperties(), mosaic.quantity)
         }
       })
