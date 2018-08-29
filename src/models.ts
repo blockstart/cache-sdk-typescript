@@ -37,7 +37,6 @@ export * from "./models/mosaic/MosaicDefinition";
 export * from "./models/mosaic/MosaicId";
 export * from "./models/mosaic/MosaicLevy";
 export * from "./models/mosaic/XEM";
-export * from "./models/mosaic/CACHE";
 export * from "./models/mosaic/ThirdPartyMosaics";
 export * from "./models/mosaic/MosaicTransferable";
 export * from "./models/mosaic/ThirdPartyMosaics";

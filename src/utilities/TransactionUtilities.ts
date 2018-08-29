@@ -52,7 +52,7 @@ export const transferFilter = (transaction: Transaction): boolean => {
 export const mapTransfer = (transaction: Transaction): TransferTransaction => {
   let mosaics: Array<Mosaic> = [];
   let xem: XEM = new XEM(1);
-  if (transaction.type == TransactionTypes.TRANSFER) {
+  if (transaction.type === TransactionTypes.TRANSFER) {
     const transferTX = transaction as TransferTransaction;
     if (transferTX.containsMosaics()) {
       mosaics = transferTX.mosaics();
@@ -67,7 +67,7 @@ export const mapTransfer = (transaction: Transaction): TransferTransaction => {
       transferTX.version, transferTX.fee, transferTX.message, transferTX.signature, mosaics,
       transferTX.signer, transactionInfo
     );
-  } else if (transaction.type == TransactionTypes.MULTISIG && (transaction as MultisigTransaction).otherTransaction.type == TransactionTypes.TRANSFER) {
+  } else if (transaction.type === TransactionTypes.MULTISIG && (transaction as MultisigTransaction).otherTransaction.type === TransactionTypes.TRANSFER) {
     const transferTX = (transaction as MultisigTransaction).otherTransaction as TransferTransaction;
     if (transferTX.containsMosaics()) {
       mosaics = transferTX.mosaics();

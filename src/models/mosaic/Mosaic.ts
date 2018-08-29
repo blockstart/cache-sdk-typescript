@@ -55,15 +55,19 @@ export class Mosaic {
     this.mosaicId = mosaicId;
     this.quantity = quantity;
   }
-
+  /**
+   * returns mosaic transferable
+   * @returns {Promise<MosaicTransferable>}
+   */
   public getMosaicDetails = (): Promise<MosaicTransferable> => {
-    return new Promise<MosaicTransferable>((resolve, reject) => {
+    return new Promise<MosaicTransferable>(async (resolve, reject) => {
       try {
         if (this.mosaicId.namespaceId === 'nem' && this.mosaicId.name === 'xem') {
           resolve(new XEM(this.quantity / 1e6));
         } else {
-          new MosaicHttp().getMosaicDefinition(this.mosaicId).subscribe((mosaicDefinition) => {
+          const subscriber = new MosaicHttp().getMosaicDefinition(this.mosaicId).subscribe((mosaicDefinition) => {
             const amount = this.quantity / Math.pow(10, mosaicDefinition.properties.divisibility);
+            subscriber.unsubscribe();
             resolve(MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, amount));
           });
         }

@@ -24,7 +24,7 @@
 
 import * as requestPromise from "request-promise-native";
 import {Observable} from "rxjs";
-import {MosaicDefinition, MosaicProperties} from "../models/mosaic/MosaicDefinition";
+import {MosaicDefinition} from "../models/mosaic/MosaicDefinition";
 import {MosaicId} from "../models/mosaic/MosaicId";
 import {MosaicTransferable} from "../models/mosaic/MosaicTransferable";
 import {HttpEndpoint, ServerConfig} from "./HttpEndpoint";
