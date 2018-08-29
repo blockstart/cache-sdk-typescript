@@ -149,9 +149,13 @@ export class TransferTransaction extends Transaction {
   public mosaicDetails = (): Promise<MosaicTransferable[]> => {
     return new Promise<MosaicTransferable[]>(async (resolve, reject) => {
       try {
-        resolve(await Promise.all(this.mosaics().map(async (mosaic) => {
-          return await mosaic.getMosaicDetails();
-        })));
+        if (this.containsMosaics()) {
+          resolve(await Promise.all(this.mosaics().map(async (mosaic) => {
+            return await mosaic.getMosaicDetails();
+          })));
+        } else {
+          resolve([this.xem()]);
+        }
       } catch(err) {
         reject(err);
       }
