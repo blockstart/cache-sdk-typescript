@@ -66,9 +66,10 @@ export class Mosaic {
           resolve(new XEM(this.quantity / 1e6));
         } else {
           const subscriber = new MosaicHttp().getMosaicDefinition(this.mosaicId).subscribe((mosaicDefinition) => {
-            const amount = this.quantity / Math.pow(10, mosaicDefinition.properties.divisibility);
+            const divisibility = mosaicDefinition.properties.divisibility;
+            const amount = (this.quantity / Math.pow(10, divisibility)).toFixedNumber(divisibility);
             subscriber.unsubscribe();
-            resolve(MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, Number(amount)));
+            resolve(MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, amount));
           });
         }
       } catch (err) {
