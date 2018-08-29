@@ -27,7 +27,6 @@ import { MosaicHttp } from '../../infrastructure/MosaicHttp';
 import {MosaicId} from "./MosaicId";
 import { MosaicTransferable } from './MosaicTransferable';
 import { XEM } from './XEM';
-import '../../utilities/Number.extenstion';
 
 /**
  * A mosaic describes an instance of a mosaic definition. Mosaics can be transferred by means of a transfer transaction.
@@ -66,10 +65,9 @@ export class Mosaic {
         if (this.mosaicId.namespaceId === 'nem' && this.mosaicId.name === 'xem') {
           resolve(new XEM(this.quantity / 1e6));
         } else {
-          const subscriber = new MosaicHttp().getMosaicDefinition(this.mosaicId).subscribe((mosaicDefinition) => {
+          new MosaicHttp().getMosaicDefinition(this.mosaicId).subscribe((mosaicDefinition) => {
             const divisibility = mosaicDefinition.properties.divisibility;
-            const amount = (this.quantity / Math.pow(10, divisibility)).toFixedNumber(divisibility);
-            subscriber.unsubscribe();
+            const amount = this.quantity / Math.pow(10, divisibility);
             resolve(MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, amount));
           });
         }
