@@ -1,6 +1,6 @@
 {
   "name": "blockstart-nem1-sdk",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Blockstart NIS1 SDK",
   "scripts": {
     "pretest": "npm run build",
