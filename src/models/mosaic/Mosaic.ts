@@ -68,7 +68,7 @@ export class Mosaic {
           const subscriber = new MosaicHttp().getMosaicDefinition(this.mosaicId).subscribe((mosaicDefinition) => {
             const amount = this.quantity / Math.pow(10, mosaicDefinition.properties.divisibility);
             subscriber.unsubscribe();
-            resolve(MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, amount));
+            resolve(MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, Number(amount)));
           });
         }
       } catch (err) {
