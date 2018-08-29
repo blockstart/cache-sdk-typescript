@@ -27,6 +27,7 @@ import { MosaicHttp } from '../../infrastructure/MosaicHttp';
 import {MosaicId} from "./MosaicId";
 import { MosaicTransferable } from './MosaicTransferable';
 import { XEM } from './XEM';
+import '../../utilities/Number.extenstion';
 
 /**
  * A mosaic describes an instance of a mosaic definition. Mosaics can be transferred by means of a transfer transaction.

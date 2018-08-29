@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 interface Number {
   toFixedNumber: (exp: number, base?: number) => number
 }
 
-Number.prototype.toFixedNumber = (exp: number, base?: number): number => {
-  const pow = Math.pow(base||10, exp);
-  return Math.round(this*pow) / pow;
+Number.prototype.toFixedNumber = function(exp: number, base?: number): number {
+  const pow = Math.pow(base || 10, exp);
+  return Math.round(this * pow) / pow;
 };
+
 
