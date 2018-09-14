@@ -1,7 +1,7 @@
 {
-  "name": "nem-library",
-  "version": "1.1.0-RC1",
-  "description": "Reactive Library for NEM",
+  "name": "blockstart-nem1-sdk",
+  "version": "0.0.30",
+  "description": "Blockstart NIS1 SDK",
   "scripts": {
     "pretest": "npm run build",
     "test": "mocha --ui bdd --recursive ./dist/test ./dist/integration_test --timeout 60000",
@@ -17,6 +17,8 @@
   },
   "keywords": [
     "NEM",
+    "Blockstart",
+    "CACHE",
     "Library",
     "API",
     "RX"
@@ -24,15 +26,16 @@
   "license": "MIT",
   "contributors": [
     "Aleix <aleix602@gmail.com>",
-    "Guillem <guillemchain@gmail.com>"
+    "Guillem <guillemchain@gmail.com>",
+    "Jacob <jacob@blockstart.io>"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/aleixmorgadas/nem-library-ts"
+    "url": "https://github.com/blockstart/blockstart-nis1-sdk"
   },
   "bugs": {
-    "url": "https://github.com/aleixmorgadas/nem-library-ts/issues",
-    "email": "aleix602@gmail.com"
+    "url": "https://github.com/blockstart/blockstart-nis1-sdk/issues",
+    "email": "jacob@blockstart.io"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
