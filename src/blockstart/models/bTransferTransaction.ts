@@ -34,6 +34,7 @@ import { TransactionInfo } from '../../models/transaction/TransactionInfo';
 import { TransferTransaction } from '../../models/transaction/TransferTransaction';
 import { BAddress } from './bAddress';
 import { BMosaic } from './bMosaic';
+import { BPlainMessage } from './bPlainMessage';
 
 export enum ExpirationType {
   oneHour = 1,
@@ -108,4 +109,35 @@ export class BTransferTransaction extends TransferTransaction{
       }
     });
   };
+
+  /**
+   * Create a TransferTransaction from object
+   * @param transferTransaction - transferTransaction object from outside source
+   * @returns {BTransferTransaction}
+   */
+  public static castToTransferTransaction = (transferTransaction: any): BTransferTransaction => {
+    const recipient = BAddress.castToAddress(transferTransaction.recipient);
+    const message = BPlainMessage.castToPlainMessage(transferTransaction.message as BPlainMessage);
+    const xem = new XEM(transferTransaction._xem.quantity);
+    const timeWindow = TimeWindow.createWithDeadline();
+    if(transferTransaction._mosaics) {
+      return new BTransferTransaction(recipient,
+        xem,
+        timeWindow,
+        2,
+        transferTransaction.fee,
+        message,
+        undefined,
+        transferTransaction._mosaics.map((_) => { return new Mosaic(_.mosaicId, _.quantity)}))
+    } else {
+      return new BTransferTransaction(recipient,
+        xem,
+        timeWindow,
+        1,
+        transferTransaction.fee,
+        message,
+        undefined,
+        undefined)
+    }
+  }
 }
