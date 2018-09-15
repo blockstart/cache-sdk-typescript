@@ -31,9 +31,9 @@ import { EncryptedMessage } from '../../models/transaction/EncryptedMessage';
 import { PlainMessage } from '../../models/transaction/PlainMessage';
 import { TimeWindow } from '../../models/transaction/TimeWindow';
 import { TransactionInfo } from '../../models/transaction/TransactionInfo';
-import { TransactionTypes } from '../../models/transaction/TransactionTypes';
 import { TransferTransaction } from '../../models/transaction/TransferTransaction';
 import { BAddress } from './bAddress';
+import { BMosaic } from './bMosaic';
 
 export enum ExpirationType {
   oneHour = 1,
@@ -86,5 +86,25 @@ export class BTransferTransaction extends TransferTransaction{
     } else {
       return  TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(expiration), recipient, [mosaic], message);
     }
+  };
+
+  /**
+   * returns mosaic array of received mosaics
+   * @returns {MosaicTransferable[]}
+   */
+  public mosaicDetails = (): Promise<MosaicTransferable[]> => {
+    return new Promise<MosaicTransferable[]>(async (resolve, reject) => {
+      try {
+        if (this.containsMosaics()) {
+          resolve(await Promise.all(this.mosaics().map(async (mosaic: BMosaic) => {
+            return await mosaic.getMosaicDetails();
+          })));
+        } else {
+          resolve([this.xem()]);
+        }
+      } catch(err) {
+        reject(err);
+      }
+    });
   };
 }

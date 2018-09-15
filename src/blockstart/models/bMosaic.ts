@@ -45,12 +45,10 @@ export class BMosaic extends Mosaic {
     return new Promise<MosaicTransferable>(async (resolve, reject) => {
       try {
         if (this.mosaicId.namespaceId === 'nem' && this.mosaicId.name === 'xem') {
-          resolve(new XEM(this.quantity / 1e6));
+          resolve(new XEM(this.quantity));
         } else {
           new MosaicHttp().getMosaicDefinition(this.mosaicId).subscribe((mosaicDefinition) => {
-            const divisibility = mosaicDefinition.properties.divisibility;
-            const amount = this.quantity / Math.pow(10, divisibility);
-            resolve(MosaicTransferable.createWithMosaicDefinition(mosaicDefinition, amount));
+            resolve(MosaicTransferable.createAbsolute(this.mosaicId, mosaicDefinition.properties, this.quantity, mosaicDefinition.levy));
           });
         }
       } catch (err) {

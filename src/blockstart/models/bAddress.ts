@@ -32,6 +32,7 @@ import { TransferTransaction } from '../../models/transaction/TransferTransactio
 import { nodeEndpoints } from '../utilities/NodeEndpointUtilities';
 import { mapTransfer, transferFilter } from '../utilities/TransactionUtilities';
 import { BMosaic } from './bMosaic';
+import { BTransferTransaction } from './bTransferTransaction';
 
 export class BAddress extends Address {
 
@@ -60,7 +61,7 @@ export class BAddress extends Address {
    * Start listening new confirmed transactions
    * @returns {Observable<Array<TransferTransaction>>}
    */
-  public confirmedTxObserver = (): Observable<TransferTransaction> => {
+  public confirmedTxObserver = (): Observable<BTransferTransaction> => {
     return new ConfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
   };
 
@@ -68,7 +69,7 @@ export class BAddress extends Address {
    * Start listening new unconfirmed transactions
    * @returns {Observable<Array<TransferTransaction>>}
    */
-  public unconfirmedTxObserver = (): Observable<TransferTransaction> => {
+  public unconfirmedTxObserver = (): Observable<BTransferTransaction> => {
     return new UnconfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
   };
 

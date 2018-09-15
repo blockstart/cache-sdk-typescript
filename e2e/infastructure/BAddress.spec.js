@@ -60,16 +60,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var _this = this;
 exports.__esModule = true;
 var Observable_1 = require("rxjs/Observable");
+var bAddress_1 = require("../../src/blockstart/models/bAddress");
+var bTransferTransaction_1 = require("../../src/blockstart/models/bTransferTransaction");
 var TransactionHttp_1 = require("../../src/infrastructure/TransactionHttp");
 var Account_1 = require("../../src/models/account/Account");
-var Address_1 = require("../../src/models/account/Address");
-var MosaicDefinition_1 = require("../../src/models/mosaic/MosaicDefinition");
-var MosaicId_1 = require("../../src/models/mosaic/MosaicId");
-var MosaicTransferable_1 = require("../../src/models/mosaic/MosaicTransferable");
 var XEM_1 = require("../../src/models/mosaic/XEM");
 var NetworkTypes_1 = require("../../src/models/node/NetworkTypes");
 var PlainMessage_1 = require("../../src/models/transaction/PlainMessage");
-var TransferTransaction_1 = require("../../src/models/transaction/TransferTransaction");
 var NEMLibrary_1 = require("../../src/NEMLibrary");
 describe("AddressTransactionListener", function () {
     var privateKey = process.env.PRIVATE_KEY;
@@ -85,9 +82,10 @@ describe("AddressTransactionListener", function () {
         NEMLibrary_1.NEMLibrary.reset();
     });
     it("should listen to confirmed xem transaction", function (done) {
-        var address = new Address_1.Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
-        var transferTransaction = TransferTransaction_1.TransferTransaction.create(address, new XEM_1.XEM(1), PlainMessage_1.EmptyMessage, TransferTransaction_1.ExpirationType.twoHour);
-        var subscriber = account.address.confirmedTxObserver().subscribe(function (x) { return __awaiter(_this, void 0, void 0, function () {
+        var address = new bAddress_1.BAddress("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+        var transferTransaction = bTransferTransaction_1.BTransferTransaction.createTX(address, new XEM_1.XEM(1), PlainMessage_1.EmptyMessage, bTransferTransaction_1.ExpirationType.twoHour);
+        var bAddress = account.address;
+        var subscriber = bAddress.confirmedTxObserver().subscribe(function (x) { return __awaiter(_this, void 0, void 0, function () {
             var mt;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -111,104 +109,103 @@ describe("AddressTransactionListener", function () {
             console.log(x);
         });
     });
-    it("should listen to confirmed cache transaction", function (done) {
-        var address = new Address_1.Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
-        var transferTransaction = TransferTransaction_1.TransferTransaction.create(address, new MosaicTransferable_1.MosaicTransferable(new MosaicId_1.MosaicId('cache', 'cache'), new MosaicDefinition_1.MosaicProperties(6, 1000000000, true, false), 1), PlainMessage_1.EmptyMessage, TransferTransaction_1.ExpirationType.twoHour);
-        var subscriber = account.address.confirmedTxObserver().subscribe(function (x) { return __awaiter(_this, void 0, void 0, function () {
-            var mt, err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, x.mosaicDetails()];
-                    case 1:
-                        mt = _a.sent();
-                        console.log(mt[0]);
-                        subscriber.unsubscribe();
-                        done();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        err_1 = _a.sent();
-                        console.log(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); }, function (err) {
-            console.log(err);
-        });
-        var transaction = account.signTransaction(transferTransaction);
-        Observable_1.Observable.of(1)
-            .delay(3000)
-            .flatMap(function (ignored) { return transactionHttp.announceTransaction(transaction); })
-            .subscribe(function (x) {
-            console.log(x);
-        });
-    });
-    it("should listen to unconfirmed xem transaction", function (done) {
-        var address = new Address_1.Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
-        var transferTransaction = TransferTransaction_1.TransferTransaction.create(address, new XEM_1.XEM(2), PlainMessage_1.EmptyMessage, TransferTransaction_1.ExpirationType.twoHour);
-        var subscriber = account.address.unconfirmedTxObserver().subscribe(function (x) { return __awaiter(_this, void 0, void 0, function () {
-            var mt;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, x.mosaicDetails()];
-                    case 1:
-                        mt = _a.sent();
-                        console.log(mt[0]);
-                        subscriber.unsubscribe();
-                        done();
-                        return [2 /*return*/];
-                }
-            });
-        }); }, function (err) {
-            console.log(err);
-        });
-        var transaction = account.signTransaction(transferTransaction);
-        Observable_1.Observable.of(1)
-            .delay(3000)
-            .flatMap(function (ignored) { return transactionHttp.announceTransaction(transaction); })
-            .subscribe(function (x) {
-            console.log(x);
-        });
-    });
-    it("should listen to unconfirmed cache transaction", function (done) {
-        var address = new Address_1.Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
-        var transferTransaction = TransferTransaction_1.TransferTransaction.create(address, new MosaicTransferable_1.MosaicTransferable(new MosaicId_1.MosaicId('cache', 'cache'), new MosaicDefinition_1.MosaicProperties(6, 1000000000, true, false), 1), PlainMessage_1.EmptyMessage, TransferTransaction_1.ExpirationType.twoHour);
-        var subscriber = account.address.unconfirmedTxObserver().subscribe(function (x) { return __awaiter(_this, void 0, void 0, function () {
-            var mt;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, x.mosaicDetails()];
-                    case 1:
-                        mt = _a.sent();
-                        console.log(mt[0]);
-                        subscriber.unsubscribe();
-                        done();
-                        return [2 /*return*/];
-                }
-            });
-        }); }, function (err) {
-            console.log(err);
-        });
-        var transaction = account.signTransaction(transferTransaction);
-        Observable_1.Observable.of(1)
-            .delay(3000)
-            .flatMap(function (ignored) { return transactionHttp.announceTransaction(transaction); })
-            .subscribe(function (x) {
-            console.log(x);
-        });
-    });
-    it("should return Mosaic Transferable Array for address", function (done) {
-        try {
-            var address = new Address_1.Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
-            address.mosaics().then(function (mosaics) {
-                console.log(mosaics);
-                done();
-            });
-        }
-        catch (err) {
-            console.log(err);
-        }
-    });
+    //   it("should listen to confirmed cache transaction", (done) => {
+    //     const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+    //     const transferTransaction = TransferTransaction.create(
+    //       address,
+    //       new MosaicTransferable(new MosaicId('cache', 'cache'), new MosaicProperties(6, 1000000000, true, false), 1),
+    //       EmptyMessage,
+    //       ExpirationType.twoHour
+    //     );
+    //
+    //     const subscriber = account.address.confirmedTxObserver().subscribe(async (x) => {
+    //       try {
+    //         const mt: Array<MosaicTransferable> = await x.mosaicDetails();
+    //         console.log(mt[0]);
+    //         subscriber.unsubscribe();
+    //         done();
+    //       } catch (err) {
+    //         console.log(err)
+    //       }
+    //     }, (err) => {
+    //       console.log(err);
+    //     });
+    //
+    //     const transaction = account.signTransaction(transferTransaction);
+    //
+    //     Observable.of(1)
+    //       .delay(3000)
+    //       .flatMap((ignored) => transactionHttp.announceTransaction(transaction))
+    //       .subscribe((x) => {
+    //         console.log(x);
+    //       });
+    //   });
+    //
+    //   it("should listen to unconfirmed xem transaction", (done) => {
+    //     const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+    //     const transferTransaction = TransferTransaction.create(
+    //       address,
+    //       new XEM(2),
+    //       EmptyMessage,
+    //       ExpirationType.twoHour
+    //     );
+    //
+    //     const subscriber = account.address.unconfirmedTxObserver().subscribe(async (x) => {
+    //       const mt: Array<MosaicTransferable> = await x.mosaicDetails();
+    //       console.log(mt[0]);
+    //       subscriber.unsubscribe();
+    //       done();
+    //     }, (err) => {
+    //       console.log(err);
+    //     });
+    //
+    //     const transaction = account.signTransaction(transferTransaction);
+    //
+    //     Observable.of(1)
+    //       .delay(3000)
+    //       .flatMap((ignored) => transactionHttp.announceTransaction(transaction))
+    //       .subscribe((x) => {
+    //         console.log(x);
+    //       });
+    //   });
+    //
+    //   it("should listen to unconfirmed cache transaction", (done) => {
+    //     const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+    //     const transferTransaction = TransferTransaction.create(
+    //       address,
+    //       new MosaicTransferable(new MosaicId('cache', 'cache'), new MosaicProperties(6, 1000000000, true, false), 1),
+    //       EmptyMessage,
+    //       ExpirationType.twoHour
+    //     );
+    //
+    //     const subscriber = account.address.unconfirmedTxObserver().subscribe(async (x) => {
+    //       const mt: Array<MosaicTransferable> = await x.mosaicDetails();
+    //       console.log(mt[0]);
+    //       subscriber.unsubscribe();
+    //       done();
+    //     }, (err) => {
+    //       console.log(err);
+    //     });
+    //
+    //     const transaction = account.signTransaction(transferTransaction);
+    //
+    //     Observable.of(1)
+    //       .delay(3000)
+    //       .flatMap((ignored) => transactionHttp.announceTransaction(transaction))
+    //       .subscribe((x) => {
+    //         console.log(x);
+    //       });
+    //   });
+    //
+    //   it("should return Mosaic Transferable Array for address", (done) => {
+    //     try {
+    //       const address = new Address("TDU225EF2XRJTDXJZOWPNPKE3K4NYR277EQPOPZD");
+    //       address.mosaics().then((mosaics) => {
+    //         console.log(mosaics);
+    //         done();
+    //       });
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   });
 });
