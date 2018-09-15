@@ -27,12 +27,10 @@ import {TransferTransactionDTO} from "../../infrastructure/transaction/TransferT
 import {Address} from "../account/Address";
 import {PublicAccount} from "../account/PublicAccount";
 import {Mosaic} from "../mosaic/Mosaic";
-import {MosaicDefinition} from "../mosaic/MosaicDefinition";
 import {MosaicId} from "../mosaic/MosaicId";
 import {MosaicTransferable} from "../mosaic/MosaicTransferable";
 import {XEM} from "../mosaic/XEM";
 import {EncryptedMessage} from "./EncryptedMessage";
-import {Message} from "./Message";
 import {PlainMessage} from "./PlainMessage";
 import {TimeWindow} from "./TimeWindow";
 import {Transaction} from "./Transaction";

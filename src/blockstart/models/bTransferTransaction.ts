@@ -22,9 +22,16 @@
  * SOFTWARE.
  */
 
+import { Address } from '../../models/account/Address';
+import { PublicAccount } from '../../models/account/PublicAccount';
+import { Mosaic } from '../../models/mosaic/Mosaic';
 import { MosaicTransferable } from '../../models/mosaic/MosaicTransferable';
+import { XEM } from '../../models/mosaic/XEM';
 import { EncryptedMessage } from '../../models/transaction/EncryptedMessage';
 import { PlainMessage } from '../../models/transaction/PlainMessage';
+import { TimeWindow } from '../../models/transaction/TimeWindow';
+import { TransactionInfo } from '../../models/transaction/TransactionInfo';
+import { TransactionTypes } from '../../models/transaction/TransactionTypes';
 import { TransferTransaction } from '../../models/transaction/TransferTransaction';
 import { BAddress } from './bAddress';
 
@@ -36,7 +43,31 @@ export enum ExpirationType {
 }
 
 export class BTransferTransaction extends TransferTransaction{
-
+  /**
+   * @internal
+   * @param recipient
+   * @param amount
+   * @param timeWindow
+   * @param version
+   * @param fee
+   * @param message
+   * @param signature
+   * @param mosaic
+   * @param sender
+   * @param transactionInfo
+   */
+  constructor(recipient: Address,
+              amount: XEM,
+              timeWindow: TimeWindow,
+              version: number,
+              fee: number,
+              message: PlainMessage | EncryptedMessage,
+              signature?: string,
+              mosaic?: Mosaic[],
+              sender?: PublicAccount,
+              transactionInfo?: TransactionInfo) {
+    super(recipient, amount, timeWindow, version, fee, message, signature, mosaic, sender, transactionInfo);
+  }
 
   /**
    * Create a CacheTransferTransaction object
@@ -51,9 +82,9 @@ export class BTransferTransaction extends TransferTransaction{
                           message: PlainMessage | EncryptedMessage,
                           expiration?: ExpirationType): TransferTransaction => {
     if (mosaic.mosaicId.namespaceId === 'nem' && mosaic.mosaicId.name === 'xem') {
-      return TransferTransaction.createWithXem(recipient, mosaic, message, expiration);
+      return TransferTransaction.create(TimeWindow.createWithDeadline(expiration), recipient, mosaic, message);
     } else {
-      return  TransferTransaction.createWithMosaics(recipient, [mosaic], message, expiration);
+      return  TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(expiration), recipient, [mosaic], message);
     }
   };
 }
