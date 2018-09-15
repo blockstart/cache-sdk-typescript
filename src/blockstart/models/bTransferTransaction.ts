@@ -82,7 +82,7 @@ export class BTransferTransaction extends TransferTransaction{
                           message: PlainMessage | EncryptedMessage,
                           expiration?: ExpirationType): TransferTransaction => {
     if (mosaic.mosaicId.namespaceId === 'nem' && mosaic.mosaicId.name === 'xem') {
-      return TransferTransaction.create(TimeWindow.createWithDeadline(expiration), recipient, mosaic, message);
+      return TransferTransaction.create(TimeWindow.createWithDeadline(expiration), recipient, XEM.fromAbsolute(mosaic.quantity), message);
     } else {
       return  TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(expiration), recipient, [mosaic], message);
     }
@@ -96,8 +96,9 @@ export class BTransferTransaction extends TransferTransaction{
     return new Promise<MosaicTransferable[]>(async (resolve, reject) => {
       try {
         if (this.containsMosaics()) {
-          resolve(await Promise.all(this.mosaics().map(async (mosaic: BMosaic) => {
-            return await mosaic.getMosaicDetails();
+          resolve(await Promise.all(this.mosaics().map(async (mosaic: Mosaic) => {
+            const bMosaic = new BMosaic(mosaic.mosaicId, mosaic.quantity);
+            return await bMosaic.getMosaicDetails();
           })));
         } else {
           resolve([this.xem()]);

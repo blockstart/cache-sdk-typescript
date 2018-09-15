@@ -27,6 +27,7 @@ import { AccountHttp } from '../../infrastructure/AccountHttp';
 import { ConfirmedTransactionListener } from '../../infrastructure/ConfirmedTransactionListener';
 import { UnconfirmedTransactionListener } from '../../infrastructure/UnconfirmedTransactionListener';
 import { Address } from '../../models/account/Address';
+import { Mosaic } from '../../models/mosaic/Mosaic';
 import { MosaicTransferable } from '../../models/mosaic/MosaicTransferable';
 import { TransferTransaction } from '../../models/transaction/TransferTransaction';
 import { nodeEndpoints } from '../utilities/NodeEndpointUtilities';
@@ -47,8 +48,9 @@ export class BAddress extends Address {
     return new Promise<MosaicTransferable[]>((resolve, reject) => {
       try {
         new AccountHttp().getMosaicOwnedByAddress(this).subscribe(async (mosaics) => {
-          resolve(await Promise.all(mosaics.map(async (mosaic: BMosaic) => {
-            return await mosaic.getMosaicDetails();
+          resolve(await Promise.all(mosaics.map(async (mosaic: Mosaic) => {
+            const bMosaic = new BMosaic(mosaic.mosaicId, mosaic.quantity);
+            return await bMosaic.getMosaicDetails();
           })));
         });
       } catch (err) {
