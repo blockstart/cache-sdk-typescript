@@ -33,7 +33,7 @@
     "test/**/*.spec.ts",
     "integration_test/**/*.spec.ts",
     "src/**/*.ts",
-    "e2e/**/*.spec.ts",
+    "e2e-disabled/**/*.spec.ts",
     "nem-sdk.d.ts",
     "crypto-js.d.ts",
     "get-random-values.d.ts"

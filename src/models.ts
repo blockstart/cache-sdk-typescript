@@ -68,3 +68,7 @@ export * from "./models/wallet/Password";
 export * from "./models/wallet/BrainWallet";
 export * from "./models/wallet/BrainPassword";
 export * from "./models/wallet/Wallet";
+
+//Blockstart add-ons
+export * from "./blockstart/models/bAddress"
+export * from "./blockstart/models/bMosaic"
