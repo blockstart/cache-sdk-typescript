@@ -38,7 +38,7 @@ export class BPlainMessage extends PlainMessage {
    * @param plainMessage - PlainMessage object from outside source
    * @returns {BPlainMessage}
    */
-  public static castToPlainMessage = (plainMessage: BPlainMessage): BPlainMessage => {
-    return PlainMessage.create(Message.decodeHex(plainMessage.payload));
+  public static castToPlainMessage = (plainMessage: any): BPlainMessage => {
+    return BPlainMessage.create(Message.decodeHex(plainMessage.payload));
   }
 }
