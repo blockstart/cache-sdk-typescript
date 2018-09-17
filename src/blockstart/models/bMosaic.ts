@@ -45,7 +45,7 @@ export class BMosaic extends Mosaic {
     return new Promise<MosaicTransferable>(async (resolve, reject) => {
       try {
         if (this.mosaicId.namespaceId === 'nem' && this.mosaicId.name === 'xem') {
-          resolve(new XEM(this.quantity));
+          resolve(XEM.fromAbsolute(this.quantity));
         } else {
           new MosaicHttp().getMosaicDefinition(this.mosaicId).subscribe((mosaicDefinition) => {
             resolve(MosaicTransferable.createAbsolute(this.mosaicId, mosaicDefinition.properties, this.quantity, mosaicDefinition.levy));
