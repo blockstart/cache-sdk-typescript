@@ -118,7 +118,7 @@ export class BTransferTransaction extends TransferTransaction{
   public static castToTransferTransaction = (transferTransaction: any): BTransferTransaction => {
     const recipient = BAddress.castToAddress(transferTransaction.recipient);
     const message = BPlainMessage.castToPlainMessage(transferTransaction.message as BPlainMessage);
-    const xem = new XEM(transferTransaction._xem.quantity);
+    const xem = XEM.fromAbsolute(transferTransaction._xem.quantity);
     const timeWindow = TimeWindow.createWithDeadline();
     if(transferTransaction._mosaics) {
       return new BTransferTransaction(recipient,
