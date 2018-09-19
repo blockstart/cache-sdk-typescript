@@ -145,6 +145,13 @@ export class SimpleWallet extends Wallet {
     if (wallet.type !== "simple") {
       throw new Error("ERROR WLT TYPE");
     }
+    if (wallet.network < 0) {
+      wallet.network = NetworkTypes.TEST_NET;
+    } else if (wallet.network == 104) {
+      wallet.network = NetworkTypes.MAIN_NET;
+    } else {
+      wallet.network = NetworkTypes.MIJIN_NET;
+    }
     return new SimpleWallet(
       wallet.name,
       wallet.network,
