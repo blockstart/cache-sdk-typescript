@@ -52,6 +52,8 @@ export class BAddress extends Address {
             const bMosaic = new BMosaic(mosaic.mosaicId, mosaic.quantity);
             return await bMosaic.getMosaicDetails();
           })));
+        }, err => {
+         reject(err)
         });
       } catch (err) {
         reject(err);
