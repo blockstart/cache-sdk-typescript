@@ -30,7 +30,6 @@ import { Address } from '../../models/account/Address';
 import { Mosaic } from '../../models/mosaic/Mosaic';
 import { MosaicTransferable } from '../../models/mosaic/MosaicTransferable';
 import { TransferTransaction } from '../../models/transaction/TransferTransaction';
-import { nodeEndpoints } from '../utilities/NodeEndpointUtilities';
 import { mapTransfer, transferFilter } from '../utilities/TransactionUtilities';
 import { BMosaic } from './bMosaic';
 import { BTransferTransaction } from './bTransferTransaction';
@@ -66,7 +65,7 @@ export class BAddress extends Address {
    * @returns {Observable<Array<TransferTransaction>>}
    */
   public confirmedTxObserver = (): Observable<BTransferTransaction> => {
-    return new ConfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
+    return new ConfirmedTransactionListener().given(this).filter(transferFilter).map(mapTransfer);
   };
 
   /**
@@ -74,7 +73,7 @@ export class BAddress extends Address {
    * @returns {Observable<Array<TransferTransaction>>}
    */
   public unconfirmedTxObserver = (): Observable<BTransferTransaction> => {
-    return new UnconfirmedTransactionListener(nodeEndpoints()).given(this).filter(transferFilter).map(mapTransfer);
+    return new UnconfirmedTransactionListener().given(this).filter(transferFilter).map(mapTransfer);
   };
 
   /**
