@@ -75,4 +75,5 @@ export * from "./blockstart/models/bMosaic";
 export * from "./blockstart/models/bPlainMessage";
 export * from "./blockstart/models/bSimpleWallet";
 export * from "./blockstart/models/bTransferTransaction";
+export * from "./blockstart/models/bTimeWindow";
 
