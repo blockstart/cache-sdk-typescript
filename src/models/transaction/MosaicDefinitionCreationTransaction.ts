@@ -115,16 +115,16 @@ export class MosaicDefinitionCreationTransaction extends Transaction {
    */
   public static create(timeWindow: TimeWindow,
                        mosaicDefinition: MosaicDefinition): MosaicDefinitionCreationTransaction {
-    const fee = Math.floor(3 * 0.05 * 1000000);
+    const fee = Math.floor(15 * 1e4);
     let creationFeeSink;
     if (NEMLibrary.getNetworkType() === NetworkTypes.TEST_NET) {
       creationFeeSink = new Address("TBMOSA-ICOD4F-54EE5C-DMR23C-CBGOAM-2XSJBR-5OLC");
     } else if (NEMLibrary.getNetworkType() === NetworkTypes.MAIN_NET) {
       creationFeeSink = new Address("NBMOSA-ICOD4F-54EE5C-DMR23C-CBGOAM-2XSIUX-6TRS");
     }
-    const creationFee = Math.floor(10 * 1000000);
+    const creationFee = Math.floor(10 * 1e6);
     return new MosaicDefinitionCreationTransaction(
-      timeWindow, 1, creationFee, creationFeeSink, mosaicDefinition, fee,
+      timeWindow, 1, creationFee, creationFeeSink, mosaicDefinition, fee
     );
   }
 }
