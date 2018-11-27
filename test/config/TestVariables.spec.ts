@@ -23,8 +23,8 @@
  */
 
 export const TestVariables = {
-  DEFAULT_TEST_DOMAIN:    "68.183.116.32",
-  // DEFAULT_TEST_DOMAIN:    "23.228.67.85",
+  //DEFAULT_TEST_DOMAIN:    "68.183.116.32",
+  DEFAULT_TEST_DOMAIN:    "23.228.67.85",
   DEFAULT_TEST_PROTOCOL:  "http",
   DEFAULT_TEST_PORT:      7890,
   DEFAULT_TEST_URL:       "http://23.228.67.85:7890",

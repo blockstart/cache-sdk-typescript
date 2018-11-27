@@ -35,6 +35,7 @@ import { TransferTransaction } from '../../models/transaction/TransferTransactio
 import { BAddress } from './bAddress';
 import { BMosaic } from './bMosaic';
 import { BPlainMessage } from './bPlainMessage';
+import { BTimeWindow } from './bTimeWindow';
 
 export enum ExpirationType {
   oneHour = 1,
@@ -75,17 +76,17 @@ export class BTransferTransaction extends TransferTransaction{
    * @param recipient
    * @param mosaic
    * @param message
-   * @param expiration? - 2 hours default, can't exceed 23 hours
+   * @param timeWindow - 2 hours default, can't exceed 23 hours
    * @returns {TransferTransaction}
    */
   public static createTX = (recipient: BAddress,
                           mosaic: MosaicTransferable,
                           message: PlainMessage | EncryptedMessage,
-                          expiration?: ExpirationType): TransferTransaction => {
+                          timeWindow: BTimeWindow): TransferTransaction => {
     if (mosaic.mosaicId.namespaceId === 'nem' && mosaic.mosaicId.name === 'xem') {
-      return TransferTransaction.create(TimeWindow.createWithDeadline(expiration), recipient, XEM.fromAbsolute(mosaic.quantity), message);
+      return TransferTransaction.create(timeWindow, recipient, XEM.fromAbsolute(mosaic.quantity), message);
     } else {
-      return  TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(expiration), recipient, [mosaic], message);
+      return  TransferTransaction.createWithMosaics(timeWindow, recipient, [mosaic], message);
     }
   };
 
@@ -119,7 +120,7 @@ export class BTransferTransaction extends TransferTransaction{
     const recipient = BAddress.castToAddress(transferTransaction.recipient);
     const message = BPlainMessage.castToPlainMessage(transferTransaction.message as BPlainMessage);
     const xem = XEM.fromAbsolute(transferTransaction._xem.quantity);
-    const timeWindow = TimeWindow.createWithDeadline();
+    const timeWindow = new BTimeWindow((Date.parse(transferTransaction.timeWindow.timeStamp)) / 1000, (Date.parse(transferTransaction.timeWindow.deadline)) / 1000);
     if(transferTransaction._mosaics) {
       return new BTransferTransaction(recipient,
         xem,

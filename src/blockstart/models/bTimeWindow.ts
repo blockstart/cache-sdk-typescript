@@ -23,6 +23,9 @@
  */
 
 import { TimeWindow } from '../../models/transaction/TimeWindow';
+import nem from 'nem-sdk';
+
+const request = require('request');
 
 export class BTimeWindow extends TimeWindow {
   /**
@@ -32,5 +35,20 @@ export class BTimeWindow extends TimeWindow {
   constructor(timeStamp: number, deadline: number) {
     super(TimeWindow.createLocalDateTimeFromNemDate(timeStamp),
       TimeWindow.createLocalDateTimeFromNemDate(deadline))
+  }
+
+  public static useNodeToCreateDeadline = (deadline: number = 2): Promise<TimeWindow> => {
+    return new Promise<TimeWindow>((resolve, reject) => {
+      try {
+        request(`${nem.model.nodes.defaultTestnet}:${nem.model.nodes.defaultPort}/node/extended-info`, function (error: any, response: any, body: any) {
+          if (error) return reject(error);
+          const parsed = JSON.parse(body);
+          const timestamp = parsed['nisInfo']['currentTime'];
+          resolve(new BTimeWindow(timestamp, timestamp + (60 * deadline)))
+        })
+      }catch(err) {
+        reject(err)
+      }
+    });
   }
 }
