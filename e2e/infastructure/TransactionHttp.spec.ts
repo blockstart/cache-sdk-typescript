@@ -21,62 +21,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-import {expect} from "chai";
-import {Observable} from "rxjs/Observable";
-import {MosaicHttp} from "../../src/infrastructure/MosaicHttp";
-import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
-import {Account} from "../../src/models/account/Account";
-import {Address} from "../../src/models/account/Address";
-import {PublicAccount} from "../../src/models/account/PublicAccount";
-import {Mosaic} from "../../src/models/mosaic/Mosaic";
-import {MosaicDefinition, MosaicProperties} from "../../src/models/mosaic/MosaicDefinition";
-import {MosaicId} from "../../src/models/mosaic/MosaicId";
-import {MosaicLevy, MosaicLevyType} from "../../src/models/mosaic/MosaicLevy";
-import {MosaicTransferable} from "../../src/models/mosaic/MosaicTransferable";
-import {XEM} from "../../src/models/mosaic/XEM";
-import {NetworkTypes} from "../../src/models/node/NetworkTypes";
-import {EncryptedMessage} from "../../src/models/transaction/EncryptedMessage";
-import {
-  ImportanceMode,
-  ImportanceTransferTransaction,
-} from "../../src/models/transaction/ImportanceTransferTransaction";
-import {MosaicDefinitionCreationTransaction} from "../../src/models/transaction/MosaicDefinitionCreationTransaction";
-import {
-  MosaicSupplyChangeTransaction,
-  MosaicSupplyType,
-} from "../../src/models/transaction/MosaicSupplyChangeTransaction";
-import {
-  CosignatoryModification,
-  CosignatoryModificationAction,
-  MultisigAggregateModificationTransaction,
-} from "../../src/models/transaction/MultisigAggregateModificationTransaction";
-import {MultisigTransaction} from "../../src/models/transaction/MultisigTransaction";
-import {EmptyMessage, PlainMessage} from "../../src/models/transaction/PlainMessage";
-import {ProvisionNamespaceTransaction} from "../../src/models/transaction/ProvisionNamespaceTransaction";
-import {TimeWindow} from "../../src/models/transaction/TimeWindow";
-import {TransferTransaction} from "../../src/models/transaction/TransferTransaction";
-import {NEMLibrary} from "../../src/NEMLibrary";
-import {TestVariables} from "../../test/config/TestVariables.spec";
-
-declare let process: any;
-
-describe("TransactionHttp", () => {
-  const recipientAccount: string = "TBV7LE4TFDEMGVOON5MYOK2P7TU2KEKLMHOLHQT6";
-  const privateKey: string = process.env.PRIVATE_KEY;
-  const newMultiSigPrivateKey: string = process.env.MULTISIG_PRIVATE_KEY;
-  const delegateAccountHarvestingPrivateKey: string = process.env.DELEGATE_HARVESTING_PRIVATE_KEY;
-
-  let multisigAccount: PublicAccount;
-
-  before(() => {
-    NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
-    multisigAccount = PublicAccount.createWithPublicKey("d7fb38212198228837841fc16b658db589642a3052f2b9bb119fe6b40c6795be");
-  });
-
-  after(() => {
-    NEMLibrary.reset();
-  });
+//
+// import {expect} from "chai";
+// import {Observable} from "rxjs/Observable";
+// import {MosaicHttp} from "../../src/infrastructure/MosaicHttp";
+// import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
+// import {Account} from "../../src/models/account/Account";
+// import {Address} from "../../src/models/account/Address";
+// import {PublicAccount} from "../../src/models/account/PublicAccount";
+// import {Mosaic} from "../../src/models/mosaic/Mosaic";
+// import {MosaicDefinition, MosaicProperties} from "../../src/models/mosaic/MosaicDefinition";
+// import {MosaicId} from "../../src/models/mosaic/MosaicId";
+// import {MosaicLevy, MosaicLevyType} from "../../src/models/mosaic/MosaicLevy";
+// import {MosaicTransferable} from "../../src/models/mosaic/MosaicTransferable";
+// import {XEM} from "../../src/models/mosaic/XEM";
+// import {NetworkTypes} from "../../src/models/node/NetworkTypes";
+// import {EncryptedMessage} from "../../src/models/transaction/EncryptedMessage";
+// import {
+//   ImportanceMode,
+//   ImportanceTransferTransaction,
+// } from "../../src/models/transaction/ImportanceTransferTransaction";
+// import {MosaicDefinitionCreationTransaction} from "../../src/models/transaction/MosaicDefinitionCreationTransaction";
+// import {
+//   MosaicSupplyChangeTransaction,
+//   MosaicSupplyType,
+// } from "../../src/models/transaction/MosaicSupplyChangeTransaction";
+// import {
+//   CosignatoryModification,
+//   CosignatoryModificationAction,
+//   MultisigAggregateModificationTransaction,
+// } from "../../src/models/transaction/MultisigAggregateModificationTransaction";
+// import {MultisigTransaction} from "../../src/models/transaction/MultisigTransaction";
+// import {EmptyMessage, PlainMessage} from "../../src/models/transaction/PlainMessage";
+// import {ProvisionNamespaceTransaction} from "../../src/models/transaction/ProvisionNamespaceTransaction";
+// import {TimeWindow} from "../../src/models/transaction/TimeWindow";
+// import {TransferTransaction} from "../../src/models/transaction/TransferTransaction";
+// import {NEMLibrary} from "../../src/NEMLibrary";
+// import {TestVariables} from "../../test/config/TestVariables.spec";
+//
+// declare let process: any;
+//
+// describe("TransactionHttp", () => {
+//   const recipientAccount: string = "TBV7LE4TFDEMGVOON5MYOK2P7TU2KEKLMHOLHQT6";
+//   const privateKey: string = process.env.PRIVATE_KEY;
+//   const newMultiSigPrivateKey: string = process.env.MULTISIG_PRIVATE_KEY;
+//   const delegateAccountHarvestingPrivateKey: string = process.env.DELEGATE_HARVESTING_PRIVATE_KEY;
+//
+//   let multisigAccount: PublicAccount;
+//
+//   before(() => {
+//     NEMLibrary.bootstrap(NetworkTypes.TEST_NET);
+//     multisigAccount = PublicAccount.createWithPublicKey("d7fb38212198228837841fc16b658db589642a3052f2b9bb119fe6b40c6795be");
+//   });
+//
+//   after(() => {
+//     NEMLibrary.reset();
+//   });
 
   // /**
   //  * TODO: We have to create a secure way to test the transactions.
@@ -181,27 +181,27 @@ describe("TransactionHttp", () => {
   //   // to pass the test
   //   done();
   // });
-
-  it("creates a MOSAIC_DEFINITION_CREATION without levy", (done) => {
-    const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
-    const account = Account.createWithPrivateKey(privateKey);
-    const mosaicDefinitionTransaction = MosaicDefinitionCreationTransaction.create(
-      TimeWindow.createWithDeadline(),
-      new MosaicDefinition(
-        PublicAccount.createWithPublicKey(account.publicKey),
-        new MosaicId("newpart", "joe12"),
-        "mosaic description",
-        new MosaicProperties(0, 10000, true, true),
-      ),
-    );
-    const signedTransaction = account.signTransaction(mosaicDefinitionTransaction);
-    transactionHttp.announceTransaction(signedTransaction).subscribe(announceSuccessResult => {
-     expect(announceSuccessResult.transactionHash.data).to.not.null;
-     done();
-     });
-    // to pass the test
-    // done();
-  });
+  //
+  // it("creates a MOSAIC_DEFINITION_CREATION without levy", (done) => {
+  //   const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
+  //   const account = Account.createWithPrivateKey(privateKey);
+  //   const mosaicDefinitionTransaction = MosaicDefinitionCreationTransaction.create(
+  //     TimeWindow.createWithDeadline(),
+  //     new MosaicDefinition(
+  //       PublicAccount.createWithPublicKey(account.publicKey),
+  //       new MosaicId("newpart", "joe12"),
+  //       "mosaic description",
+  //       new MosaicProperties(0, 10000, true, true),
+  //     ),
+  //   );
+  //   const signedTransaction = account.signTransaction(mosaicDefinitionTransaction);
+  //   transactionHttp.announceTransaction(signedTransaction).subscribe(announceSuccessResult => {
+  //    expect(announceSuccessResult.transactionHash.data).to.not.null;
+  //    done();
+  //    });
+  //   // to pass the test
+  //   // done();
+  // });
 
   // it("creates a MOSAIC_DEFINITION_CREATION with levy", (done) => {
   //   const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
@@ -451,5 +451,5 @@ describe("TransactionHttp", () => {
   //     });*/
   //   done();
   // });
-
-});
+//
+// });
