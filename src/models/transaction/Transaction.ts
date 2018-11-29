@@ -57,7 +57,7 @@ export abstract class Transaction {
   /**
    * TimeWindow
    */
-  public readonly timeWindow: TimeWindow;
+  public timeWindow: TimeWindow;
 
   /**
    * The fee for the transaction. The higher the fee, the higher the priority of the transaction. Transactions with high priority get included in a block before transactions with lower priority.

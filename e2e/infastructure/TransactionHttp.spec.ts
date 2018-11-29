@@ -24,6 +24,7 @@
 
 import {expect} from "chai";
 import {Observable} from "rxjs/Observable";
+import { BTimeWindow } from '../../src/blockstart/models/bTimeWindow';
 import {MosaicHttp} from "../../src/infrastructure/MosaicHttp";
 import {TransactionHttp} from "../../src/infrastructure/TransactionHttp";
 import {Account} from "../../src/models/account/Account";
@@ -78,22 +79,24 @@ describe("TransactionHttp", () => {
     NEMLibrary.reset();
   });
 
-  /**
-   * TODO: We have to create a secure way to test the transactions.
-   */
+  // /**
+  //  * TODO: We have to create a secure way to test the transactions.
+  //  */
   it("creates a TRANSFER", (done) => {
     const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
     const account = Account.createWithPrivateKey(privateKey);
     const amount = new XEM(100);
-    const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
-      new Address("TCPQZT5P4XWXZBC36Z5YEBM6XKUW6O2N3OBLS2TH"),
-      amount,
-      EmptyMessage);
-    const signedTransaction = account.signTransaction(transferTransaction);
-    transactionHttp.announceTransaction(signedTransaction).subscribe((announceSuccessResult) => {
-      expect(announceSuccessResult.transactionHash.data).to.not.null;
-      done();
+    BTimeWindow.useNodeToCreateDeadline().then((deadline) => {
+      const transferTransaction = TransferTransaction.create(
+        deadline,
+        new Address("TCPQZT5P4XWXZBC36Z5YEBM6XKUW6O2N3OBLS2TH"),
+        amount,
+        EmptyMessage);
+      const signedTransaction = account.signTransaction(transferTransaction);
+      transactionHttp.announceTransaction(signedTransaction).subscribe((announceSuccessResult) => {
+        expect(announceSuccessResult.transactionHash.data).to.not.null;
+        done();
+      });
     });
   });
 
@@ -103,19 +106,20 @@ describe("TransactionHttp", () => {
     const recipientPublicAccount = PublicAccount.createWithPublicKey("b254d8b2b00e1b1266eb54a6931cd7c1b0f307e41d9ebb01f025f4933758f0be");
     const amount = new XEM(20);
     const encryptedMessage = account.encryptMessage("test transaction", recipientPublicAccount);
-
-    const transferTransaction = TransferTransaction.create(
-      TimeWindow.createWithDeadline(),
-      recipientPublicAccount.address,
-      amount,
-      encryptedMessage);
-    const signedTransaction = account.signTransaction(transferTransaction);
-    // transactionHttp.announceTransaction(signedTransaction).subscribe(announceSuccessResult => {
-    //  expect(announceSuccessResult.transactionHash.data).to.not.null;
-    //  done();
-    //  });
+    BTimeWindow.useNodeToCreateDeadline().then((deadline) => {
+      const transferTransaction = TransferTransaction.create(
+        deadline,
+        recipientPublicAccount.address,
+        amount,
+        encryptedMessage);
+      const signedTransaction = account.signTransaction(transferTransaction);
+      transactionHttp.announceTransaction(signedTransaction).subscribe(announceSuccessResult => {
+       expect(announceSuccessResult.transactionHash.data).to.not.null;
+       done();
+       });
+    })
     // to pass the test
-    done();
+    // done();
   });
 
   it("creates a TRANSFER with mosaic", (done) => {
@@ -185,23 +189,24 @@ describe("TransactionHttp", () => {
   it("creates a MOSAIC_DEFINITION_CREATION without levy", (done) => {
     const transactionHttp = new TransactionHttp([{domain: TestVariables.DEFAULT_TEST_DOMAIN}]);
     const account = Account.createWithPrivateKey(privateKey);
-    const mosaicDefinitionTransaction = MosaicDefinitionCreationTransaction.create(
-      TimeWindow.createWithDeadline(),
-      new MosaicDefinition(
-        PublicAccount.createWithPublicKey(account.publicKey),
-        new MosaicId("newpart", "joe12"),
-        "mosaic description",
-        new MosaicProperties(0, 10000, true, true),
-      ),
-    );
-
-    const signedTransaction = account.signTransaction(mosaicDefinitionTransaction);
-    // transactionHttp.announceTransaction(signedTransaction).subscribe(announceSuccessResult => {
-    //  expect(announceSuccessResult.transactionHash.data).to.not.null;
-    //  done();
-    //  });
+    BTimeWindow.useNodeToCreateDeadline().then((deadline) => {
+      const mosaicDefinitionTransaction = MosaicDefinitionCreationTransaction.create(
+        deadline,
+        new MosaicDefinition(
+          PublicAccount.createWithPublicKey(account.publicKey),
+          new MosaicId("newpart", "joe12"),
+          "mosaic description",
+          new MosaicProperties(0, 10000, true, true),
+        ),
+      );
+      const signedTransaction = account.signTransaction(mosaicDefinitionTransaction);
+      transactionHttp.announceTransaction(signedTransaction).subscribe(announceSuccessResult => {
+        expect(announceSuccessResult.transactionHash.data).to.not.null;
+        done();
+      });
+    })
     // to pass the test
-    done();
+    // done();
   });
 
   it("creates a MOSAIC_DEFINITION_CREATION with levy", (done) => {

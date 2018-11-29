@@ -79,9 +79,9 @@ export class BAddress extends Address {
   /**
    * Create a Address from object
    * @param addressValue - Address object from outside source
-   * @returns {BAddress}
+   * @returns {Address}
    */
-  public static castToAddress = (addressValue: any): BAddress => {
-    return new BAddress(addressValue.value);
+  public static castToAddress = (addressValue: any): Address => {
+    return new Address(addressValue.value);
   }
 }

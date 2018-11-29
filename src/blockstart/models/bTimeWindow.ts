@@ -22,14 +22,33 @@
  * SOFTWARE.
  */
 
-export const TestVariables = {
-  DEFAULT_TEST_DOMAIN:    "68.183.116.32",
-  // DEFAULT_TEST_DOMAIN:    "23.228.67.85",
-  DEFAULT_TEST_PROTOCOL:  "http",
-  DEFAULT_TEST_PORT:      7890,
-  DEFAULT_TEST_URL:       "http://23.228.67.85:7890",
-  ACCOUNT_HISTORICAL_DATA_NODE_DOMAIN: "hugealice.nem.ninja",
-  TEST_PRIVATE_KEY:       "2e85249abf87eab255a7c280a8c423ed6772534e5c24e2358d1d60a706487dc9",
-  TEST_PUBLIC_KEY:        "2a9b9786d94b1ce89723c0b4ce1673aaed2185a2d8cee367499d80ac0259f0c6",
-  TEST_ADDRESS:           "TDLZQL-26PP5R-VO4QCT-AJRATG-A5R4UE-DHHQGC-F3LR",
-};
+import { TimeWindow } from '../../models/transaction/TimeWindow';
+import nem from 'nem-sdk';
+
+const request = require('request');
+
+export class BTimeWindow extends TimeWindow {
+  /**
+   * @param deadline - LocalDateTime
+   * @param timeStamp - LocalDateTime
+   */
+  constructor(timeStamp: number, deadline: number) {
+    super(TimeWindow.createLocalDateTimeFromNemDate(timeStamp),
+      TimeWindow.createLocalDateTimeFromNemDate(deadline))
+  }
+
+  public static useNodeToCreateDeadline = (deadline: number = 2): Promise<TimeWindow> => {
+    return new Promise<TimeWindow>((resolve, reject) => {
+      try {
+        request(`${nem.model.nodes.defaultTestnet}:${nem.model.nodes.defaultPort}/node/extended-info`, function (error: any, response: any, body: any) {
+          if (error) return reject(error);
+          const parsed = JSON.parse(body);
+          const timestamp = parsed['nisInfo']['currentTime'];
+          resolve(new BTimeWindow(timestamp, timestamp + (60 * deadline)))
+        })
+      }catch(err) {
+        reject(err)
+      }
+    });
+  }
+}

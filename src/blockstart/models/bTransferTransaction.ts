@@ -35,6 +35,7 @@ import { TransferTransaction } from '../../models/transaction/TransferTransactio
 import { BAddress } from './bAddress';
 import { BMosaic } from './bMosaic';
 import { BPlainMessage } from './bPlainMessage';
+import { BTimeWindow } from './bTimeWindow';
 
 export enum ExpirationType {
   oneHour = 1,
@@ -75,17 +76,17 @@ export class BTransferTransaction extends TransferTransaction{
    * @param recipient
    * @param mosaic
    * @param message
-   * @param expiration? - 2 hours default, can't exceed 23 hours
+   * @param timeWindow - 2 hours default, can't exceed 23 hours
    * @returns {TransferTransaction}
    */
   public static createTX = (recipient: BAddress,
                           mosaic: MosaicTransferable,
                           message: PlainMessage | EncryptedMessage,
-                          expiration?: ExpirationType): TransferTransaction => {
+                          timeWindow: BTimeWindow): TransferTransaction => {
     if (mosaic.mosaicId.namespaceId === 'nem' && mosaic.mosaicId.name === 'xem') {
-      return TransferTransaction.create(TimeWindow.createWithDeadline(expiration), recipient, XEM.fromAbsolute(mosaic.quantity), message);
+      return TransferTransaction.create(timeWindow, recipient, XEM.fromAbsolute(mosaic.quantity), message);
     } else {
-      return  TransferTransaction.createWithMosaics(TimeWindow.createWithDeadline(expiration), recipient, [mosaic], message);
+      return  TransferTransaction.createWithMosaics(timeWindow, recipient, [mosaic], message);
     }
   };
 
@@ -115,29 +116,35 @@ export class BTransferTransaction extends TransferTransaction{
    * @param transferTransaction - transferTransaction object from outside source
    * @returns {BTransferTransaction}
    */
-  public static castToTransferTransaction = (transferTransaction: any): BTransferTransaction => {
-    const recipient = BAddress.castToAddress(transferTransaction.recipient);
-    const message = BPlainMessage.castToPlainMessage(transferTransaction.message as BPlainMessage);
-    const xem = XEM.fromAbsolute(transferTransaction._xem.quantity);
-    const timeWindow = TimeWindow.createWithDeadline();
-    if(transferTransaction._mosaics) {
-      return new BTransferTransaction(recipient,
-        xem,
-        timeWindow,
-        2,
-        transferTransaction.fee,
-        message,
-        undefined,
-        transferTransaction._mosaics.map((_) => { return new Mosaic(_.mosaicId, _.quantity)}))
-    } else {
-      return new BTransferTransaction(recipient,
-        xem,
-        timeWindow,
-        1,
-        transferTransaction.fee,
-        message,
-        undefined,
-        undefined)
-    }
+  public static castToTransferTransaction = (transferTransaction: any): Promise<BTransferTransaction> => {
+    return new Promise<BTransferTransaction>(async (resolve, reject) => {
+      try {
+        const recipient = BAddress.castToAddress(transferTransaction.recipient);
+        const message = BPlainMessage.castToPlainMessage(transferTransaction.message as BPlainMessage);
+        const xem = XEM.fromAbsolute(transferTransaction._xem.quantity);
+        const timeWindow = await BTimeWindow.useNodeToCreateDeadline();
+        if(transferTransaction._mosaics) {
+          resolve( new BTransferTransaction(recipient,
+            xem,
+            timeWindow,
+            2,
+            transferTransaction.fee,
+            message,
+            undefined,
+            transferTransaction._mosaics.map((_) => { return new Mosaic(_.mosaicId, _.quantity)})))
+        } else {
+          resolve( new BTransferTransaction(recipient,
+            xem,
+            timeWindow,
+            1,
+            transferTransaction.fee,
+            message,
+            undefined,
+            undefined))
+        }
+      } catch (err) {
+        reject(err)
+      }
+    })
   }
 }
