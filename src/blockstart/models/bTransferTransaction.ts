@@ -116,29 +116,35 @@ export class BTransferTransaction extends TransferTransaction{
    * @param transferTransaction - transferTransaction object from outside source
    * @returns {BTransferTransaction}
    */
-  public static castToTransferTransaction = (transferTransaction: any): BTransferTransaction => {
-    const recipient = BAddress.castToAddress(transferTransaction.recipient);
-    const message = BPlainMessage.castToPlainMessage(transferTransaction.message as BPlainMessage);
-    const xem = XEM.fromAbsolute(transferTransaction._xem.quantity);
-    const timeWindow = new BTimeWindow((Date.parse(transferTransaction.timeWindow.timeStamp)) / 1000, (Date.parse(transferTransaction.timeWindow.deadline)) / 1000);
-    if(transferTransaction._mosaics) {
-      return new BTransferTransaction(recipient,
-        xem,
-        timeWindow,
-        2,
-        transferTransaction.fee,
-        message,
-        undefined,
-        transferTransaction._mosaics.map((_) => { return new Mosaic(_.mosaicId, _.quantity)}))
-    } else {
-      return new BTransferTransaction(recipient,
-        xem,
-        timeWindow,
-        1,
-        transferTransaction.fee,
-        message,
-        undefined,
-        undefined)
-    }
+  public static castToTransferTransaction = (transferTransaction: any): Promise<BTransferTransaction> => {
+    return new Promise<BTransferTransaction>(async (resolve, reject) => {
+      try {
+        const recipient = BAddress.castToAddress(transferTransaction.recipient);
+        const message = BPlainMessage.castToPlainMessage(transferTransaction.message as BPlainMessage);
+        const xem = XEM.fromAbsolute(transferTransaction._xem.quantity);
+        const timeWindow = await BTimeWindow.useNodeToCreateDeadline();
+        if(transferTransaction._mosaics) {
+          resolve( new BTransferTransaction(recipient,
+            xem,
+            timeWindow,
+            2,
+            transferTransaction.fee,
+            message,
+            undefined,
+            transferTransaction._mosaics.map((_) => { return new Mosaic(_.mosaicId, _.quantity)})))
+        } else {
+          resolve( new BTransferTransaction(recipient,
+            xem,
+            timeWindow,
+            1,
+            transferTransaction.fee,
+            message,
+            undefined,
+            undefined))
+        }
+      } catch (err) {
+        reject(err)
+      }
+    })
   }
 }
