@@ -1,7 +1,7 @@
 {
-  "name": "blockstart-nem1-sdk",
-  "version": "0.0.56",
-  "description": "Blockstart NIS1 SDK",
+  "name": "meteor-nem-library",
+  "version": "1.0.0",
+  "description": "Meteor NIS1 Library",
   "scripts": {
     "pretest": "npm run build",
     "test": "mocha --ui bdd --recursive ./dist/test ./dist/integration_test --timeout 60000",
@@ -17,6 +17,7 @@
   },
   "keywords": [
     "NEM",
+    "Meteor",
     "Blockstart",
     "CACHE",
     "Library",
