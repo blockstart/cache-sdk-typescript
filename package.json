@@ -1,6 +1,6 @@
 {
   "name": "meteor-nem-library",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Meteor NIS1 Library",
   "scripts": {
     "pretest": "npm run build",
